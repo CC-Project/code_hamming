@@ -5,10 +5,13 @@ struct Matrix
 {
 	unsigned short int rows;
 	unsigned short int cols;
-	unsigned char *t; // On travaille avec des 0 et des 1, on prendra donc des char car ils ne prennent que 1 octets en mémoire
+	unsigned char **t;
 };
 
 struct Matrix new_matrix(int rows, int cols);
 void show_matrix(struct Matrix *m);
 void void_matrix(struct Matrix *m);
 void del_matrix(struct Matrix *m);
+
+struct Matrix mul_matrix(struct Matrix *a, struct Matrix *b);
+struct Matrix add_matrix(struct Matrix *a, struct Matrix *b);
