@@ -1,5 +1,3 @@
-#include "matrix.h"
-
 struct Matrix new_matrix(int rows, int cols)
 {
 	struct Matrix m;

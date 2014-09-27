@@ -1,11 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 struct Matrix
 {
 	unsigned short int rows;
 	unsigned short int cols;
 	unsigned char **t;
+	struct Registy data;
 };
 
 struct Matrix new_matrix(int rows, int cols);

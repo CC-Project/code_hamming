@@ -9,3 +9,25 @@
 1411744033 source:c:\users\thibault\google drive\mes cours\2014 - 2015 - mp\tipe\projets\librairies\lib_hamming\main.c
 	"matrix.h"
 
+1411830641 source:c:\users\thibault\google drive\mes cours\2014 - 2015 - mp\tipe\projets\librairies\lib_hamming - data version\data.c
+
+1411830594 c:\users\thibault\google drive\mes cours\2014 - 2015 - mp\tipe\projets\librairies\lib_hamming - data version\data.h
+	<stdio.h>
+	<stdlib.h>
+	<stdint.h>
+
+1411830433 source:c:\users\thibault\google drive\mes cours\2014 - 2015 - mp\tipe\projets\librairies\lib_hamming - data version\hamming.c
+	"hamming.h"
+
+1411830377 c:\users\thibault\google drive\mes cours\2014 - 2015 - mp\tipe\projets\librairies\lib_hamming - data version\hamming.h
+	<stdio.h>
+	<stdlib.h>
+	<stdint.h>
+	"matrix.h"
+
+1411830616 c:\users\thibault\google drive\mes cours\2014 - 2015 - mp\tipe\projets\librairies\lib_hamming - data version\matrix.h
+	<stdio.h>
+	<stdlib.h>
+	"data.h"
+	"hamming.h"
+
