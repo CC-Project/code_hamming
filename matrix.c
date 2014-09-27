@@ -38,7 +38,6 @@ void void_matrix(struct Matrix * m)
     }
 }
 
-
 void del_matrix(struct Matrix *m)
 {
     for(int i = 0; i< m->cols; i++)
