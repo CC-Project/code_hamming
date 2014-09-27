@@ -31,6 +31,15 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="config.h" />
+		<Unit filename="data.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="data.h" />
+		<Unit filename="hamming.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="hamming.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
