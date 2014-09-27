@@ -2,7 +2,7 @@ struct Data
 {
     unsigned short int data_size;
     unsigned short int data_number;
-	int8_t * *data_array;
+	struct Uint8List data_array;
 };
 
 void add_data(struct Data *d);

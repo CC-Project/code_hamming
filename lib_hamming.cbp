@@ -47,6 +47,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="matrix.h" />
+		<Unit filename="uint8_list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="uint8_list.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

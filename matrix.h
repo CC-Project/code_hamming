@@ -1,3 +1,4 @@
+typedef struct element element;
 struct Matrix
 {
 	unsigned short int rows;
