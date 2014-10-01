@@ -1,14 +1,9 @@
-void add_data(struct Data *d)
+void data_get(unsigned short int number, struct Data *d)
 {
 
 }
 
-void get_data(struct Data *d, unsigned short int number)
-{
-
-}
-
-void set_data(struct Data *d, unsigned short int number, unsigned char new_data)
+void data_set(unsigned short int number, unsigned char new_data, struct Data *d)
 {
 
 }

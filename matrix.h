@@ -5,10 +5,10 @@ struct Matrix
 	struct Data data;
 };
 
-struct Matrix new_matrix(int rows, int cols);
-void show_matrix(struct Matrix *m);
-void void_matrix(struct Matrix *m);
-void del_matrix(struct Matrix *m);
+struct Matrix matrix_generate(int rows, int cols);
+void matrix_show(struct Matrix *m);
+void matrix_void(struct Matrix *m);
+void matrix_del(struct Matrix *m);
 
-struct Matrix mul_matrix(struct Matrix *a, struct Matrix *b);
-struct Matrix add_matrix(struct Matrix *a, struct Matrix *b);
+struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b);
+struct Matrix matrix_add(struct Matrix *a, struct Matrix *b);

@@ -16,13 +16,29 @@ struct Data hamming_decode(struct * Hamming_config conf, struct Data * word)
 }
 
 struct Data hamming_check(struct * Hamming_config conf, struct Data * word)
+{
 
+}
 
 struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
 {
 
 }
+struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf)
+{
+
+}
 */
+
+unsigned int hamming_lenght(struct Data * word1, struct Data * word2) // Calcul de la distance de hamming
+{
+    unsigned int = 0;
+
+    for(int i = 0; i < word1->data_number; i++)
+        r + = data_get(&word1, i) ^ data_get(&word2, i);
+
+    return r;
+}
 
 struct Hamming_config generate_config(unsigned short int l, unsigned short int m) // l = longueur des elements de la base, m = paramètre de hamming
 {
@@ -42,7 +58,7 @@ struct Hamming_config generate_config(unsigned short int l, unsigned short int m
     conf.m = m;
 
     // Creation de la matrice de controle
-    conf.control_matrix = hamming_generate_control_matrix(&conf);
+    conf.control_matrix = hamming_generate_gen_matrix(&conf);
 
     return conf;
 }

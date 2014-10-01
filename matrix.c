@@ -1,4 +1,4 @@
-struct Matrix new_matrix(int rows, int cols)
+struct Matrix matrix_generate(int rows, int cols)
 {
 	struct Matrix m;
 	m.rows = rows;
@@ -9,11 +9,11 @@ struct Matrix new_matrix(int rows, int cols)
     {
         m.t[i] = malloc(sizeof(char) * cols);
     }
-    void_matrix(&m);
+    matrix_void(&m);
 	return m;
 }
 
-void show_matrix(struct Matrix * m)
+void matrix_show(struct Matrix * m)
 {
     for(int i = 0; i < m->rows; i++)
     {
@@ -25,7 +25,7 @@ void show_matrix(struct Matrix * m)
     }
 }
 
-void void_matrix(struct Matrix * m)
+void matrix_void(struct Matrix * m)
 {
     for(int i = 0; i < m->rows; i++)
     {
@@ -36,7 +36,7 @@ void void_matrix(struct Matrix * m)
     }
 }
 
-void del_matrix(struct Matrix *m)
+void matrix_del(struct Matrix *m)
 {
     for(int i = 0; i< m->cols; i++)
     {
@@ -45,9 +45,9 @@ void del_matrix(struct Matrix *m)
     free(m->t);
 }
 
-struct Matrix mul_matrix(struct Matrix *a, struct Matrix *b)
+struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
 {
-    struct Matrix m = new_matrix(a->rows, b->cols);
+    struct Matrix m = matrix_generate(a->rows, b->cols);
     for(int i = 0; i < m.rows; i++)
     {
         for(int j = 0; j < m.cols; j++)
@@ -61,9 +61,9 @@ struct Matrix mul_matrix(struct Matrix *a, struct Matrix *b)
     return m;
 }
 
-struct Matrix add_matrix(struct Matrix *a, struct Matrix *b)
+struct Matrix matrix_add(struct Matrix *a, struct Matrix *b)
 {
-    struct Matrix m = new_matrix(a->rows, b->cols);
+    struct Matrix m = matrix_generate(a->rows, b->cols);
     for(int i = 0; i < m.rows; i++)
     {
         for(int j = 0; j < m.cols; j++)
@@ -73,3 +73,17 @@ struct Matrix add_matrix(struct Matrix *a, struct Matrix *b)
     }
     return m;
 }
+
+struct Matrix matrix_generate_identity(unsigned short int k) // Genère la matrice identité de M_k
+{
+    struct Matrix id = matrix_generate(k, k);
+
+    if(matrix_set_value(0,0, id) != 0)
+        matrix_void_matrix(&id);
+
+    for(int i = 0; i < k; i++)
+        matrix_set_value(i, i, 1, &id);
+
+    return id;
+}
+

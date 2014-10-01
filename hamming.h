@@ -6,8 +6,8 @@ struct Hamming_config
 	unsigned short int word_size;
 	unsigned short int correction_size;
 	// --- //
+    struct Base base; // Base de travail
 	unsigned short int m; // Parametres d'encodage de Hamming
-	struct Base base; // Base de travail
 	// --- //
 	struct Matrix control_matrix; // La matrice de controle associée
 };
