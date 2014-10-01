@@ -1,10 +1,8 @@
-typedef struct element element;
 struct Matrix
 {
 	unsigned short int rows;
 	unsigned short int cols;
-	unsigned char **t;
-	struct Registy data;
+	struct Data data;
 };
 
 struct Matrix new_matrix(int rows, int cols);

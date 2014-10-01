@@ -1,5 +1,4 @@
 #include "matrix.h"
-
 int main()
 {
     struct Matrix m1 = new_matrix(5,1);

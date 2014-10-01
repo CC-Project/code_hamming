@@ -1,9 +1,17 @@
 #include "matrix.h"
 
-struct ControlMatrix
+struct Hamming_config
 {
-	unsigned short int basis;
-	struct Matrix matrix;
+	unsigned short int total_size;
+	unsigned short int word_size;
+	unsigned short int correction_size;
+	// --- //
+	unsigned short int m; // Parametres d'encodage de Hamming
+	struct Base base; // Base de travail
+	// --- //
+	struct Matrix control_matrix; // La matrice de controle associée
 };
 
-uint8_t hamming_encode(uint8_t *code);
+struct Data hamming_encode(struct Hamming_config * conf, struct Data * word);
+struct Hamming_config generate_config(unsigned short int d, unsigned short int m);
+
