@@ -3,10 +3,10 @@
 
 struct Data hamming_encode(struct Hamming_config * conf, struct Data * word)
 {
-    struct Matrix word_matrix = new_matrix(word->data_number, 1);
+    struct Matrix word_matrix = matrix_generate(word->data_number, 1);
     word_matrix->data = word;
 
-    struct Matrix result = mul_matrix(conf->control_matrix, word_matrix);
+    struct Matrix result = matrix_mul(conf->control_matrix, word_matrix);
     return result.data;
 }
 /*
@@ -30,7 +30,7 @@ struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf)
 }
 */
 
-unsigned int hamming_lenght(struct Data * word1, struct Data * word2) // Calcul de la distance de hamming
+unsigned int hamming_lenght(struct Data * word1, struct Data * word2) // Renvoie la distance de hamming entre 2 codes
 {
     unsigned int = 0;
 
