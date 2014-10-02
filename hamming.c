@@ -19,7 +19,7 @@ struct Data hamming_check(struct * Hamming_config conf, struct Data * word)
 {
 
 }
-
+*/
 struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
 {
 
@@ -28,7 +28,7 @@ struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf)
 {
 
 }
-*/
+
 
 unsigned int hamming_length(struct Data * word1, struct Data * word2) // Renvoie la distance de hamming entre 2 codes
 {
