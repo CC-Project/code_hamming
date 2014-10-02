@@ -13,7 +13,7 @@ struct Hamming_config
 };
 
 struct Data hamming_encode(struct Hamming_config * conf, struct Data * word);
-unsigned int hamming_lenght(struct Data * word1, struct Data * word2);
+unsigned int hamming_length(struct Data * word1, struct Data * word2);
 struct Hamming_config generate_config(unsigned short int l, unsigned short int m);
 
 
