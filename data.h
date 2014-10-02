@@ -5,5 +5,5 @@ struct Data
 	uint8_t ** data_array; // Tableau de uint8_t contenant les données
 };
 
-void data_get(unsigned short int number, struct Data *d);
-void data_set(unsigned short int number, unsigned char new_data, struct Data *d);
+void data_get(uint16_t number, struct Data *d);
+void data_set(uint16_t number, uint8_t new_data, struct Data *d);

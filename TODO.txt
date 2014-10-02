@@ -1,0 +1,4 @@
+Matrices :
+matrix_del_line // supprime la ligne i
+matrix_del_col // supprime la colonne i
+matrix_collapse_down // Ajoute deux matrices A et B l'une en dessous de l'autre

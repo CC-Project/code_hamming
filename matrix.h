@@ -1,7 +1,7 @@
 struct Matrix
 {
-	unsigned short int rows;
-	unsigned short int cols;
+	uint8_t rows;
+	uint8_t cols;
 	struct Data data;
 };
 

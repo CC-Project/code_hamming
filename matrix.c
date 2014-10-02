@@ -74,7 +74,7 @@ struct Matrix matrix_add(struct Matrix *a, struct Matrix *b)
     return m;
 }
 
-struct Matrix matrix_generate_identity(unsigned short int k) // Genère la matrice identité de M_k
+struct Matrix matrix_generate_identity(uint8_t k) // Genère la matrice identité de M_k
 {
     struct Matrix id = matrix_generate(k, k);
 
@@ -86,4 +86,3 @@ struct Matrix matrix_generate_identity(unsigned short int k) // Genère la matric
 
     return id;
 }
-

@@ -22,15 +22,21 @@ struct Data hamming_check(struct * Hamming_config conf, struct Data * word)
 */
 struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
 {
+    struct Matrix control = matrix_generate(int_pow(2, conf->m) - 1, m); // Generation de la matrice de controle
 
+    // Remplissage de la matrice de controle
 }
 struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf)
 {
+    struct Matrix control = conf->control_matrix; // Récupération de la matrice de controle
 
+    for(uint8_t i = 0; i < conf->m; i++)
+        control = matrix_del_col(control, control.cols - 1); // On supprime les m dernière colonnes qui correspondent a l'identité
+
+    struct Matrix gen = matrix_collapse_down(matrix_generate_identity(int_pow(2, conf->m) - 1 - conf->m), control) // On colle ensuite cette matrice avec l'identité
 }
 
-
-unsigned int hamming_length(struct Data * word1, struct Data * word2) // Renvoie la distance de hamming entre 2 codes
+uint16_t hamming_length(struct Data * word1, struct Data * word2) // Renvoie la distance de hamming entre 2 codes
 {
     // Formule valable en base 2 seulement
     unsigned int = 0;
@@ -41,7 +47,7 @@ unsigned int hamming_length(struct Data * word1, struct Data * word2) // Renvoie
     return r;
 }
 
-struct Hamming_config generate_config(unsigned short int l, unsigned short int m) // l = longueur des elements de la base, m = paramètre de hamming
+struct Hamming_config generate_config(uint8_t l, uint8_t m) // l = longueur des elements de la base, m = paramètre de hamming
 {
     struct Hamming_config conf;
     struct Base base;
