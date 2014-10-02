@@ -32,6 +32,7 @@ struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf)
 
 unsigned int hamming_length(struct Data * word1, struct Data * word2) // Renvoie la distance de hamming entre 2 codes
 {
+    // Formule valable en base 2 seulement
     unsigned int = 0;
 
     for(int i = 0; i < word1->data_number; i++)

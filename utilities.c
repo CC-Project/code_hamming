@@ -1,7 +1,7 @@
-int int_pow(int a, int b)
+uint16_t int_pow(uint8_t a, uint8_t b)
 {
-    int r = 1;
-    for(int i = 0; i < b; i++)
+    uint16_t r = 1;
+    for(uint8_t i = 0; i < b; i++)
         r = r * a;
     return r;
 }
