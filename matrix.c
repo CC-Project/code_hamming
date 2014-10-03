@@ -1,4 +1,4 @@
-struct Matrix matrix_generate(int rows, int cols)
+struct Matrix matrix_generate(uint16_t rows, uint16_t cols)
 {
 	struct Matrix m;
 	m.rows = rows;

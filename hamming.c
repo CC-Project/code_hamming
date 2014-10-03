@@ -22,9 +22,26 @@ struct Data hamming_check(struct * Hamming_config conf, struct Data * word)
 */
 struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
 {
-    struct Matrix control = matrix_generate(int_pow(2, conf->m) - 1, m); // Generation de la matrice de controle
+    uint16_t cols = int_pow(2, conf->m) - 1;
+    struct Matrix control = matrix_generate(cols, conf->m); // Generation de la matrice de controle
 
     // Remplissage de la matrice de controle
+    /* Principe pour la base 2 :
+        On remplit la matrice de manière recursive avec les vecteur de la base canonique de 2^m
+        On supprime ensuite les lignes 2î avec i dans [0,m-1]
+    */
+
+    for(uint8_t i = 0; i < m; i++)
+        for(uint8_t j = 0; j < cols; j++)
+            if((j / int_pow(2, m - i - 1)) % 2 == 0)
+                matrix_set(i, j, 0);
+            else
+                matrix_set(i, j, 1);
+
+    for(uint8_t j = 0; j < m; j++)
+        matrix_del_col(int_pow(2, j));
+
+    return control;
 }
 struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf)
 {
