@@ -1,29 +1,40 @@
-struct Matrix matrix_generate(uint16_t rows, uint16_t cols)
+#include "matrix.h"
+
+struct Matrix matrix_generate(uint16_t n, uint16_t p, struct Base base)
 {
 	struct Matrix m;
-	m.rows = rows;
-	m.cols = cols;
+	m.rows = n;
+	m.cols = p;
 
-    m.t = malloc(sizeof(char *) * rows);
-    for(int i = 0; i<rows; i++)
-    {
-        m.t[i] = malloc(sizeof(char) * cols);
-    }
-    matrix_void(&m);
+    m.data = data_generate(base, n*p);
 	return m;
 }
 
-void matrix_show(struct Matrix * m)
+void matrix_delete(struct Matrix *m)
 {
-    for(int i = 0; i < m->rows; i++)
+    free(&(m->data));
+    free(m);
+}
+
+#ifdef DEBUG
+void matrix_show(struct Matrix* m)
+{
+    uint8_t i = 0;
+    uint8_t j = 0;
+    uint8_t k = 0;
+    for(i = 0; i < m->rows; i++)
     {
-        for(int j = 0; j < m->cols; j++)
+        for(j = 0; j < m->cols; j++)
         {
-            printf("%d ", m->t[i][j]);
+            printf("%d ", data_get(j+k, &(m->data));
         }
         printf("\n");
+        k+=8;
     }
 }
+#endif
+
+/*
 
 void matrix_void(struct Matrix * m)
 {
@@ -34,15 +45,6 @@ void matrix_void(struct Matrix * m)
             m->t[i][j] = 0;
         }
     }
-}
-
-void matrix_del(struct Matrix *m)
-{
-    for(int i = 0; i< m->cols; i++)
-    {
-        free(m->t[i]);
-    }
-    free(m->t);
 }
 
 struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
@@ -86,3 +88,4 @@ struct Matrix matrix_generate_identity(uint8_t k) // Genère la matrice identité 
 
     return id;
 }
+*/
