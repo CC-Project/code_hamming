@@ -28,27 +28,28 @@ struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
     // Remplissage de la matrice de controle
     /* Principe pour la base 2 :
         On remplit la matrice de manière recursive avec les vecteur de la base canonique de 2^m
-        On supprime ensuite les lignes 2î avec i dans [0,m-1]
+        On supprime ensuite les lignes 2^i avec i dans [0,m-1]
     */
 
     for(uint8_t i = 0; i < m; i++)
         for(uint8_t j = 0; j < cols; j++)
             if((j / int_pow(2, m - i - 1)) % 2 == 0)
-                matrix_set(i, j, 0);
+                matrix_set(control, i, j, 0);
             else
-                matrix_set(i, j, 1);
+                matrix_set(control, i, j, 1);
 
+    // On rend la matrice systématique
     for(uint8_t j = 0; j < m; j++)
-        matrix_del_col(int_pow(2, j));
+        matrix_del_col(control, int_pow(2, j));
 
-    return control;
+    return matrix_collapse_right(control, matrix_generate_identity(m));
 }
 struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf)
 {
     struct Matrix control = conf->control_matrix; // Récupération de la matrice de controle
 
     for(uint8_t i = 0; i < conf->m; i++)
-        control = matrix_del_col(control, control.cols - 1); // On supprime les m dernière colonnes qui correspondent a l'identité
+        control = matrix_del_col(control, control.cols - 1); // On supprime les m dernières colonnes qui correspondent à l'identité
 
     struct Matrix gen = matrix_collapse_down(matrix_generate_identity(int_pow(2, conf->m) - 1 - conf->m), control) // On colle ensuite cette matrice avec l'identité
 }

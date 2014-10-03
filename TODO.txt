@@ -4,5 +4,7 @@ matrix_del_col // Supprime la colonne i
 matrix_add_line // Ajoute une ligne après la ligne i
 matrix_add_col // Supprime une ligne après la ligne i
 matrix_collapse_down // Ajoute deux matrices A et B l'une en dessous de l'autre
+matrix_collapse_right // Ajoute deux matrices A et B l'une a coté de l'autre
 matrix_set(i,j,val) // Modifie la valeur de coordonnées (i,j)
 matrix_get(i,j) // Renvoi la valeur de coordonnées (i,j)
+matrix_isvoid // Renvoit true si la matrice est nulle (composée uniquement de 0)
