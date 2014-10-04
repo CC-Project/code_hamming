@@ -24,17 +24,12 @@ int main()
     //*
     struct Matrix m = matrix_generate(3,3,base);
     uint8_t i = 0;
-    for(i = 1; i <= 3; i++)
-        matrix_set_value(&m, i, i, 1);
+    matrix_make_identity(&m);
     matrix_show(&m);
     matrix_void(&m);
     matrix_show(&m);
 
-    struct Matrix id = matrix_generate_identity(3, base);
-    matrix_show(&id);
-    //matrix_delete(&id);
-
-    matrix_delete(&m);
+    matrix_free(&m);
     //*/
     return 0;
 }

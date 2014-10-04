@@ -10,9 +10,9 @@ struct Matrix matrix_generate(uint16_t n, uint16_t p, struct Base base)
 	return m;
 }
 
-void matrix_delete(struct Matrix* m)
+void matrix_free(struct Matrix* m)
 {
-    free(&(m->data));
+    data_free(&(m->data));
     free(m);
 }
 
@@ -37,9 +37,9 @@ void matrix_void(struct Matrix * m)
         m->data.data_array[i] = 0;
 }
 
-void matrix_set_value(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets the i-th line, j-th column of m to val
+void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets the i-th line, j-th column of m to val
 {
-    data_set(, val, &(m->data));
+    data_set( (i-1)*m->cols + j-1, val, &(m->data));
 }
 /*
 struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
@@ -72,15 +72,11 @@ struct Matrix matrix_add(struct Matrix *a, struct Matrix *b)
 }
 */
 
-struct Matrix matrix_generate_identity(uint16_t k, struct Base base)
+void matrix_make_identity(struct Matrix* m)
 {
-    struct Matrix id = matrix_generate(k, k, base);
-
     uint16_t i = 0;
-    for(i = 1; i <= k; i++)
-        matrix_set_value(&id, i, i, 1);
-
-    return id;
+    for(i = 1; i <= m->cols; i++)
+        matrix_set(m, i, i, 1);
 }
 
 

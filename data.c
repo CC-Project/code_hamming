@@ -21,7 +21,7 @@ struct Data data_generate(struct Base base, uint16_t data_number)
     return d;
 }
 
-void data_delete(struct Data* d)
+void data_free(struct Data* d)
 {
     free(d);
 }

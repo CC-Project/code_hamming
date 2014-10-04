@@ -11,8 +11,8 @@
         uint8_t word_size;
         uint8_t correction_size;
         // --- //
-        struct Base base; // Base de travail
-        uint8_t m; // Parametres d'encodage de Hamming (On travaillera avec m < 16 pour des raisons de place mémoire)
+        struct Base base;   // Base de travail
+        uint8_t m;          // Parametres d'encodage de Hamming (On travaillera avec m < 16 pour des raisons de place mémoire)
         // --- //
         struct Matrix control_matrix; // La matrice de controle associée de taille (2^m - 1) x m
     };
