@@ -15,9 +15,8 @@ struct Data data_generate(struct Base base, uint16_t data_number)
     //Sets initial values
     uint8_t i = 0;
     for(i=0; i < n; i++)
-    {
         d.data_array[i] = 0;
-    }
+
     return d;
 }
 

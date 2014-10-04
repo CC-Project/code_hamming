@@ -22,16 +22,18 @@ int main()
 
     //Fonctions de test sur la structure matrix
     //*
-    struct Matrix m = matrix_generate(3,3,base);
-    uint8_t i = 0;
-    matrix_make_identity(&m);
+
+    struct Matrix m = matrix_generate(10, 1, base);
+    struct Matrix id = matrix_generate(1, 10, base);
+
+    matrix_set(&m, 3, 1, 1);
+    matrix_set(&id, 1, 3, 1);
+    matrix_show(&id);
     matrix_show(&m);
-    matrix_void(&m);
-    if( matrix_isempty(&m))
-        printf("Vide\n");
-    matrix_set(&m, 1, 3, 1);
-    matrix_show(&m);
-    printf("%d", matrix_get(&m, 1,3));
+
+    struct Matrix r = matrix_mul(&m, &id);
+    matrix_show(&r);
+
     matrix_free(&m);
     //*/
     return 0;

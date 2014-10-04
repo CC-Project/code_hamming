@@ -18,8 +18,8 @@ void matrix_free(struct Matrix* m)
 
 void matrix_show(struct Matrix* m)
 {
-    uint8_t i = 0;
-    uint8_t j = 0;
+    uint16_t i = 0;
+    uint16_t j = 0;
     for(i = 0; i < m->data.data_number; i++)
     {
         j+=1;
@@ -58,23 +58,19 @@ void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets th
      return data_get( (i-1)*m->cols + j-1, &(m->data));
  }
 
-/*
 struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
 {
-    struct Matrix m = matrix_generate(a->rows, b->cols);
-    for(int i = 0; i < m.rows; i++)
-    {
-        for(int j = 0; j < m.cols; j++)
-        {
-            for (int k = 0; k < a->cols; k++)
-            {
-                m.t[i][j] ^= a->t[i][k] * b->t[k][j];
-            }
-        }
-    }
+    struct Matrix m = matrix_generate(a->rows, b->cols, a->data.data_base);
+
+    for(uint16_t i = 1; i <= m.rows; i++)
+        for(uint16_t j = 1; j <= m.cols; j++)
+            for (uint16_t k = 1; k <= a->cols; k++)
+                matrix_set(&m, i, j, matrix_get(&m, i, j) ^ (matrix_get(a, i, k) * matrix_get(b, k, j)));
+
     return m;
 }
 
+/*
 struct Matrix matrix_add(struct Matrix *a, struct Matrix *b)
 {
     struct Matrix m = matrix_generate(a->rows, b->cols);
