@@ -34,10 +34,10 @@ uint8_t data_get(uint16_t n, struct Data* d) //Returns the n-th data stored. Sta
 
     for(c=0; c<d->data_base.l; c++) //For each bit
     {
-        if ( d->data_array[i / 8] & (1 << i%8) )
-            data |= (d->data_array[i / 8] & (1 << i%8)) >> (i%8 -c);
+        if ( d->data_array[i / 8] & (1 << (i%8+c)) )
+            data |= (d->data_array[i / 8] & (1 << (i%8+c))) >> i%8;
         else
-            data &= ~(d->data_array[i / 8] & (1 << i%8)) >> (i%8 -c);
+            data &= ~(d->data_array[i / 8] & (1 << (i%8+c))) >> i%8;
     }
     return data;
 }
@@ -49,8 +49,8 @@ void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of
     for(c=0; c < d->data_base.l; c++) //For each bit
     {
         if ( data & (1 << c) )
-            d->data_array[i / 8] |= ( ( (data & (1 << c) ) >> c) << i%8);
+            d->data_array[i / 8] |= ( ( (data & (1 << c) ) >> c) << (i%8+c));
         else
-            d->data_array[i / 8] &= ~( ( (data & (1 << c) ) >> c) << i%8);
+            d->data_array[i / 8] &= ~( ( (data & (1 << c) ) >> c) << (i%8+c));
     }
 }
