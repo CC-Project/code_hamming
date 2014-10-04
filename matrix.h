@@ -17,7 +17,9 @@
     void matrix_free(struct Matrix* m);
     void matrix_show(struct Matrix* m);
     void matrix_void(struct Matrix* m);
+    uint8_t matrix_isempty(struct Matrix* m);
     void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val); //Sets the i-th line, j-th column of m to val
+    uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j); //Gets the i-th line, j-th column of m
 
     struct Matrix matrix_mul(struct Matrix* a, struct Matrix* b);
     struct Matrix matrix_add(struct Matrix* a, struct Matrix* b);

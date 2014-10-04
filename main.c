@@ -27,8 +27,11 @@ int main()
     matrix_make_identity(&m);
     matrix_show(&m);
     matrix_void(&m);
+    if( matrix_isempty(&m))
+        printf("Vide\n");
+    matrix_set(&m, 1, 3, 1);
     matrix_show(&m);
-
+    printf("%d", matrix_get(&m, 1,3));
     matrix_free(&m);
     //*/
     return 0;
