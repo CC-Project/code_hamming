@@ -54,13 +54,12 @@ void data_delete(uint16_t n, struct Data* d)
     uint8_t l = d->data_base.l;
     uint8_t nb = d->data_number;
 
-    for(uint16_t i = n; i < nb - l; i++)
-        data_set(i, data_get(i + l, d), d);
+    for(uint16_t i = n; i < nb - 1; i++)
+        data_set(i, data_get(i + 1, d), d);
 
-    for(uint16_t i = nb - l - 1; i < nb; i++)
-        data_set(i, 0, d);
+    data_set(nb - 1, 0, d);
 
-    d->data_number -= l;
+    d->data_number -= 1;
 }
 
 void data_show(struct Data* d)
