@@ -21,6 +21,11 @@
     void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val); //Sets the i-th line, j-th column of m to val
     uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j); //Gets the i-th line, j-th column of m
 
+    void matrix_del_line(uint16_t i, struct Matrix* m);
+    void matrix_del_col(uint16_t j, struct Matrix* m);
+
+    uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m); // Return the number of the (i,j) data
+
     struct Matrix matrix_mul(struct Matrix* a, struct Matrix* b);
     struct Matrix matrix_add(struct Matrix* a, struct Matrix* b);
     void matrix_make_identity(struct Matrix* m);

@@ -1,9 +1,10 @@
 #include "hamming.h"
 #include <math.h>
+
 /*
 struct Data hamming_encode(struct Hamming_config * conf, struct Data * word)
 {
-    struct Matrix word_matrix = matrix_generate(word->data_number, 1);
+    struct Matrix word_matrix = matrix_generate(word->data_number, 1, word->data_base);
     word_matrix->data = word;
 
     struct Matrix result = matrix_mul(conf->control_matrix, word_matrix);
@@ -17,7 +18,6 @@ struct Data hamming_decode(struct * Hamming_config conf, struct Data * word)
 
 struct Data hamming_check(struct * Hamming_config conf, struct Data * word)
 {
-
 }
 
 struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)

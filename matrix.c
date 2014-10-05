@@ -50,40 +50,39 @@ uint8_t matrix_isempty(struct Matrix* m)
 
 void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets the i-th line, j-th column of m to val
 {
-    data_set( (i-1)*m->cols + j-1, val, &(m->data));
+    data_set(matrix_get_data_number(i, j, m), val, &(m->data));
 }
 
  uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th line, j-th column of m
  {
-     return data_get( (i-1)*m->cols + j-1, &(m->data));
+     return data_get(matrix_get_data_number(i, j, m), &(m->data));
  }
 
 struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
 {
     struct Matrix m = matrix_generate(a->rows, b->cols, a->data.data_base);
 
-    for(uint16_t i = 1; i <= m.rows; i++)
-        for(uint16_t j = 1; j <= m.cols; j++)
-            for (uint16_t k = 1; k <= a->cols; k++)
-                matrix_set(&m, i, j, matrix_get(&m, i, j) ^ (matrix_get(a, i, k) * matrix_get(b, k, j)));
+    // Pour la base 2
+    if (a->data.data_base.d == 2)
+        for(uint16_t i = 1; i <= m.rows; i++)
+            for(uint16_t j = 1; j <= m.cols; j++)
+                for (uint16_t k = 1; k <= a->cols; k++)
+                    matrix_set(&m, i, j, matrix_get(&m, i, j) ^ (matrix_get(a, i, k) * matrix_get(b, k, j)));
 
     return m;
 }
 
-/*
 struct Matrix matrix_add(struct Matrix *a, struct Matrix *b)
 {
-    struct Matrix m = matrix_generate(a->rows, b->cols);
-    for(int i = 0; i < m.rows; i++)
-    {
-        for(int j = 0; j < m.cols; j++)
-        {
-            m.t[i][j] = a->t[i][j] ^ b->t[i][j];
-        }
-    }
+    struct Matrix m = matrix_generate(a->rows, b->cols, a->data.data_base);
+
+    if (a->data.data_base.d == 2)
+        for(uint16_t i = 1; i <= m.rows; i++)
+            for(uint16_t j = 1; j <= m.cols; j++)
+                matrix_set(&m, i, j, (matrix_get(a, i, j) ^ matrix_get(b, i, j)));
+
     return m;
 }
-*/
 
 void matrix_make_identity(struct Matrix* m)
 {
@@ -92,4 +91,23 @@ void matrix_make_identity(struct Matrix* m)
         matrix_set(m, i, i, 1);
 }
 
+void matrix_del_col(uint16_t j, struct Matrix* m)
+{
+    for(uint16_t i = 1; i <= m->rows; i++)
+        data_delete(matrix_get_data_number(i, j, m) - (i - 1), &(m->data)); // On fait un - (i - 1) pour compenser le décalage du a la supression des données
 
+    m->cols -= 1;
+}
+
+void matrix_del_line(uint16_t i, struct Matrix* m)
+{
+    for(uint16_t j = 1; j <= m->cols; j++)
+        data_delete(matrix_get_data_number(i, j, m) - (j - 1), &(m->data)); // On fait un - (j - 1) pour compenser le décalage du a la supression des données
+
+    m->rows -= 1;
+}
+
+uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m) // Permet de récupéré le numéro du Data de l'élément (i,j)
+{
+    return (i-1) * m->cols + j-1;
+}
