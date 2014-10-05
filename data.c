@@ -43,6 +43,8 @@ void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of
     uint16_t i = d->data_base.l * n;    // First bit containing the data. First bit is 0, to 7.
     uint8_t l = d->data_base.l;
     uint8_t it = i % 8; // first bit in the table containing the data
+    uint8_t dt = d->data_array[i / 8];
+
 /*
     for(uint8_t c = 0; c < d->data_base.l; c++) //For each bit
         if ( data & (1 << c) )
@@ -51,7 +53,8 @@ void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of
             d->data_array[i / 8] &= ~( ( (data & (1 << c) ) >> c) << (i%8+c));
 */
     d->data_array[i / 8] = ((data) << (8 - l - it)) |
-                    (((d->data_array[i / 8] >> (8 - l)) << (8 - l)) | ((d->data_array[i / 8] << (it + l)) >> (it + l)));
+                    ((dt >> (8 - it)) << (8 - it)) |
+                    ((dt << (it + l)) >> (it + l));
 }
 
 void data_delete(uint16_t n, struct Data* d)

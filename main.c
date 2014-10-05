@@ -9,7 +9,7 @@ int main()
 
     matrix_set(&m, 1,1,1);
     matrix_set(&m, 3,1,1);
-    //matrix_set(&m, 1,2,1);
+    matrix_set(&m, 1,2,1);
     matrix_set(&m, 1,5,1);
     matrix_set(&m, 2,3,1);
     matrix_set(&m, 5,3,1);
