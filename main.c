@@ -15,9 +15,12 @@ int main()
     matrix_set(&m, 5,3,1);
 
     matrix_show(&m);
-
+    data_show(&(m.data));
+    printf("\n\n");
     matrix_del_col(4, &m);
-    matrix_show(&m);
+
+     matrix_show(&m);
+    data_show(&(m.data));
     matrix_free(&m);
     //*/
     return 0;
