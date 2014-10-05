@@ -14,10 +14,11 @@ int main()
     matrix_set(&m, 2,3,1);
     matrix_set(&m, 5,3,1);
 
+    matrix_show(&m);
     struct Data d = m.data;
 
     for(uint16_t i = 0; i < d.data_number;i++)
-        data_set(i,1,&d);
+        data_set(i,0,&d);
 
     data_show(&d);
     printf("\n\n");

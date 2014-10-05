@@ -1,6 +1,4 @@
 Matrices :
-matrix_del_line // Supprime la ligne i
-matrix_del_col // Supprime la colonne i
 matrix_add_line // Ajoute une ligne après la ligne i
 matrix_add_col // Supprime une ligne après la ligne i
 matrix_collapse_down // Ajoute deux matrices A et B l'une en dessous de l'autre
