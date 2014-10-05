@@ -54,7 +54,7 @@ void data_delete(uint16_t n, struct Data* d)
     uint8_t l = d->data_base.l;
     uint8_t nb = d->data_number;
 
-    for(uint16_t i = n; i < nb; i++)
+    for(uint16_t i = n; i < nb - l; i++)
         data_set(i, data_get(i + l, d), d);
 
     for(uint16_t i = nb - l - 1; i < nb; i++)

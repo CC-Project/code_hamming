@@ -14,14 +14,14 @@ int main()
     matrix_set(&m, 2,3,1);
     matrix_set(&m, 5,3,1);
 
-    matrix_show(&m);
-    data_show(&(m.data));
+    struct Data d = m.data;
+    data_show(&d);
     printf("\n\n");
-    matrix_del_col(4, &m);
+    data_delete(3,&d);
 
-     matrix_show(&m);
-    data_show(&(m.data));
+    data_show(&d);
     matrix_free(&m);
+    data_free(&d);
     //*/
     return 0;
 }
