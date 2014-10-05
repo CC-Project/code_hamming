@@ -51,7 +51,6 @@ void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of
 
 void data_delete(uint16_t n, struct Data* d)
 {
-    uint8_t l = d->data_base.l;
     uint8_t nb = d->data_number;
 
     for(uint16_t i = n; i < nb - 1; i++)
