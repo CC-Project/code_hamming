@@ -49,7 +49,7 @@ uint8_t data_get(uint16_t n, struct Data* d) //Returns the n-th data stored. Sta
 void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of d to data
 {
     uint8_t l = d->data_base.l;
-    uint16_t i = d->data_base.l * n;    // First bit containing the data. First bit is 0, to 7.
+    uint16_t i = l * n;    // First bit containing the data. First bit is 0, to 7.
     uint8_t it = i % 8; // first bit in the table containing the data
 
     uint8_t dt = d->data_array[i / 8]; uint8_t data1 = dt; uint8_t data2 = dt; free(dt);
