@@ -26,22 +26,26 @@ void data_free(struct Data* d)
 
 uint8_t data_get(uint16_t n, struct Data* d) //Returns the n-th data stored. Starting from 0.
 {
-    uint16_t i = d->data_base.l * n;    // First bit containing the data. First bit is 0, to 7.
-    uint8_t data = 0;
+    uint8_t l = d->data_base.l;
+    uint16_t i = l * n;    // First bit containing the data. First bit is 0, to 7.
+    uint8_t it = i % 8; // first bit in the table containing the data
 
+    /*
+    uint8_t data = 0;
     for(uint8_t c = 0; c < d->data_base.l; c++) //For each bit
         if ( d->data_array[i / 8] & (1 << (i%8+c)) )
             data |= (d->data_array[i / 8] & (1 << (i%8+c))) >> i%8;
         else
             data &= ~(d->data_array[i / 8] & (1 << (i%8+c))) >> i%8;
+    */
 
-    return data;
+    return (d->data_array[i / 8] << it) >> 8 - l;
 }
 
 void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of d to data
 {
-    uint16_t i = d->data_base.l * n;    // First bit containing the data. First bit is 0, to 7.
     uint8_t l = d->data_base.l;
+    uint16_t i = d->data_base.l * n;    // First bit containing the data. First bit is 0, to 7.
     uint8_t it = i % 8; // first bit in the table containing the data
     uint8_t dt = d->data_array[i / 8];
 
