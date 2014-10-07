@@ -30,19 +30,11 @@ uint8_t data_get(uint16_t n, struct Data* d) //Returns the n-th data stored. Sta
     uint16_t i = l * n;    // First bit containing the data. First bit is 0, to 7.
     uint8_t it = i % 8; // first bit in the table containing the data
 
-    /*
-    uint8_t data = 0;
-    for(uint8_t c = 0; c < d->data_base.l; c++) //For each bit
-        if ( d->data_array[i / 8] & (1 << (i%8+c)) )
-            data |= (d->data_array[i / 8] & (1 << (i%8+c))) >> i%8;
-        else
-            data &= ~(d->data_array[i / 8] & (1 << (i%8+c))) >> i%8;
-    */
-
     uint8_t data = d->data_array[i / 8];
 
     data <<= it;
     data >>= (8 - l);
+
     return data;
 }
 
@@ -52,25 +44,12 @@ void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of
     uint16_t i = l * n;    // First bit containing the data. First bit is 0, to 7.
     uint8_t it = i % 8; // first bit in the table containing the data
 
-    uint8_t dt = d->data_array[i / 8]; uint8_t data1 = dt; uint8_t data2 = dt; free(dt);
-
-/*
-    for(uint8_t c = 0; c < d->data_base.l; c++) //For each bit
-        if ( data & (1 << c) )
-            d->data_array[i / 8] |= ( ( (data & (1 << c) ) >> c) << (i%8+c));
-        else
-            d->data_array[i / 8] &= ~( ( (data & (1 << c) ) >> c) << (i%8+c));
-*/
+    uint8_t data1 = d->data_array[i / 8]; uint8_t data2 = d->data_array[i / 8];
 
     data1 >>= 8 - it; data1 <<= 8 - it;
     data2 <<= it + l; data2 >>= it + l;
 
     d->data_array[i / 8] = ((data) << (8 - l - it)) | (data1 | data2);
-
-    /*
-    d->data_array[i / 8] = ((data) << (8 - l - it)) |
-                    ((dt >> (8 - it)) << (8 - it)) |
-                    ((dt << (it + l)) >> (it + l));*/
 }
 
 void data_delete(uint16_t n, struct Data* d)
