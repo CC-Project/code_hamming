@@ -32,6 +32,7 @@
     struct Matrix matrix_collapse_down(struct Matrix *a, struct Matrix *b); // Collapse two matrix
     struct Matrix matrix_collapse_right(struct Matrix *a, struct Matrix *b);
 
+    struct Matrix matrix_copy(struct Matrix *a); // Copy a matrix
     void matrix_make_identity(struct Matrix* m);
 
 #endif // MATRIX_H
