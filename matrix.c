@@ -124,3 +124,18 @@ struct Matrix matrix_collapse_down(struct Matrix *a, struct Matrix *b)
 
     return m;
 }
+
+struct Matrix matrix_collapse_right(struct Matrix *a, struct Matrix *b)
+{
+    struct Matrix m = matrix_generate(a->rows, a->cols + b->cols, a->data.data_base);
+
+    for(uint16_t i = 1; i <= a->cols; i++)
+        for(uint16_t j = 1; j <= a->cols; j++)
+            matrix_set(&m, i, j, matrix_get(a, i, j));
+
+    for(uint16_t i = 1; i <= b->cols; i++)
+        for(uint16_t j = 1; j <= b->cols; j++)
+            matrix_set(&m, i, j + a->cols, matrix_get(b, i, j));
+
+    return m;
+}

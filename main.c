@@ -18,7 +18,7 @@ int main()
     matrix_show(&m);
     matrix_show(&m2);
 
-    m = matrix_collapse_down(&m, &m);
+    m = matrix_collapse_right(&m, &m);
     matrix_show(&m);
     return 0;
 }
