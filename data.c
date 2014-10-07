@@ -67,6 +67,7 @@ void data_delete(uint16_t n, struct Data* d)
 void data_show(struct Data* d)
 {
     uint8_t data;
+    printf("-----------------\nShow %d data :\n", d->data_number);
     for(uint16_t i = 0; i < d->data_number; i++)
     {
         data = data_get(i, d);
@@ -74,4 +75,5 @@ void data_show(struct Data* d)
         printf(" | ");
         print_var_bits(data);
     }
+    printf("-----------------\n\n", d->data_number);
 }

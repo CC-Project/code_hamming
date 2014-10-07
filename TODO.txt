@@ -1,5 +1,4 @@
 Matrices :
 matrix_add_line // Ajoute une ligne après la ligne i
 matrix_add_col // Supprime une ligne après la ligne i
-matrix_collapse_down // Ajoute deux matrices A et B l'une en dessous de l'autre
 matrix_collapse_right // Ajoute deux matrices A et B l'une a coté de l'autre

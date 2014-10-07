@@ -23,7 +23,7 @@ void matrix_show(struct Matrix* m)
     for(i = 0; i < m->data.data_number; i++)
     {
         j+=1;
-            printf("%d ", data_get(i, &(m->data)));
+        printf("%d ", data_get(i, &(m->data)));
         if (j == m->cols) {printf("\n"); j = 0;}
     }
     printf("\n");
@@ -110,4 +110,17 @@ void matrix_del_line(uint16_t i, struct Matrix* m)
 uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m) // Permet de récupéré le numéro du Data de l'élément (i,j)
 {
     return (i-1) * m->cols + j-1;
+}
+
+struct Matrix matrix_collapse_down(struct Matrix *a, struct Matrix *b)
+{
+    struct Matrix m = matrix_generate(a->rows + b->rows, a->cols, a->data.data_base);
+
+    for(uint16_t i = 0; i < m.data.data_number; i++)
+        if(i < a->data.data_number)
+            data_set(i, data_get(i, &(a->data)), &(m.data));
+        else
+            data_set(i, data_get(i - a->data.data_number, &(b->data)), &(m.data));
+
+    return m;
 }

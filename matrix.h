@@ -28,6 +28,7 @@
 
     struct Matrix matrix_mul(struct Matrix* a, struct Matrix* b);
     struct Matrix matrix_add(struct Matrix* a, struct Matrix* b);
+    struct Matrix matrix_collapse_down(struct Matrix *a, struct Matrix *b); // Collapse two matrix
     void matrix_make_identity(struct Matrix* m);
 
 #endif // MATRIX_H
