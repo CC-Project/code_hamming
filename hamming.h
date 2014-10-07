@@ -15,10 +15,14 @@
         uint8_t m;          // Parametres d'encodage de Hamming (On travaillera avec m < 16 pour des raisons de place mémoire)
         // --- //
         struct Matrix control_matrix; // La matrice de controle associée de taille (2^m - 1) x m
+        struct Matrix generatrix_matrix; // La matrice génératrice
     };
 
     struct Data hamming_encode(struct Hamming_config * conf, struct Data * word);
     uint16_t hamming_length(struct Data * word1, struct Data * word2);
-    struct Hamming_config generate_config(uint8_t l, uint8_t m);
+    struct Hamming_config hamming_generate_config(uint8_t l, uint8_t m);
+
+    struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf);
+    struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf);
 
 #endif // HAMMING_H
