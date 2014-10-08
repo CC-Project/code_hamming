@@ -9,11 +9,11 @@ struct Data data_generate(struct Base base, uint16_t data_number)
     d.data_number = data_number;
     d.data_base = base;
 
-    uint8_t n = floor((base.l * data_number-1)/8) + 1; //Number of byte needed
+    uint16_t n = floor((base.l * data_number-1)/8) + 1; //Number of byte needed
     d.data_array = malloc( n * sizeof(uint8_t) );
 
     //Sets initial values
-    for(uint8_t i = 0; i < n; i++)
+    for(uint16_t i = 0; i < n; i++)
         d.data_array[i] = 0;
 
     return d;
@@ -28,7 +28,7 @@ uint8_t data_get(uint16_t n, struct Data* d) //Returns the n-th data stored. Sta
 {
     uint8_t l = d->data_base.l;
     uint16_t i = l * n;    // First bit containing the data. First bit is 0, to 7.
-    uint8_t it = i % 8; // first bit in the table containing the data
+    uint8_t it = i % 8; // first bit in the byte containing the data
 
     uint8_t data = d->data_array[i / 8];
 
@@ -42,7 +42,7 @@ void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of
 {
     uint8_t l = d->data_base.l;
     uint16_t i = l * n;    // First bit containing the data. First bit is 0, to 7.
-    uint8_t it = i % 8; // first bit in the table containing the data
+    uint8_t it = i % 8; // first bit in the byte containing the data
 
     uint8_t data1 = d->data_array[i / 8]; uint8_t data2 = d->data_array[i / 8];
 

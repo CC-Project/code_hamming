@@ -24,12 +24,13 @@ int16_t hamming_check(struct Hamming_config *conf, struct Data * word)
 
     struct Matrix r = matrix_mul(&(conf->control_matrix), &data);
 
-    return r.data.data_array[0] >> 8 - conf->m; // On retourne le nombre en binaire correspondant à l'emplacement de l'erreur (=> que la matrice data reçu soit d'une taille < 255 lignes, m < 8)
+    return r.data.data_array[0] >> (8 - conf->m); // On retourne le nombre en binaire correspondant à l'emplacement de l'erreur (=> que la matrice data reçu soit d'une taille < 255 lignes, m < 8)
 }
 struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
 {
     uint16_t cols = int_pow(2, conf->m);
     struct Matrix control = matrix_generate(conf->m, cols, conf->base); // Generation de la matrice de controle
+    // C'est ici qu'intervient la condition m <= 12, en effet, data ne peut contenir que 2^16 data, en resolvant m*2^m <= 2^16 on trouve m <= 12
 
     // Remplissage de la matrice de controle
     /* Principe pour la base 2 :
@@ -46,6 +47,7 @@ struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
 
     // On rend la matrice systématique
     matrix_del_col(1, &control);
+
     for(uint8_t j = 0; j < conf->m; j++)
         matrix_del_col(int_pow(2, j) - j, &control);
 
@@ -53,7 +55,8 @@ struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
     matrix_make_identity(&identity);
 
     return matrix_collapse_right(&control, &identity);
-    // Remplissage de la matrice de controle
+
+    //return control;
 }
 
 
@@ -102,6 +105,13 @@ struct Hamming_config hamming_generate_config(uint8_t l, uint8_t m) // l = longu
 
     // Creation de la matrice de controle
     conf.control_matrix = hamming_generate_control_matrix(&conf);
-    conf.generatrix_matrix = hamming_generate_gen_matrix(&conf);
+    //conf.generatrix_matrix = hamming_generate_gen_matrix(&conf);
     return conf;
+}
+
+void hamming_free_config(struct Hamming_config *conf)
+{
+    //matrix_free(&(conf->generatrix_matrix));
+    matrix_free(&(conf->control_matrix));
+    free(conf);
 }

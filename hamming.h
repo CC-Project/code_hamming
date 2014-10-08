@@ -21,6 +21,7 @@
 
     // Function to initialize configuration
     struct Hamming_config hamming_generate_config(uint8_t l, uint8_t m);
+    void hamming_free_config(struct Hamming_config *conf);
 
     // Gestion des matrices de codage/ decodage
     struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf);

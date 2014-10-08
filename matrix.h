@@ -8,8 +8,8 @@
 
     struct Matrix
     {
-        uint8_t rows;
-        uint8_t cols;
+        uint16_t rows;
+        uint16_t cols;
 
         struct Data data;
     };
