@@ -95,7 +95,8 @@ void matrix_make_identity(struct Matrix* m)
 void matrix_del_col(uint16_t j, struct Matrix* m)
 {
     for(uint16_t i = 1; i <= m->rows; i++)
-        data_delete(matrix_get_data_number(i, j, m) - (i - 1), &(m->data)); // On fait un - (i - 1) pour compenser le décalage du a la supression des données
+        data_delete(matrix_get_data_number(i, j, m) - (i - 1), &(m->data));
+        // On fait un - (i - 1) pour compenser le décalage du a la supression des données
 
     m->cols -= 1;
 }
@@ -103,12 +104,13 @@ void matrix_del_col(uint16_t j, struct Matrix* m)
 void matrix_del_line(uint16_t i, struct Matrix* m)
 {
     for(uint16_t j = 1; j <= m->cols; j++)
-        data_delete(matrix_get_data_number(i, j, m) - (j - 1), &(m->data)); // On fait un - (j - 1) pour compenser le décalage du a la supression des données
+        data_delete(matrix_get_data_number(i, j, m) - (j - 1), &(m->data));
+        // On fait un - (j - 1) pour compenser le décalage du a la supression des données
 
     m->rows -= 1;
 }
 
-uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m) // Permet de récupéré le numéro du Data de l'élément (i,j)
+uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m)
 {
     return (i-1) * m->cols + j-1;
 }

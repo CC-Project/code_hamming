@@ -1,25 +1,31 @@
 #include "hamming.h"
 #include <math.h>
 
-/*
+
 struct Data hamming_encode(struct Hamming_config * conf, struct Data * word)
 {
     struct Matrix word_matrix = matrix_generate(word->data_number, 1, word->data_base);
-    word_matrix->data = word;
+    word_matrix.data = *word;
 
-    struct Matrix result = matrix_mul(conf->control_matrix, word_matrix);
+    struct Matrix result = matrix_mul(&(conf->generatrix_matrix), &word_matrix);
     return result.data;
 }
-
+/*
 struct Data hamming_decode(struct * Hamming_config conf, struct Data * word)
 {
 
 }
-
-struct Data hamming_check(struct * Hamming_config conf, struct Data * word)
-{
-}
 */
+
+int16_t hamming_check(struct Hamming_config *conf, struct Data * word)
+{
+    struct Matrix data = matrix_generate(word->data_number, 1, word->data_base);
+    data.data = *word;
+
+    struct Matrix r = matrix_mul(&(conf->control_matrix), &data);
+
+    return r.data.data_array[0] >> 8 - conf->m; // On retourne le nombre en binaire correspondant à l'emplacement de l'erreur (=> que la matrice data reçu soit d'une taille < 255 lignes, m < 8)
+}
 struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
 {
     uint16_t cols = int_pow(2, conf->m);
@@ -88,6 +94,7 @@ struct Hamming_config hamming_generate_config(uint8_t l, uint8_t m) // l = longu
     // Calcul des paramètres
     conf.total_size = (int_pow(base.d, m) - 1)/(base.d - 1);
     conf.word_size = conf.total_size - m;
+    conf.correction_size = 3; // 3 = code de hamming simple, 4 = code de hamming étendu
 
     // Enregistrement des paramètres
     conf.base = base;

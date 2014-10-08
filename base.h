@@ -13,5 +13,5 @@
         uint8_t l; // longueur des elements de la base (ex : dans F_8 : d = 8 mais l = 3)
     };
 
-    struct Base base_generate(uint8_t d, uint8_t l);
+    struct Base base_generate(uint8_t l);
 #endif // BASE_H
