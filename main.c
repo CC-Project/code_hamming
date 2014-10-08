@@ -23,6 +23,11 @@ int main()
     printf("Data encoded (de) :\n");
     data_show(&d);
 
+    data_set(5, 1, &d);
+
+    printf("Data modified (dm) :\n");
+    data_show(&d);
+
     uint8_t r = hamming_check(&conf, &(d));
 
     printf("Correction C x de :\n");
