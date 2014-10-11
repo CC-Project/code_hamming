@@ -5,7 +5,7 @@
 
 int main()
 {
-    struct Base base = base_generate(2);
+    struct Base base = base_generate(1);
 
     //Test code
     /**
@@ -34,11 +34,12 @@ int main()
     //Test code for matrix struct
 
     //Test code for hamming
-    /**
+
     struct Hamming_config conf = hamming_generate_config(1, 6);
 
     printf("Matrice de controle :\n");
     matrix_show(&(conf.control_matrix));
+
     printf("Matrice generatrice :\n");
     matrix_show(&(conf.generatrix_matrix));
 
@@ -64,6 +65,5 @@ int main()
     printf("%d", r);
     printf(" | ");
     print_var_bits(r);
-    **/
-    //hamming_free_config(&conf);
+    hamming_free_config(&conf);
 }

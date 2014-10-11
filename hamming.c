@@ -55,8 +55,6 @@ struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
     matrix_make_identity(&identity);
 
     return matrix_collapse_right(&control, &identity);
-
-    //return control;
 }
 
 
@@ -64,10 +62,10 @@ struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf)
 {
     struct Matrix control = matrix_copy(&(conf->control_matrix)); // Récupération de la matrice de controle
 
-    for(uint8_t i = 1; i <= conf->m; i++)
+    for(uint8_t i = 1; i <= control.rows; i++)
         matrix_del_col(control.cols, &control); // On supprime les m dernières colonnes qui correspondent a l'identité
 
-    struct Matrix identity = matrix_generate(int_pow(2, conf->m) - 1 - conf->m, int_pow(2, conf->m) - 1 - conf->m, conf->base);
+    struct Matrix identity = matrix_generate(control.cols, control.cols, conf->base);
     matrix_make_identity(&identity);
 
     struct Matrix gen = matrix_collapse_down(&identity, &control); // On colle ensuite cette matrice avec l'identité
@@ -105,13 +103,13 @@ struct Hamming_config hamming_generate_config(uint8_t l, uint8_t m) // l = longu
 
     // Creation de la matrice de controle
     conf.control_matrix = hamming_generate_control_matrix(&conf);
-    //conf.generatrix_matrix = hamming_generate_gen_matrix(&conf);
+    conf.generatrix_matrix = hamming_generate_gen_matrix(&conf);
     return conf;
 }
 
 void hamming_free_config(struct Hamming_config *conf)
 {
-    //matrix_free(&(conf->generatrix_matrix));
+    matrix_free(&(conf->generatrix_matrix));
     matrix_free(&(conf->control_matrix));
     free(conf);
 }

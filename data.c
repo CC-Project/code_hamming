@@ -43,12 +43,10 @@ uint8_t data_get(uint16_t n, struct Data* d) //Returns the n-th data stored. Sta
 void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of d to data
 {
     if( n >= d->data_number)
-    {
-         printf("ERROR: Inccorect data number. Function data_set\n");
-    }
+         printf("ERROR: Incorect data number. Function data_set (you ask %d in a array with %d elements)\n", n + 1, d->data_number);
     else
     {
-        if( 0 <= data && data <= d->data_base.d -1)
+        if( 0 <= data && data <= d->data_base.d - 1)
         {
             uint8_t l = d->data_base.l;
             uint16_t i = l * n;     // First bit containing the data. First bit is 0, to 7.
@@ -62,7 +60,7 @@ void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of
         }
         else
         {
-            printf("ERROR: Inccorect data value. Function data_set\n");
+            printf("ERROR: Inccorect data value. Function data_set, (you have gived the data %d)\n", data);
         }
     }
 }
