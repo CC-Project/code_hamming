@@ -1,7 +1,12 @@
+Questions:
+	1.	Calloc ou malloc? Calloc -> Mets à 0 dès l'allocation de la mémoire, mais plus lent, contrairement à malloc.
+		->Gain de temps vs sûreté du code?
+	2.	On calcule souvent le nombre total d'octets dans une struct Data: intégrer cette valeur dans la structure?
+		->Perte de mémoire mais plus rapide. Aussi: moins de ram necessaire.
+
 Matrices :
-matrix_add_line(i) -> Ajoute une ligne après la ligne i. Nouvelle ligne initialisée à 0.
-matrix_add_col(i) -> Supprime une ligne après la ligne i
+	1.	matrix_add_line(i) -> Ajoute une ligne après la ligne i. Nouvelle ligne initialisée à 0.
+	2.	matrix_add_col(i) -> Supprime une ligne après la ligne i
 
 Data:
-data_add(val) -> Ajoute une donnée à la fin des autres
-data_delete(n) -> Libérer la mémoire s'il y a un octet en trop. Bug pour l'instant.
+	1.	data_delete(n) -> Optimisation. On fait à peu près le même calcul 3 fois.

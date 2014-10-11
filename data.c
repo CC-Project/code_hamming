@@ -10,7 +10,7 @@ struct Data data_generate(struct Base base, uint16_t data_number)
     d.data_number = data_number;
     d.data_base = base;
 
-    uint16_t n = floor((base.l * data_number-1)/8) + 1; //Number of byte needed
+    uint16_t n = (base.l * data_number - 1)/8 + 1; //Number of byte needed
     d.data_array = malloc( n * sizeof(uint8_t) );
 
     //Sets initial values
@@ -29,8 +29,8 @@ void data_free(struct Data* d)
 uint8_t data_get(uint16_t n, struct Data* d) //Returns the n-th data stored. Starting from 0.
 {
     uint8_t l = d->data_base.l;
-    uint16_t i = l * n;    // First bit containing the data. First bit is 0, to 7.
-    uint8_t it = i % 8; // first bit in the byte containing the data
+    uint16_t i = l * n;     // First bit containing the data. First bit is 0, to 7.
+    uint8_t it = i % 8;     // First bit in the byte containing the data
 
     uint8_t data = d->data_array[i / 8];
 
@@ -55,7 +55,6 @@ void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of
             uint8_t it = i % 8;     // First bit in the byte containing the data
 
             uint8_t data1 = d->data_array[i / 8]; uint8_t data2 = d->data_array[i / 8];
-
             data1 >>= 8 - it; data1 <<= 8 - it;
             data2 <<= it + l; data2 >>= it + l;
 
@@ -68,6 +67,23 @@ void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of
     }
 }
 
+void data_add(uint8_t data, struct Data* d)
+{
+    uint16_t a = (d->data_base.l * (d->data_number +1 ) - 1) / 8 + 1;
+    uint16_t b = (d->data_base.l * d->data_number - 1) / 8 + 1;
+    if( a > b )
+    {
+        d->data_array = realloc(d->data_array, a);
+        d->data_number += 1;
+        data_set(d->data_number-1, data, d);
+    }
+    else
+    {
+        d->data_number += 1;
+        data_set(d->data_number-1, data, d);
+    }
+}
+
 void data_delete(uint16_t n, struct Data* d)
 {
     if (0 <= n && n < d->data_number)
@@ -77,14 +93,16 @@ void data_delete(uint16_t n, struct Data* d)
         for(uint16_t i = n; i < nb - 1; i++)
             data_set(i, data_get(i + 1, d), d);
 
-        //Number of byte needed. Taken from data_generate: floor((d->data_base.l * d->data_number - 1)/8) + 1
-        if( floor((d->data_base.l * d->data_number - 2)/8) < floor((d->data_base.l * d->data_number - 1)/8) + 1)
-        {
-            d->data_array = realloc(d->data_array, floor((d->data_base.l * d->data_number - 2)/8));
-        }
+        /*
+            Determines wether or not it is necessary to allocate a new block of memory.
+            Number of byte needed. Taken from data_generate: floor((d->data_base.l * d->data_number - 1)/8) + 1
+        */
+        uint16_t a = (d->data_base.l * (d->data_number - 1) - 1)/8 + 1;
+        uint16_t b = d->data_base.l * d->data_number /8 + 1;
+        if( a < b)
+            d->data_array = realloc(d->data_array, a);
         else
             data_set(nb - 1, 0, d);
-
         d->data_number -= 1;
     }
     else

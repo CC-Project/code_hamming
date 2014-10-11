@@ -5,14 +5,13 @@
 
 int main()
 {
-    struct Base base = base_generate(1);
+    struct Base base = base_generate(2);
 
     //Test code
     /**
     uint8_t* i = malloc(2*sizeof(uint8_t));
     i[0] = 1;
     i[1] = 2;
-
     i = realloc(i, 3 * sizeof(uint8_t));
     i[2] = 3;
     printf("%d %d %d", i[0], i[1], i[2]);
@@ -20,15 +19,17 @@ int main()
     **/
 
     //Test code for data struct
-    //**
-    struct Data d = data_generate(base,2);
-    data_set(1,1, &d);
-    data_set(4, data_get(1,&d), &d);
+    /**
+    struct Data d = data_generate(base,9);
+    data_set(0,2, &d);
+    data_set(1, data_get(0,&d), &d);
     data_show(&d);
     data_delete(1,&d);
     data_show(&d);
+    data_add(3,&d);
+    data_show(&d);
     data_free(&d);
-    //**/
+    **/
 
     //Test code for matrix struct
 
