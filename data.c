@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "utilities.h"
 #include "data.h"
 
 struct Data data_generate(struct Base base, uint16_t data_number)
@@ -21,6 +22,7 @@ struct Data data_generate(struct Base base, uint16_t data_number)
 
 void data_free(struct Data* d)
 {
+    free(d->data_array);
     free(d);
 }
 
@@ -40,28 +42,53 @@ uint8_t data_get(uint16_t n, struct Data* d) //Returns the n-th data stored. Sta
 
 void data_set(uint16_t n, uint8_t data, struct Data* d) //Sets the n-th block of d to data
 {
-    uint8_t l = d->data_base.l;
-    uint16_t i = l * n;    // First bit containing the data. First bit is 0, to 7.
-    uint8_t it = i % 8; // first bit in the byte containing the data
+    if( n >= d->data_number)
+    {
+         printf("ERROR: Inccorect data number. Function data_set\n");
+    }
+    else
+    {
+        if( 0 <= data && data <= d->data_base.d -1)
+        {
+            uint8_t l = d->data_base.l;
+            uint16_t i = l * n;     // First bit containing the data. First bit is 0, to 7.
+            uint8_t it = i % 8;     // First bit in the byte containing the data
 
-    uint8_t data1 = d->data_array[i / 8]; uint8_t data2 = d->data_array[i / 8];
+            uint8_t data1 = d->data_array[i / 8]; uint8_t data2 = d->data_array[i / 8];
 
-    data1 >>= 8 - it; data1 <<= 8 - it;
-    data2 <<= it + l; data2 >>= it + l;
+            data1 >>= 8 - it; data1 <<= 8 - it;
+            data2 <<= it + l; data2 >>= it + l;
 
-    d->data_array[i / 8] = ((data) << (8 - l - it)) | (data1 | data2);
+            d->data_array[i / 8] = ((data) << (8 - l - it)) | (data1 | data2);
+        }
+        else
+        {
+            printf("ERROR: Inccorect data value. Function data_set\n");
+        }
+    }
 }
 
 void data_delete(uint16_t n, struct Data* d)
 {
-    uint8_t nb = d->data_number;
+    if (0 <= n && n < d->data_number)
+    {
+        uint8_t nb = d->data_number;
 
-    for(uint16_t i = n; i < nb - 1; i++)
-        data_set(i, data_get(i + 1, d), d);
+        for(uint16_t i = n; i < nb - 1; i++)
+            data_set(i, data_get(i + 1, d), d);
 
-    data_set(nb - 1, 0, d);
+        //Number of byte needed. Taken from data_generate: floor((d->data_base.l * d->data_number - 1)/8) + 1
+        if( floor((d->data_base.l * d->data_number - 2)/8) < floor((d->data_base.l * d->data_number - 1)/8) + 1)
+        {
+            d->data_array = realloc(d->data_array, floor((d->data_base.l * d->data_number - 2)/8));
+        }
+        else
+            data_set(nb - 1, 0, d);
 
-    d->data_number -= 1;
+        d->data_number -= 1;
+    }
+    else
+        printf("ERROR: Deleting a wrong block. Function data_delete\n");
 }
 
 void data_show(struct Data* d)

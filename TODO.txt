@@ -1,3 +1,7 @@
 Matrices :
-matrix_add_line // Ajoute une ligne après la ligne i
-matrix_add_col // Supprime une ligne après la ligne i
+matrix_add_line(i) -> Ajoute une ligne après la ligne i. Nouvelle ligne initialisée à 0.
+matrix_add_col(i) -> Supprime une ligne après la ligne i
+
+Data:
+data_add(val) -> Ajoute une donnée à la fin des autres
+data_delete(n) -> Libérer la mémoire s'il y a un octet en trop. Bug pour l'instant.

@@ -6,7 +6,7 @@
     {
         struct Base data_base;  // Base de travail
         uint16_t data_number;   // Nombre de données contenu dans le tableau "data_array"
-        uint8_t* data_array;  // Tableau de uint8_t contenant les données
+        uint8_t* data_array;    // Tableau de uint8_t contenant les données
     };
 
     struct Data data_generate(struct Base base, uint16_t data_number);
