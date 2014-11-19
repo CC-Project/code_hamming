@@ -2,8 +2,11 @@
 #include <stdio.h>
 #include "utilities.h"
 #include "hamming.h"
+#include <time.h>
 
-int main()
+int test_data_matrix_system();
+
+int main(int argc, char *argv[])
 {
     struct Base base = base_generate(1);
 
@@ -30,40 +33,72 @@ int main()
     data_show(&d);
     data_free(&d);
     **/
-
+    //return test_data_matrix_system(atoi(argv[1]));
     //Test code for matrix struct
-
     //Test code for hamming
 
-    struct Hamming_config conf = hamming_generate_config(1, 6);
-
+    struct Hamming_config conf = hamming_generate_config(base, 3);
+    // Affichage des matrices de controle et de generation
     printf("Matrice de controle :\n");
     matrix_show(&(conf.control_matrix));
 
     printf("Matrice generatrice :\n");
     matrix_show(&(conf.generatrix_matrix));
 
+    // Creation du mot a encoder
     struct Data dte = data_generate(base, 4);
     dte.data_array[0] = 0b10100000;
 
+    // Encodage
     struct Data d = hamming_encode(&conf, &dte);
 
+    // Affichage
     printf("Data to encode (dte) :\n");
     data_show(&dte);
 
     printf("Data encoded (de) :\n");
     data_show(&d);
 
-    data_set(5, 1, &d);
+    // Infiltration d'une erreur dans le mot
+    data_set(4, 1, &d);
 
     printf("Data modified (dm) :\n");
     data_show(&d);
 
-    uint8_t r = hamming_check(&conf, &(d));
-
+    // Correction
+    struct Matrix r = hamming_check(&conf, &(d));
+    // Affichage de la correction
     printf("Correction C x de :\n");
-    printf("%d", r);
+    matrix_show(&r);
+    /**printf("%d", r);
     printf(" | ");
-    print_var_bits(r);
+    print_var_bits(r);**/
+
+    /*printf("\nMultiplication :\n");
+    struct Matrix mul = matrix_mul(&(conf.control_matrix), &(conf.generatrix_matrix));
+    matrix_show(&mul);*/
     hamming_free_config(&conf);
+}
+
+int test_data_matrix_system(int sec)
+{
+    clock_t time;
+    int n = 0;
+    struct Matrix m = matrix_generate(5, 5, base_generate(1));
+    //matrix_show(&m);
+    time = clock();
+    while(time/CLOCKS_PER_SEC < sec)
+    {
+        for(uint8_t i = 1; i <= m.rows; i++)
+            for(uint8_t j = 1; j <= m.cols; j++)
+            {
+                matrix_set(&m, i, j, matrix_get(&m, i, j) >> 7);
+                n += 2;
+            }
+
+        time = clock();
+    }
+
+    //printf("Nombre de manipulations de donnees : %d\n", n);
+    return n;
 }

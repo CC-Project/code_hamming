@@ -10,21 +10,15 @@ struct Data hamming_encode(struct Hamming_config * conf, struct Data * word)
     struct Matrix result = matrix_mul(&(conf->generatrix_matrix), &word_matrix);
     return result.data;
 }
-/*
-struct Data hamming_decode(struct * Hamming_config conf, struct Data * word)
-{
 
-}
-*/
-
-int16_t hamming_check(struct Hamming_config *conf, struct Data * word)
+struct Matrix hamming_check(struct Hamming_config *conf, struct Data * word)
 {
     struct Matrix data = matrix_generate(word->data_number, 1, word->data_base);
     data.data = *word;
 
     struct Matrix r = matrix_mul(&(conf->control_matrix), &data);
 
-    return r.data.data_array[0] >> (8 - conf->m); // On retourne le nombre en binaire correspondant à l'emplacement de l'erreur (=> que la matrice data reçu soit d'une taille < 255 lignes, m < 8)
+    return r; // On retourne le nombre en binaire correspondant à l'emplacement de l'erreur (=> que la matrice data reçu soit d'une taille < 255 lignes, m < 8)
 }
 struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
 {
@@ -83,14 +77,9 @@ uint16_t hamming_length(struct Data * word1, struct Data * word2) // Renvoie la 
     return r;
 }
 */
-struct Hamming_config hamming_generate_config(uint8_t l, uint8_t m) // l = longueur des elements de la base, m = paramètre de hamming
+struct Hamming_config hamming_generate_config(struct Base base, uint8_t m) // l = longueur des elements de la base, m = paramètre de hamming
 {
     struct Hamming_config conf;
-    struct Base base;
-
-    // Configuration de la base
-    base.d = int_pow(2, l);
-    base.l = l;
 
     // Calcul des paramètres
     conf.total_size = (int_pow(base.d, m) - 1)/(base.d - 1);

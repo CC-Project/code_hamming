@@ -20,7 +20,7 @@
     };
 
     // Function to initialize configuration
-    struct Hamming_config hamming_generate_config(uint8_t l, uint8_t m);
+    struct Hamming_config hamming_generate_config(struct Base base, uint8_t m);
     void hamming_free_config(struct Hamming_config *conf);
 
     // Gestion des matrices de codage/ decodage
@@ -31,6 +31,6 @@
     struct Data hamming_encode(struct Hamming_config * conf, struct Data * word);
 
     // Data check to find errors
-    int16_t hamming_check(struct Hamming_config * conf, struct Data * word);
+    struct Matrix hamming_check(struct Hamming_config * conf, struct Data * word);
 
 #endif // HAMMING_H
