@@ -11,40 +11,37 @@ struct Matrix hamming_decode(struct Hamming_config * conf, struct Matrix * word)
 {
 
 }
-
-struct Matrix hamming_generate_syndromes_matrix(struct Hamming_config * conf)
+void hamming_fill_syndromes_array(struct Hamming_config * conf)
 {
-    struct Matrix syndromes = matrix_generate(int_pow(2, conf->m), 1, conf->base);
+    conf->syndrome_array = malloc(int_pow(2, conf->m) * sizeof(uint8_t));
     struct Matrix d = matrix_generate(conf->total_size, 1, conf->base);
     struct Matrix dc;
     uint8_t synd;
 
-    for(uint8_t i = 1; i <= d.data_number; i++)
+    // Pour la base 2
+    for(uint16_t i = 1; i <= conf->total_size; i++)
     {
-        matrix_set(&d, d.data_number - i, 1, 1);
+        matrix_set(&d, conf->total_size - i, 1, 1);
         dc = hamming_syndrome(conf, &d);
 
         // Ici, on sait que m <= 8. donc que dc est codé sur 8 bits
-        synd = dc.data_array[0]; // On récupère le syndrome (ici il faudrait utiliser matrix_word_to_int)
-        if(matrix_get(&syndromes, synd, 0) == 0) // Si le syndrome n'a pas deja ete calcule
-            matrix_set(&syndromes, synd, 0, d.data_number - i); // On le met a jour
+        synd = dc.data.data_array[0]; // On récupère le syndrome (ici il faudrait utiliser matrix_word_to_int)
+        if(conf->syndrome_array[synd] == 0) // Si le syndrome n'a pas deja ete calcule
+            conf->syndrome_array[synd] = conf->total_size - i; // On le met a jour
 
-        matrix_set(&d, d.data_number - i, 1, 1);
+        matrix_set(&d, conf->total_size - i, 1, 1);
     }
     // Libération de mémoire
     matrix_free(&d);
     matrix_free(&dc);
-    free(synd);
-
-    // On retourne la matrice
-    return syndromes;
+    free(&synd);
 }
 
 uint8_t hamming_check(struct Hamming_config * conf, struct Matrix * word)
 {
-    struct Matrix synd = hamming_syndrome(&conf, word);
+    struct Matrix synd = hamming_syndrome(conf, word);
 
-    return matrix_get(&(conf->syndrome_matrix), synd, 1);
+    return conf->syndrome_array[synd.data.data_array[0]];
 }
 
 struct Matrix hamming_syndrome(struct Hamming_config *conf, struct Matrix * word)
@@ -118,7 +115,7 @@ struct Hamming_config hamming_generate_config(struct Base base, uint8_t m) // l 
     conf.generatrix_matrix = hamming_generate_gen_matrix(&conf);
 
     // Generation du tableau de syndromes
-    conf.syndromes_matrix = hamming_generate_syndromes_matrix(&conf);
+    hamming_fill_syndromes_array(&conf);
 
     return conf;
 }
@@ -127,6 +124,5 @@ void hamming_free_config(struct Hamming_config *conf)
 {
     matrix_free(&(conf->generatrix_matrix));
     matrix_free(&(conf->control_matrix));
-    matrix_free(&(conf->syndrome_matrix));
     free(conf);
 }

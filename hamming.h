@@ -17,7 +17,7 @@
 
         struct Matrix control_matrix; // La matrice de controle associée de taille (2^m - 1) x m
         struct Matrix generatrix_matrix; // La matrice génératrice
-        struct Matrix syndrome_matrix; // Le tableau de syndromes (m <= 8 donc les syndrome sont codé sur 8 bits au max, d'ou le uint8_t)
+        uint8_t* syndrome_array; // Le tableau de syndromes (m <= 8 donc les syndrome sont codé sur 8 bits au max, d'ou le uint8_t)
     };
 
     // Function to initialize configuration
@@ -34,7 +34,7 @@
     uint8_t hamming_check(struct Hamming_config * conf, struct Matrix * word); // Retourne en binaire le numero du bit defectueux
 
     // Data check to find the syndrome
-    struct Matrix hamming_syndrome(struct Hamming_config * conf, struct Matrix * word); // Calcul le syndrome associé a un code
-    struct Matrix hamming_generate_syndromes_matrix(struct Hamming_config * conf); // Generate the array of syndromes
+    struct Matrix hamming_syndrome(struct Hamming_config *conf, struct Matrix * word); // Calcul le syndrome associé a un code
+    void hamming_fill_syndromes_array(struct Hamming_config * conf); // Generate the array of syndromes
 
 #endif // HAMMING_H

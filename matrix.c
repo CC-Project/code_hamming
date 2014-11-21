@@ -39,9 +39,8 @@ void matrix_show(struct Matrix* m)
 void matrix_show_word(struct Matrix * m)
 {
     struct Matrix tm = matrix_transpose(m);
-    matrix_show(&m2);
+    matrix_show(&tm);
 }
-
 
 void matrix_void(struct Matrix * m)
 {

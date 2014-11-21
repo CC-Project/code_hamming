@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     //return test_data_matrix_system(atoi(argv[1]));
 
     //Test code for hamming
-    struct Hamming_config conf = hamming_generate_config(base, 8);
+    struct Hamming_config conf = hamming_generate_config(base, 3);
     printf("--------------------------\n### TEST DU CODE DE HAMMING (%d, %d, %d) ###\n--------------------------\n\n", conf.total_size, conf.word_size, conf.correction_size);
 
     // Affichage des matrices de controle et de generation
@@ -46,18 +46,17 @@ int main(int argc, char *argv[])
     printf("Matrice generatrice :\n");
     matrix_show(&(conf.generatrix_matrix));
 
-    printf("Tableau de syndromes :\n");
-    matrix_show(&(conf.generatrix_matrix));
     // Creation du mot a encoder
     struct Matrix dte = matrix_generate(conf.word_size, 1, base);
-    dte.data.data_array[0] = 0b10100100;
-
-    // Encodage
-    struct Matrix d = hamming_encode(&conf, &dte);
+    matrix_set(&dte, 1, 0, 1);
+    matrix_set(&dte, 3, 0, 1);
 
     // Affichage
     printf("Data to encode (dte) :\n");
     matrix_show_word(&dte);
+    /**
+    // Encodage
+    struct Matrix d = hamming_encode(&conf, &dte);
 
     printf("Data encoded (de) :\n");
     matrix_show_word(&d);
@@ -73,12 +72,7 @@ int main(int argc, char *argv[])
     // Affichage de la correction
     printf("Syndrome C x de :\n");
     matrix_show_word(&r);
-
-    printf()
-
-    /*printf("\nMultiplication :\n");
-    struct Matrix mul = matrix_mul(&(conf.control_matrix), &(conf.generatrix_matrix));
-    matrix_show(&mul);*/
+    **/
     hamming_free_config(&conf);
 }
 
