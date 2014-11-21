@@ -63,12 +63,18 @@ uint8_t matrix_isempty(struct Matrix* m)
 
 void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets the i-th line, j-th column of m to val
 {
-    data_set(matrix_get_data_number(i, j, m), val, &(m->data));
+    if(i <= m->rows && j <= m->cols)
+        data_set(matrix_get_data_number(i, j, m), val, &(m->data));
+    else
+        printf("ERROR: Incorect matrix size. Function matrix_set, (you have ask the data (%d,%d))\n", i,j);
 }
 
  uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th line, j-th column of m
  {
-     return data_get(matrix_get_data_number(i, j, m), &(m->data));
+    if(i <= m->rows && j <= m->cols)
+        return data_get(matrix_get_data_number(i, j, m), &(m->data));
+    else
+        printf("ERROR: Incorect matrix size. Function matrix_set, (you have ask the data (%d,%d))\n", i,j);
  }
 
 struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
@@ -220,7 +226,7 @@ struct Matrix matrix_transpose(struct Matrix * m)
 
     for(uint16_t i = 1; i <= m2.rows; i++)
         for(uint16_t j = 1; j <= m2.cols; j++)
-            matrix_set(&m, i, j, matrix_get(m, j, i));
+            matrix_set(&m2, i, j, matrix_get(m, j, i));
 
     return m2;
 }

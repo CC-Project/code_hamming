@@ -59,9 +59,7 @@ void data_set(uint16_t n, uint8_t data, struct Data* d) // Sets the n-th block o
             d->data_array[i / 8] = ((data) << (8 - l - it)) | (data1 | data2);
         }
         else
-        {
             printf("ERROR: Incorect data value. Function data_set, (you have gived the data %d)\n", data);
-        }
     }
 }
 

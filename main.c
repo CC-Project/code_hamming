@@ -48,13 +48,13 @@ int main(int argc, char *argv[])
 
     // Creation du mot a encoder
     struct Matrix dte = matrix_generate(conf.word_size, 1, base);
-    matrix_set(&dte, 1, 0, 1);
-    matrix_set(&dte, 3, 0, 1);
+    matrix_set(&dte, 3, 1, 1);
+    matrix_set(&dte, 1, 1, 1);
 
     // Affichage
     printf("Data to encode (dte) :\n");
     matrix_show_word(&dte);
-    /**
+
     // Encodage
     struct Matrix d = hamming_encode(&conf, &dte);
 
@@ -68,11 +68,14 @@ int main(int argc, char *argv[])
     matrix_show_word(&d);
 
     // Correction
-    struct Matrix r = hamming_syndrome(&conf, &(d));
+    struct Matrix r = hamming_syndrome(&conf, &d);
     // Affichage de la correction
     printf("Syndrome C x de :\n");
     matrix_show_word(&r);
-    **/
+
+    uint8_t b = hamming_check(&conf, &d);
+    printf("######### Bit corrompu : %d \n", b);
+
     hamming_free_config(&conf);
 }
 

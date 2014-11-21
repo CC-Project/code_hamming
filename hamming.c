@@ -19,14 +19,14 @@ void hamming_fill_syndromes_array(struct Hamming_config * conf)
     uint8_t synd;
 
     // Pour la base 2
-    for(uint16_t i = 1; i <= conf->total_size; i++)
+    for(uint16_t i = 0; i < conf->total_size; i++)
     {
         matrix_set(&d, conf->total_size - i, 1, 1);
         dc = hamming_syndrome(conf, &d);
 
         // Ici, on sait que m <= 8. donc que dc est codé sur 8 bits
         synd = dc.data.data_array[0]; // On récupère le syndrome (ici il faudrait utiliser matrix_word_to_int)
-        if(conf->syndrome_array[synd] == 0) // Si le syndrome n'a pas deja ete calcule
+        if(synd != 0 && conf->syndrome_array[synd] == 0) // Si le syndrome n'a pas deja ete calcule
             conf->syndrome_array[synd] = conf->total_size - i; // On le met a jour
 
         matrix_set(&d, conf->total_size - i, 1, 1);
