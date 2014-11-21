@@ -34,10 +34,11 @@ int main(int argc, char *argv[])
     data_free(&d);
     **/
     //return test_data_matrix_system(atoi(argv[1]));
-    //Test code for matrix struct
-    //Test code for hamming
 
-    struct Hamming_config conf = hamming_generate_config(base, 3);
+    //Test code for hamming
+    struct Hamming_config conf = hamming_generate_config(base, 8);
+    printf("--------------------------\n### TEST DU CODE DE HAMMING (%d, %d, %d) ###\n--------------------------\n\n", conf.total_size, conf.word_size, conf.correction_size);
+
     // Affichage des matrices de controle et de generation
     printf("Matrice de controle :\n");
     matrix_show(&(conf.control_matrix));
@@ -45,34 +46,35 @@ int main(int argc, char *argv[])
     printf("Matrice generatrice :\n");
     matrix_show(&(conf.generatrix_matrix));
 
+    printf("Tableau de syndromes :\n");
+    matrix_show(&(conf.generatrix_matrix));
     // Creation du mot a encoder
-    struct Data dte = data_generate(base, 4);
-    dte.data_array[0] = 0b10100000;
+    struct Matrix dte = matrix_generate(conf.word_size, 1, base);
+    dte.data.data_array[0] = 0b10100100;
 
     // Encodage
-    struct Data d = hamming_encode(&conf, &dte);
+    struct Matrix d = hamming_encode(&conf, &dte);
 
     // Affichage
     printf("Data to encode (dte) :\n");
-    data_show(&dte);
+    matrix_show_word(&dte);
 
     printf("Data encoded (de) :\n");
-    data_show(&d);
+    matrix_show_word(&d);
 
     // Infiltration d'une erreur dans le mot
-    data_set(4, 1, &d);
+    data_set(1, 1, &(d.data));
 
     printf("Data modified (dm) :\n");
-    data_show(&d);
+    matrix_show_word(&d);
 
     // Correction
-    struct Matrix r = hamming_check(&conf, &(d));
+    struct Matrix r = hamming_syndrome(&conf, &(d));
     // Affichage de la correction
-    printf("Correction C x de :\n");
-    matrix_show(&r);
-    /**printf("%d", r);
-    printf(" | ");
-    print_var_bits(r);**/
+    printf("Syndrome C x de :\n");
+    matrix_show_word(&r);
+
+    printf()
 
     /*printf("\nMultiplication :\n");
     struct Matrix mul = matrix_mul(&(conf.control_matrix), &(conf.generatrix_matrix));

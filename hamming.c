@@ -1,25 +1,59 @@
 #include "hamming.h"
 #include <math.h>
 
-
-struct Data hamming_encode(struct Hamming_config * conf, struct Data * word)
+struct Matrix hamming_encode(struct Hamming_config * conf, struct Matrix * word)
 {
-    struct Matrix word_matrix = matrix_generate(word->data_number, 1, word->data_base);
-    word_matrix.data = *word;
-
-    struct Matrix result = matrix_mul(&(conf->generatrix_matrix), &word_matrix);
-    return result.data;
+    struct Matrix result = matrix_mul(&(conf->generatrix_matrix), word);
+    return result;
 }
 
-struct Matrix hamming_check(struct Hamming_config *conf, struct Data * word)
+struct Matrix hamming_decode(struct Hamming_config * conf, struct Matrix * word)
 {
-    struct Matrix data = matrix_generate(word->data_number, 1, word->data_base);
-    data.data = *word;
 
-    struct Matrix r = matrix_mul(&(conf->control_matrix), &data);
-
-    return r; // On retourne le nombre en binaire correspondant à l'emplacement de l'erreur (=> que la matrice data reçu soit d'une taille < 255 lignes, m < 8)
 }
+
+struct Matrix hamming_generate_syndromes_matrix(struct Hamming_config * conf)
+{
+    struct Matrix syndromes = matrix_generate(int_pow(2, conf->m), 1, conf->base);
+    struct Matrix d = matrix_generate(conf->total_size, 1, conf->base);
+    struct Matrix dc;
+    uint8_t synd;
+
+    for(uint8_t i = 1; i <= d.data_number; i++)
+    {
+        matrix_set(&d, d.data_number - i, 1, 1);
+        dc = hamming_syndrome(conf, &d);
+
+        // Ici, on sait que m <= 8. donc que dc est codé sur 8 bits
+        synd = dc.data_array[0]; // On récupère le syndrome (ici il faudrait utiliser matrix_word_to_int)
+        if(matrix_get(&syndromes, synd, 0) == 0) // Si le syndrome n'a pas deja ete calcule
+            matrix_set(&syndromes, synd, 0, d.data_number - i); // On le met a jour
+
+        matrix_set(&d, d.data_number - i, 1, 1);
+    }
+    // Libération de mémoire
+    matrix_free(&d);
+    matrix_free(&dc);
+    free(synd);
+
+    // On retourne la matrice
+    return syndromes;
+}
+
+uint8_t hamming_check(struct Hamming_config * conf, struct Matrix * word)
+{
+    struct Matrix synd = hamming_syndrome(&conf, word);
+
+    return matrix_get(&(conf->syndrome_matrix), synd, 1);
+}
+
+struct Matrix hamming_syndrome(struct Hamming_config *conf, struct Matrix * word)
+{
+    struct Matrix r = matrix_mul(&(conf->control_matrix), word);
+
+    return r; // On retourne le nombre en binaire correspondant au syndrome (=> que la matrice data reçu soit d'une taille < 255 lignes, m < 8)
+}
+
 struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
 {
     uint16_t cols = int_pow(2, conf->m);
@@ -51,7 +85,6 @@ struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
     return matrix_collapse_right(&control, &identity);
 }
 
-
 struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf)
 {
     struct Matrix control = matrix_copy(&(conf->control_matrix)); // Récupération de la matrice de controle
@@ -65,18 +98,7 @@ struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf)
     struct Matrix gen = matrix_collapse_down(&identity, &control); // On colle ensuite cette matrice avec l'identité
     return gen;
 }
-/*
-uint16_t hamming_length(struct Data * word1, struct Data * word2) // Renvoie la distance de hamming entre 2 codes
-{
-    // Formule valable en base 2 seulement
-    uint16_t r = 0;
 
-    for(uint8_t i = 0; i < word1->data_number; i++)
-        r += data_get(&word1, i) ^ data_get(&word2, i);
-
-    return r;
-}
-*/
 struct Hamming_config hamming_generate_config(struct Base base, uint8_t m) // l = longueur des elements de la base, m = paramètre de hamming
 {
     struct Hamming_config conf;
@@ -84,7 +106,8 @@ struct Hamming_config hamming_generate_config(struct Base base, uint8_t m) // l 
     // Calcul des paramètres
     conf.total_size = (int_pow(base.d, m) - 1)/(base.d - 1);
     conf.word_size = conf.total_size - m;
-    conf.correction_size = 3; // 3 = code de hamming simple, 4 = code de hamming étendu
+
+    conf.correction_size = 3; // 3 = code de hamming simple
 
     // Enregistrement des paramètres
     conf.base = base;
@@ -93,6 +116,10 @@ struct Hamming_config hamming_generate_config(struct Base base, uint8_t m) // l 
     // Creation de la matrice de controle
     conf.control_matrix = hamming_generate_control_matrix(&conf);
     conf.generatrix_matrix = hamming_generate_gen_matrix(&conf);
+
+    // Generation du tableau de syndromes
+    conf.syndromes_matrix = hamming_generate_syndromes_matrix(&conf);
+
     return conf;
 }
 
@@ -100,5 +127,6 @@ void hamming_free_config(struct Hamming_config *conf)
 {
     matrix_free(&(conf->generatrix_matrix));
     matrix_free(&(conf->control_matrix));
+    matrix_free(&(conf->syndrome_matrix));
     free(conf);
 }

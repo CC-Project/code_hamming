@@ -36,6 +36,13 @@ void matrix_show(struct Matrix* m)
     printf("\n");
 }
 
+void matrix_show_word(struct Matrix * m)
+{
+    struct Matrix tm = matrix_transpose(m);
+    matrix_show(&m2);
+}
+
+
 void matrix_void(struct Matrix * m)
 {
     uint16_t n = floor((m->data.data_base.l * m->data.data_number-1)/8) + 1; //Number of byte
@@ -231,4 +238,9 @@ struct Matrix matrix_pow(struct Matrix * m, uint8_t n)
     }
     else
         printf("Erreur : matrix_pow : La matrice passe en argument n'est pas carre");
+}
+
+uint8_t matrix_word_to_int(struct Matrix * m)
+{
+
 }
