@@ -5,8 +5,31 @@
 #include <time.h>
 
 int test_data_matrix_system();
+int test_hamming();
+void writeFile(struct Hamming_config * conf);
 
 int main(int argc, char *argv[])
+{
+    struct Base base = base_generate(1);
+    struct Hamming_config conf = hamming_generate_config(base, 4); // On utilise la configuration (15,11,3)
+
+    FILE* file = fopen("joconde.txt", "r"); // Le fichier test
+    FILE* file_coded = fopen("joconde_coded.txt", "w+"); // Le fichier contenant le code
+
+    // Codage du fichier
+    writeFile(&conf, file_coded);
+
+    // Generation des erreurs
+
+    int fclose(file);
+    int fclose(file_coded);
+}
+void writeFile(struct Hamming_config * conf, FILE* file)
+{
+
+}
+
+int test_hamming()
 {
     struct Base base = base_generate(1);
 
@@ -52,7 +75,7 @@ int main(int argc, char *argv[])
         print_var_bits(i);
         printf(" : ");
         print_var_bits(conf.syndrome_array[i]);
-        printf(" (%d)", conf.syndrome_array[i]);
+        printf(" (%d : %d)", i, conf.syndrome_array[i]);
         printf("\n");
     }
     printf("\n");
@@ -90,7 +113,7 @@ int main(int argc, char *argv[])
         printf("######### BIT CORROMPU : Le bit numero %d est corrompu\n", b + 1);
     }
     else
-        printf("AUCUN BIT CORROMPU");
+        printf("######### AUCUN BIT CORROMPU\n\n");
 
     hamming_free_config(&conf);
 }

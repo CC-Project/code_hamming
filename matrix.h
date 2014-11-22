@@ -22,11 +22,13 @@
 
     // Functions
     uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m); // Return the number of the (i,j) data in data attribute
-    struct Matrix matrix_copy(struct Matrix *a); // Copy a matrix
     uint8_t matrix_isempty(struct Matrix* m);
+    struct Matrix matrix_copy(struct Matrix *a); // Copy a matrix
 
-    void matrix_free(struct Matrix* m);
-    void matrix_show(struct Matrix* m);
+    // Operations
+    void matrix_free(struct Matrix* m); // Free memory of a matrix
+    void matrix_show(struct Matrix* m); // See a matrix
+    void matrix_show_word(struct Matrix* m); // See a word in line
     void matrix_void(struct Matrix* m); // Void a matrix
 
     // Matrix's data manipulations

@@ -9,7 +9,11 @@ struct Matrix hamming_encode(struct Hamming_config * conf, struct Matrix * word)
 
 struct Matrix hamming_decode(struct Hamming_config * conf, struct Matrix * word)
 {
+    struct Matrix word_decode = matrix_copy(word);
+    for(uint16_t i = 0; i < conf->m; i++)
+        matrix_del_line(word_decode.rows - i, &word_decode);
 
+    return word_decode;
 }
 void hamming_fill_syndromes_array(struct Hamming_config * conf)
 {
@@ -34,7 +38,6 @@ void hamming_fill_syndromes_array(struct Hamming_config * conf)
     // Libération de mémoire
     matrix_free(&d);
     matrix_free(&dc);
-    free(&synd);
 }
 
 uint8_t hamming_check(struct Hamming_config * conf, struct Matrix * word)
@@ -100,28 +103,33 @@ struct Hamming_config hamming_generate_config(struct Base base, uint8_t m) // l 
 {
     struct Hamming_config conf;
 
-    // Calcul des paramètres
+    // ### Calcul des paramètres
     conf.total_size = (int_pow(base.d, m) - 1)/(base.d - 1);
     conf.word_size = conf.total_size - m;
 
     conf.correction_size = 3; // 3 = code de hamming simple
 
-    // Enregistrement des paramètres
+    // ### Enregistrement des paramètres
     conf.base = base;
     conf.m = m;
 
-    // Creation de la matrice de controle
+    // ### Creation de la matrice de controle
     conf.control_matrix = hamming_generate_control_matrix(&conf);
     conf.generatrix_matrix = hamming_generate_gen_matrix(&conf);
 
-    // Generation du tableau de syndromes
+    // ### Generation du tableau de syndromes
+    // Allocation dynamique
     uint16_t nb_alloc = int_pow(2, conf.m);
     conf.syndrome_array = malloc(nb_alloc * sizeof(uint8_t));
+
+    // Verification de l'allocation
     if ( conf.syndrome_array == NULL )
     {
-         fprintf(stderr,"ERROR : hamming_generate_config : Allocation impossible pour syndrome_array\n");
+         fprintf(stderr,"ERROR : hamming_generate_config : Dynamic allocation not possible (syndrome_array)\n");
          exit(EXIT_FAILURE);
     }
+
+    // Réinitialisation des cases
     for(uint16_t i = 0; i < nb_alloc; i++)
         conf.syndrome_array[i] = 0;
 
@@ -135,5 +143,7 @@ void hamming_free_config(struct Hamming_config *conf)
 {
     matrix_free(&(conf->generatrix_matrix));
     matrix_free(&(conf->control_matrix));
-    free(conf);
+
+    free(conf->syndrome_array);
+    //free(conf);
 }

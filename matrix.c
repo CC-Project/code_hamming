@@ -13,7 +13,7 @@ struct Matrix matrix_generate(uint16_t n, uint16_t p, struct Base base)
 void matrix_free(struct Matrix* m)
 {
     data_free(&(m->data));
-    free(m);
+    //free(m);
 }
 
 void matrix_show(struct Matrix* m)
@@ -66,7 +66,10 @@ void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets th
     if(i <= m->rows && j <= m->cols)
         data_set(matrix_get_data_number(i, j, m), val, &(m->data));
     else
-        printf("ERROR: Incorect matrix size. Function matrix_set, (you have ask the data (%d,%d))\n", i,j);
+    {
+        fprintf(stderr,"ERROR : matrix_set : Incorect matrix size. (you have ask the data (%d,%d))\n", i, j);
+        exit(EXIT_FAILURE);
+    }
 }
 
  uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th line, j-th column of m
@@ -74,7 +77,10 @@ void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets th
     if(i <= m->rows && j <= m->cols)
         return data_get(matrix_get_data_number(i, j, m), &(m->data));
     else
-        printf("ERROR: Incorect matrix size. Function matrix_set, (you have ask the data (%d,%d))\n", i,j);
+    {
+        fprintf(stderr,"ERROR : matrix_get : Incorect matrix size. (you have ask the data (%d,%d))\n", i, j);
+        exit(EXIT_FAILURE);
+    }
  }
 
 struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
@@ -93,7 +99,10 @@ struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
         return m;
     }
     else
-        printf("Erreur : matric_mul : Les tailles des matrices sont incompatibles");
+    {
+        fprintf(stderr,"ERROR : matric_mul : The sizes of matrix are not compatible\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 struct Matrix matrix_add(struct Matrix *a, struct Matrix *b)
@@ -175,7 +184,10 @@ struct Matrix matrix_collapse_right(struct Matrix *a, struct Matrix *b)
         return m;
     }
     else
-        printf("Error : You can only collapse right two matrix with the same rows number. matrix_collapse_right");
+    {
+        fprintf(stderr,"ERROR : matrix_collapse_right : You can only collapse right two matrix with the same rows number.\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 struct Matrix matrix_copy(struct Matrix *a)
@@ -204,9 +216,9 @@ void matrix_exchange_cols(uint16_t j1, uint16_t j2, struct Matrix * m)
     uint8_t temp;
     for (uint16_t i = 1; i <= m->rows; i++)
     {
-        temp = matrix_get(&m, i, j1);
-        matrix_set(&m, i, j1, matrix_get(&m, i, j2));
-        matrix_set(&m, i, j2, temp);
+        temp = matrix_get(m, i, j1);
+        matrix_set(m, i, j1, matrix_get(m, i, j2));
+        matrix_set(m, i, j2, temp);
     }
 }
 void matrix_exchange_lines(uint16_t i1, uint16_t i2, struct Matrix * m)
@@ -214,9 +226,9 @@ void matrix_exchange_lines(uint16_t i1, uint16_t i2, struct Matrix * m)
     uint8_t temp;
     for (uint16_t j = 1; j <= m->cols; j++)
     {
-        temp = matrix_get(&m, j, i1);
-        matrix_set(&m, j, i1, matrix_get(&m, j, i2));
-        matrix_set(&m, j, i2, temp);
+        temp = matrix_get(m, j, i1);
+        matrix_set(m, j, i1, matrix_get(m, j, i2));
+        matrix_set(m, j, i2, temp);
     }
 }
 
@@ -242,7 +254,10 @@ struct Matrix matrix_pow(struct Matrix * m, uint8_t n)
         return m_pow;
     }
     else
-        printf("Erreur : matrix_pow : La matrice passe en argument n'est pas carre");
+    {
+        fprintf(stderr,"ERROR : matrix_pow : The array passed as an argument is not square\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 // VALABLE SEULEMENT EN BASE 2

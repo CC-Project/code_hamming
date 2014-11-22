@@ -10,8 +10,16 @@ struct Data data_generate(struct Base base, uint16_t data_number)
     d.data_number = data_number;
     d.data_base = base;
 
+    // Dynamic allocation
     uint16_t n = (base.l * data_number - 1)/8 + 1; //Number of byte needed
     d.data_array = malloc( n * sizeof(uint8_t) );
+
+    // Verification of dynamic allocation
+    if (d.data_array == NULL)
+    {
+         fprintf(stderr,"ERROR : data_generate : Dynamic allocation not possible (data_array)\n");
+         exit(EXIT_FAILURE);
+    }
 
     //Sets initial values
     for(uint16_t i = 0; i < n; i++)
@@ -23,7 +31,7 @@ struct Data data_generate(struct Base base, uint16_t data_number)
 void data_free(struct Data* d)
 {
     free(d->data_array);
-    free(d);
+    //free(d);
 }
 
 uint8_t data_get(uint16_t n, struct Data* d) //Returns the n-th data stored. Starting from 0.
