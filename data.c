@@ -115,6 +115,7 @@ void data_show(struct Data* d)
         printf("%d ", data);
         printf(" | ");
         print_var_bits(data);
+        printf("\n");
     }
     printf("-----------------\n\n", d->data_number);
 }

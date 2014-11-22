@@ -12,10 +12,7 @@ uint16_t int_pow(uint16_t a, uint16_t b)
 
 void print_var_bits(uint8_t var)
 {
-    int8_t i;
     printf("0b");
-    for(i = 7; i >= 0; i--)
+    for(int8_t i = 7; i >= 0; i--)
         printf( "%d", (var & (1 << i)) >> i );
-
-    printf("\n");
 }
