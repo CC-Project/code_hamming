@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     //return test_data_matrix_system(atoi(argv[1]));
 
     //Test code for hamming
-    struct Hamming_config conf = hamming_generate_config(base, 3);
+    struct Hamming_config conf = hamming_generate_config(base, 4);
     printf("--------------------------\n### TEST DU CODE DE HAMMING (%d, %d, %d) ###\n--------------------------\n\n", conf.total_size, conf.word_size, conf.correction_size);
 
     // Affichage des matrices de controle et de generation
@@ -46,35 +46,51 @@ int main(int argc, char *argv[])
     printf("Matrice generatrice :\n");
     matrix_show(&(conf.generatrix_matrix));
 
+    printf("Tableau de syndromes : \n");
+    for(uint8_t i = 1; i < int_pow(2, conf.m); i++)
+    {
+        print_var_bits(i);
+        printf(" : ");
+        print_var_bits(conf.syndrome_array[i]);
+        printf(" (%d)", conf.syndrome_array[i]);
+        printf("\n");
+    }
+    printf("\n");
     // Creation du mot a encoder
     struct Matrix dte = matrix_generate(conf.word_size, 1, base);
     matrix_set(&dte, 3, 1, 1);
     matrix_set(&dte, 1, 1, 1);
 
     // Affichage
-    printf("Data to encode (dte) :\n");
+    printf("Data to encode : %d elements\n", dte.data.data_number);
     matrix_show_word(&dte);
 
     // Encodage
     struct Matrix d = hamming_encode(&conf, &dte);
 
-    printf("Data encoded (de) :\n");
+    printf("Data encoded : %d elements\n", d.data.data_number);
     matrix_show_word(&d);
 
     // Infiltration d'une erreur dans le mot
-    data_set(1, 1, &(d.data));
+    data_set(3, 1, &(d.data));
 
-    printf("Data modified (dm) :\n");
+    printf("Data modified : %d elements\n", d.data.data_number);
     matrix_show_word(&d);
 
     // Correction
     struct Matrix r = hamming_syndrome(&conf, &d);
     // Affichage de la correction
-    printf("Syndrome C x de :\n");
-    matrix_show_word(&r);
+    printf("############\nCORRECTION\n############\n\n");
+    printf("Syndrome du code modifie : %d \n", matrix_word_to_int(&r));
+    data_show(&(r.data));
 
-    uint8_t b = hamming_check(&conf, &d);
-    printf("######### Bit corrompu : %d \n", b);
+    if(!matrix_isempty(&r))
+    {
+        uint8_t b = hamming_check(&conf, &d);
+        printf("######### BIT CORROMPU : Le bit numero %d est corrompu\n", b + 1);
+    }
+    else
+        printf("AUCUN BIT CORROMPU");
 
     hamming_free_config(&conf);
 }

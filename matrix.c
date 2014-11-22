@@ -245,7 +245,13 @@ struct Matrix matrix_pow(struct Matrix * m, uint8_t n)
         printf("Erreur : matrix_pow : La matrice passe en argument n'est pas carre");
 }
 
-uint8_t matrix_word_to_int(struct Matrix * m)
+// VALABLE SEULEMENT EN BASE 2
+uint16_t matrix_word_to_int(struct Matrix * m)
 {
+    uint16_t val = 0;
+    for(uint8_t i = 0; i < m->data.data_number; i++)
+        if (data_get(i, &(m->data)) == 1)
+            val = val + int_pow(2, m->data.data_number - i - 1);
 
+    return val;
 }

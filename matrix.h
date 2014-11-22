@@ -52,5 +52,5 @@
     void matrix_make_jidentity(struct Matrix* m);
     void matrix_reverse(struct Matrix *a); // Replace 0 by 1
 
-    uint8_t matrix_word_to_int(struct Matrix * m); // Si la matrice envoyer est une matrice colonne, on renvoi le nombre associé au mot
+    uint16_t matrix_word_to_int(struct Matrix * m); // Si la matrice envoyer est une matrice colonne, on renvoi le nombre associé au mot
 #endif // MATRIX_H
