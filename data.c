@@ -36,25 +36,31 @@ void data_free(struct Data* d)
 
 uint8_t data_get(uint16_t n, struct Data* d) //Returns the n-th data stored. Starting from 0.
 {
-    uint8_t l = d->data_base.l;
-    uint16_t i = l * n;     // First bit containing the data. First bit is 0, to 7.
-    uint8_t it = i % 8;     // First bit in the byte containing the data
+    if(n < d->data_number)
+    {
+        uint8_t l = d->data_base.l;
+        uint16_t i = l * n;     // First bit containing the data. First bit is 0, to 7.
+        uint8_t it = i % 8;     // First bit in the byte containing the data
 
-    uint8_t data = d->data_array[i / 8];
+        uint8_t data = d->data_array[i / 8];
 
-    data <<= it;
-    data >>= (8 - l);
+        data <<= it;
+        data >>= (8 - l);
 
-    return data;
+        return data;
+    }
+    else
+    {
+        fprintf(stderr,"ERROR: Incorect data number. Function data_set (you ask %d in a array with %d elements)\n", n + 1, d->data_number);
+        exit(EXIT_FAILURE);
+    }
 }
 
 void data_set(uint16_t n, uint8_t data, struct Data* d) // Sets the n-th block of d to data
 {
-    if( n >= d->data_number)
-         printf("ERROR: Incorect data number. Function data_set (you ask %d in a array with %d elements)\n", n + 1, d->data_number);
-    else
+    if(n < d->data_number)
     {
-        if( 0 <= data && data <= d->data_base.d - 1)
+        if(0 <= data && data <= d->data_base.d - 1)
         {
             uint8_t l = d->data_base.l;
             uint16_t i = l * n;     // First bit containing the data. First bit is 0, to 7.
@@ -67,7 +73,15 @@ void data_set(uint16_t n, uint8_t data, struct Data* d) // Sets the n-th block o
             d->data_array[i / 8] = ((data) << (8 - l - it)) | (data1 | data2);
         }
         else
-            printf("ERROR: Incorect data value. Function data_set, (you have gived the data %d)\n", data);
+        {
+            fprintf(stderr, "ERROR: Incorect data value. Function data_set, (you have gived the data %d)\n", data);
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: Incorect data number. Function data_set (you ask %d in a array with %d elements)\n", n + 1, d->data_number);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -110,7 +124,10 @@ void data_delete(uint16_t n, struct Data* d)
         d->data_number -= 1;
     }
     else
-        printf("ERROR: Deleting a wrong block. Function data_delete\n");
+    {
+        fprintf(stderr, "ERROR: Deleting a wrong block. Function data_delete\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 void data_show(struct Data* d)

@@ -16,3 +16,11 @@ void print_var_bits(uint8_t var)
     for(int8_t i = 7; i >= 0; i--)
         printf( "%d", (var & (1 << i)) >> i );
 }
+
+uint8_t inverse_word(uint8_t word)
+{
+    if(word == 0)
+        return 1;
+    else
+        return 0;
+}

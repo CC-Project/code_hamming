@@ -40,13 +40,26 @@ void hamming_fill_syndromes_array(struct Hamming_config * conf)
     matrix_free(&dc);
 }
 
-uint8_t hamming_check(struct Hamming_config * conf, struct Matrix * word)
+uint8_t hamming_check_syndrome(struct Hamming_config * conf, struct Matrix * synd)
+{
+    return conf->syndrome_array[matrix_word_to_int(synd)];
+}
+struct Matrix hamming_correction(struct Hamming_config * conf, struct Matrix * word)
 {
     struct Matrix synd = hamming_syndrome(conf, word);
 
-    return conf->syndrome_array[matrix_word_to_int(&synd)];
-}
+    if(!matrix_isempty(&synd))
+    {
+        struct Matrix word_correct = matrix_copy(word);
+        uint8_t synd_check = hamming_check_syndrome(conf, &synd) + 1;
 
+        matrix_set(&word_correct, synd_check, 1, inverse_word(matrix_get(word, synd_check, 1)));
+
+        return word_correct;
+    }
+    else
+        return *word;
+}
 struct Matrix hamming_syndrome(struct Hamming_config *conf, struct Matrix * word)
 {
     struct Matrix r = matrix_mul(&(conf->control_matrix), word);

@@ -1,5 +1,4 @@
 #include "matrix.h"
-
 struct Matrix matrix_generate(uint16_t n, uint16_t p, struct Base base)
 {
 	struct Matrix m;
@@ -51,13 +50,16 @@ void matrix_void(struct Matrix * m)
 }
 uint8_t matrix_isempty(struct Matrix* m)
 {
-    uint16_t n = floor((m->data.data_base.l * m->data.data_number-1)/8) + 1; //Number of byte
+    uint16_t n = floor(((m->data.data_base.l * m->data.data_number) - 1)/8) + 1; //Number of byte
     uint16_t i = 0;
-    do{
+
+    do
+    {
         if (m->data.data_array[i] != 0)
             return 0;
-        i+=1;
+        i++;
     } while (i < n); //For each byte
+
     return 1;
 }
 
@@ -72,8 +74,8 @@ void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets th
     }
 }
 
- uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th line, j-th column of m
- {
+uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th line, j-th column of m
+{
     if(i <= m->rows && j <= m->cols)
         return data_get(matrix_get_data_number(i, j, m), &(m->data));
     else
@@ -81,8 +83,7 @@ void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets th
         fprintf(stderr,"ERROR : matrix_get : Incorect matrix size. (you have ask the data (%d,%d))\n", i, j);
         exit(EXIT_FAILURE);
     }
- }
-
+}
 struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
 {
     if(a->cols == b->rows)

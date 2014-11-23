@@ -31,7 +31,8 @@
     // Functions to manipulate data
     struct Matrix hamming_encode(struct Hamming_config * conf, struct Matrix * word);
     struct Matrix hamming_decode(struct Hamming_config * conf, struct Matrix * word);
-    uint8_t hamming_check(struct Hamming_config * conf, struct Matrix * word); // Retourne en binaire le numero du bit defectueux
+    uint8_t hamming_check_syndrome(struct Hamming_config * conf, struct Matrix * word); // Retourne en binaire le numero du bit defectueux
+    struct Matrix hamming_correction(struct Hamming_config * conf, struct Matrix * word);
 
     // Data check to find the syndrome
     struct Matrix hamming_syndrome(struct Hamming_config *conf, struct Matrix * word); // Calcul le syndrome associé a un code

@@ -6,27 +6,98 @@
 
 int test_data_matrix_system();
 int test_hamming();
-void writeFile(struct Hamming_config * conf);
 
+int rand_a_b(int a, int b){
+    return rand()%(b-a) +a;
+}
+char transform_int_to_char(uint8_t bin)
+{
+    if (bin == 0)
+        return 48;
+    else
+        return 49;
+}
+uint8_t transform_char_to_int(char bin)
+{
+    if (bin == 48)
+        return 0;
+    else
+        return 1;
+}
 int main(int argc, char *argv[])
 {
     struct Base base = base_generate(1);
-    struct Hamming_config conf = hamming_generate_config(base, 4); // On utilise la configuration (15,11,3)
+    struct Hamming_config conf = hamming_generate_config(base, 3); // On utilise la configuration (7,4,3)
 
     FILE* file = fopen("joconde.txt", "r"); // Le fichier test
     FILE* file_coded = fopen("joconde_coded.txt", "w+"); // Le fichier contenant le code
 
+    FILE* file_decoded_no_correction = fopen("joconde_decoded_no_correction.txt", "w+"); // Le fichier contenant le code
+    FILE* file_decoded_with_correction = fopen("joconde_decoded_with_correction.txt", "w+"); // Le fichier contenant le code
+
     // Codage du fichier
-    writeFile(&conf, file_coded);
+    struct Matrix word = matrix_generate(conf.word_size, 1, base);
+    struct Matrix word_coded;
+    struct Matrix word_correct;
 
-    // Generation des erreurs
+    uint8_t caractereActuel;
+    uint8_t nb = 0;
+    uint8_t nb_alea = 0;
+    srand(time(NULL)); // initialisation de rand
 
-    int fclose(file);
-    int fclose(file_coded);
-}
-void writeFile(struct Hamming_config * conf, FILE* file)
-{
+    // Boucle de lecture des caractères un à un
+    do
+    {
+        if(nb == conf.word_size) // Si la matrice de codage est plein
+        {
+            // Gestion du codage
+            word_coded = hamming_encode(&conf, &word); // On encode
+            for(uint8_t i = 1; i <= conf.total_size; i++) // On écrit le code dans le fichier
+            {
+                // Enregistrement dans le coded
+                fputc(transform_int_to_char(matrix_get(&word_coded, i, 1)), file_coded);
 
+                // Ajout d'aspérité au code
+                nb_alea = rand_a_b(0,7);
+                if(nb_alea == 5)
+                    matrix_set(&word_coded, i, 1, inverse_word(matrix_get(&word_coded, i, 1)));
+            }
+
+            // Gestion du decodage sans correction
+            word = hamming_decode(&conf, &word_coded);
+            for(uint8_t i = 1; i <= conf.word_size; i++)
+                fputc(transform_int_to_char(matrix_get(&word, i, 1)), file_decoded_no_correction);
+
+            // Gestion du décodage avec correction
+            word_correct = hamming_correction(&conf, &word_coded);
+            word = hamming_decode(&conf, &word_coded);
+
+            for(uint8_t i = 1; i <= conf.word_size; i++)
+                fputc(transform_int_to_char(matrix_get(&word, i, 1)), file_decoded_with_correction);
+
+            // On réinitialise
+            nb = 0;
+            matrix_void(&word);
+            matrix_void(&word_coded);
+            matrix_void(&word_correct);
+        }
+        else
+        {
+            nb++;
+            caractereActuel = fgetc(file); // On lit le caractère
+
+            // Conversion en int
+            caractereActuel = transform_char_to_int(caractereActuel);
+            matrix_set(&word, nb, 1, caractereActuel);
+        }
+
+    } while (caractereActuel != EOF); // On continue tant que fgetc n'a pas retourné EOF (fin de fichier)
+
+    printf("DONE !!");
+    // Fermeture des fichiers
+    fclose(file);
+    fclose(file_coded);
+    return EXIT_SUCCESS;
 }
 
 int test_hamming()
@@ -99,7 +170,7 @@ int test_hamming()
 
     printf("Data modified : %d elements\n", d.data.data_number);
     matrix_show_word(&d);
-
+    /**
     // Correction
     struct Matrix r = hamming_syndrome(&conf, &d);
     // Affichage de la correction
@@ -116,6 +187,8 @@ int test_hamming()
         printf("######### AUCUN BIT CORROMPU\n\n");
 
     hamming_free_config(&conf);
+    **/
+    return EXIT_SUCCESS;
 }
 
 int test_data_matrix_system(int sec)
