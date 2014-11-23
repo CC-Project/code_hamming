@@ -8,7 +8,7 @@ int test_data_matrix_system();
 int test_hamming();
 
 int rand_a_b(int a, int b){
-    return rand()%(b-a) +a;
+    return rand() % (b-a) + a;
 }
 char transform_int_to_char(uint8_t bin)
 {
@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
 {
     struct Base base = base_generate(1);
     struct Hamming_config conf = hamming_generate_config(base, 3); // On utilise la configuration (7,4,3)
+
 
     FILE* file = fopen("joconde.txt", "r"); // Le fichier test
     FILE* file_coded = fopen("joconde_coded.txt", "w+"); // Le fichier contenant le code
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
                 fputc(transform_int_to_char(matrix_get(&word_coded, i, 1)), file_coded);
 
                 // Ajout d'aspérité au code
-                nb_alea = rand_a_b(0,7);
+                nb_alea = rand_a_b(0,50);
                 if(nb_alea == 5)
                     matrix_set(&word_coded, i, 1, inverse_word(matrix_get(&word_coded, i, 1)));
             }
@@ -70,7 +71,7 @@ int main(int argc, char *argv[])
 
             // Gestion du décodage avec correction
             word_correct = hamming_correction(&conf, &word_coded);
-            word = hamming_decode(&conf, &word_coded);
+            word = hamming_decode(&conf, &word_correct);
 
             for(uint8_t i = 1; i <= conf.word_size; i++)
                 fputc(transform_int_to_char(matrix_get(&word, i, 1)), file_decoded_with_correction);
@@ -87,11 +88,14 @@ int main(int argc, char *argv[])
             caractereActuel = fgetc(file); // On lit le caractère
 
             // Conversion en int
-            caractereActuel = transform_char_to_int(caractereActuel);
-            matrix_set(&word, nb, 1, caractereActuel);
+            if(caractereActuel != '\n')
+            {
+                caractereActuel = transform_char_to_int(caractereActuel);
+                matrix_set(&word, nb, 1, caractereActuel);
+            }
         }
 
-    } while (caractereActuel != EOF); // On continue tant que fgetc n'a pas retourné EOF (fin de fichier)
+    } while (caractereActuel != '\n'); // On continue tant que fgetc n'a pas retourné EOF (fin de fichier)
 
     printf("DONE !!");
     // Fermeture des fichiers

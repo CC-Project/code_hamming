@@ -9,9 +9,10 @@ struct Matrix hamming_encode(struct Hamming_config * conf, struct Matrix * word)
 
 struct Matrix hamming_decode(struct Hamming_config * conf, struct Matrix * word)
 {
-    struct Matrix word_decode = matrix_copy(word);
-    for(uint16_t i = 0; i < conf->m; i++)
-        matrix_del_line(word_decode.rows - i, &word_decode);
+    struct Matrix word_decode = matrix_generate(conf->word_size, 1, conf->base);
+
+    for(uint16_t i = 1; i <= conf->word_size; i++)
+        matrix_set(&word_decode, i, 1, matrix_get(word, i, 1));
 
     return word_decode;
 }
