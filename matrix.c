@@ -271,3 +271,7 @@ uint16_t matrix_word_to_int(struct Matrix * m)
 
     return val;
 }
+
+/**
+Ici, on va traité des matrices plus générales, des matrices de nombres
+**/

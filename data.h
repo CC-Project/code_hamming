@@ -18,5 +18,11 @@
     void data_delete(uint16_t n, struct Data* d);               // Delete the n-th block of d
 
     void data_show(struct Data* d);     // Print a data
+
+    uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data * d);
+    uint8_t data_getBit(uint16_t n, struct Data * d);
+    void data_setBit(uint16_t n, uint8_t data, struct Data * d);
+    void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data * d);
+
 #endif // DATA_H
 

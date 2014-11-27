@@ -11,7 +11,7 @@ struct Data data_generate(struct Base base, uint16_t data_number)
     d.data_base = base;
 
     // Dynamic allocation
-    uint16_t n = (base.l * data_number - 1)/8 + 1; //Number of byte needed
+    uint16_t n = (base.l * data_number - 1)/8 + 1; // Number of byte needed
     d.data_array = malloc( n * sizeof(uint8_t) );
 
     // Verification of dynamic allocation
@@ -39,19 +39,30 @@ uint8_t data_get(uint16_t n, struct Data* d) //Returns the n-th data stored. Sta
     if(n < d->data_number)
     {
         uint8_t l = d->data_base.l;
-        uint16_t i = l * n;     // First bit containing the data. First bit is 0, to 7.
-        uint8_t it = i % 8;     // First bit in the byte containing the data
 
-        uint8_t data = d->data_array[i / 8];
+        /*
+        If log2(n) is an integer, then all the sequence is on a table, so we can make a fast get-method
+        Else, we must get the bits one by one and recreate the sequence
+        */
 
-        data <<= it;
-        data >>= (8 - l);
+        if(l == 1 || l == 2 || l == 4 || l == 8) // Si on est dans une puissance de 2
+        {
+            uint16_t i = l * n;     // First bit containing the data. First bit is 0, to 7.
+            uint8_t it = i % 8;     // First bit in the byte containing the data
 
-        return data;
+            uint8_t data = d->data_array[i / 8];
+
+            data <<= it;
+            data >>= (8 - l);
+
+            return data;
+        }
+        else
+            return data_getSequence(l * n, l, d);
     }
     else
     {
-        fprintf(stderr,"ERROR: Incorect data number. Function data_set (you ask %d in a array with %d elements)\n", n + 1, d->data_number);
+        fprintf(stderr,"ERROR: Incorect data number. Function data_get (you ask %d in a array with %d elements)\n", n + 1, d->data_number);
         exit(EXIT_FAILURE);
     }
 }
@@ -143,4 +154,97 @@ void data_show(struct Data* d)
         printf("\n");
     }
     printf("-----------------\n\n", d->data_number);
+}
+
+/**
+Peu importe la base, on peu avoir besoin de recupéré 1 seul ou plusieurs bits. On doit donc créer des fonctions pour palier a cela
+NB : Cela permet par ailleurs de regler le problème des base**/
+
+uint8_t data_getBit(uint16_t n, struct Data * d)
+{
+    if(n < d->data_number)
+    {
+        uint8_t data = d->data_array[n / 8];
+
+        data <<= (n % 8);
+        data >>= 7;
+
+        return data;
+    }
+    else
+    {
+        fprintf(stderr,"ERROR: Incorect data number. Function data_getBit (you ask %d in a array with %d elements)\n", n + 1, d->data_number);
+        exit(EXIT_FAILURE);
+    }
+}
+
+uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data * d) // Get a sequence l long begin in n (l <= 8)
+{
+    if(n + l < d->data_number)
+    {
+        uint8_t result = 0;
+        for(uint8_t i = 0; i < l; i++)
+        {
+            result <<= 1;
+            result |= data_getBit(n + i, d);
+        }
+
+        return result;
+    }
+    else
+    {
+        fprintf(stderr,"ERROR: Incorect data number. Function data_getSequence (you ask %d in a array with %d elements)\n", n + 1 + l, d->data_number);
+        exit(EXIT_FAILURE);
+    }
+}
+
+void data_setBit(uint16_t n, uint8_t data, struct Data * d)
+{
+    if(n < d->data_number)
+    {
+        if(0 <= data && data <= 1)
+        {
+            uint8_t it = n % 8;     // First bit in the byte containing the data
+            uint8_t data1 = d->data_array[n / 8]; uint8_t data2 = d->data_array[n / 8];
+
+            data1 >>= 8 - it; data1 <<= 8 - it;
+            data2 <<= it + 1; data2 >>= it + 1;
+
+            d->data_array[n / 8] = ((data) << (7 - it)) | (data1 | data2);
+        }
+        else
+        {
+            fprintf(stderr, "ERROR: Incorect data value. Function data_setBit, (you have gived the data %d)\n", data);
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        fprintf(stderr,"ERROR: Incorect data number. Function data_setBit (you ask %d in a array with %d elements)\n", n + 1, d->data_number);
+        exit(EXIT_FAILURE);
+    }
+}
+
+void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data * d) // Get a sequence l long begin in n (l <= 8)
+{
+    if(n + l < d->data_number)
+    {
+        if(0 <= data && data <= d->data_base.d - 1)
+        {
+            uint8_t l = d->data_base.l;
+            uint16_t i = l * n;     // First bit containing the data. First bit is 0, to 7.
+            uint8_t it = i % 8;     // First bit in the byte containing the data
+
+            uint8_t data1 = d->data_array[i / 8]; uint8_t data2 = d->data_array[i / 8];
+            data1 >>= 8 - it; data1 <<= 8 - it;
+            data2 <<= it + l; data2 >>= it + l;
+
+            d->data_array[i / 8] = ((data) << (8 - l - it)) | (data1 | data2);
+        }
+    }
+    else
+    {
+        fprintf(stderr,"ERROR: Incorect data number. Function data_getSequence (you ask %d in a array with %d elements)\n", n + 1 + l, d->data_number);
+        exit(EXIT_FAILURE);
+    }
 }

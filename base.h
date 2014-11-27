@@ -6,6 +6,7 @@
 #ifndef BASE_H
     #define BASE_H
     #include <inttypes.h>
+    #include "utilities.h"
 
     struct Base
     {

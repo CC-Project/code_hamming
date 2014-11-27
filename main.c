@@ -26,6 +26,7 @@ uint8_t transform_char_to_int(char bin)
 }
 int main(int argc, char *argv[])
 {
+    /**
     struct Base base = base_generate(1);
     struct Hamming_config conf = hamming_generate_config(base, 3); // On utilise la configuration (7,4,3)
 
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
                 fputc(transform_int_to_char(matrix_get(&word_coded, i, 1)), file_coded);
 
                 // Ajout d'aspérité au code
-                nb_alea = rand_a_b(0,50);
+                nb_alea = rand_a_b(0,40);
                 if(nb_alea == 5)
                     matrix_set(&word_coded, i, 1, inverse_word(matrix_get(&word_coded, i, 1)));
             }
@@ -102,6 +103,7 @@ int main(int argc, char *argv[])
     fclose(file);
     fclose(file_coded);
     return EXIT_SUCCESS;
+    **/
 }
 
 int test_hamming()
