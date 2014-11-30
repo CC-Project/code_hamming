@@ -15,4 +15,5 @@
     };
 
     struct Base base_generate(uint8_t l);
+	
 #endif // BASE_H

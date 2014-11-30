@@ -1,0 +1,1 @@
+data.c -> There were two variables with the same name used in the same block. Check if it worked fine
