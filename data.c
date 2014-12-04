@@ -7,7 +7,7 @@ struct Data data_generate(uint16_t data_number)
 
     // Dynamic allocation
     uint16_t n = (BASE_L * data_number - 1)/8 + 1; // Number of byte needed
-    d.data_array = malloc( n * sizeof(uint8_t) );
+    d.data_array = malloc(n * sizeof(uint8_t));
 
     // Verification of dynamic allocation
     if (d.data_array == NULL)
@@ -132,9 +132,7 @@ void data_delete(uint16_t n, struct Data* d)
 
 uint8_t data_getBit(uint16_t n, struct Data * d)
 {
-    printf("Data number : %d\n", d->data_number);
-    printf("n = %d\n",n);
-    if(n < d->data_number)
+    if(n <= d->data_number * BASE_L)
     {
         uint8_t data = d->data_array[n / 8];
 
@@ -144,12 +142,12 @@ uint8_t data_getBit(uint16_t n, struct Data * d)
         return data;
     }
     else
-        error("ERROR: Incorect data number. Function data_getBit.");
+        return error("ERROR: Incorect data number. Function data_getBit.");
 }
 
 uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data * d) // Get a sequence l long begin in n (l <= 8)
 {
-    if(n + l < d->data_number)
+    if(n + (l - 1) < d->data_number * BASE_L)
     {
         uint8_t result = 0;
         for(uint8_t i = 0; i < l; i++)
@@ -166,7 +164,7 @@ uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data * d) // Get a sequen
 
 void data_setBit(uint16_t n, uint8_t data, struct Data * d)
 {
-    if(n < d->data_number)
+    if(n < d->data_number * BASE_L)
     {
         if(0 <= data && data <= 1)
         {
@@ -187,23 +185,25 @@ void data_setBit(uint16_t n, uint8_t data, struct Data * d)
 
 void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data * d) // Get a sequence l long begin in n (l <= 8)
 {
-    if(n + l < d->data_number)
+    if(n + (l - 1) < d->data_number * BASE_L)
     {
         if(0 <= data && data <= BASE_D - 1)
         {
+            // On place la sequence a remplacer dans un data
             struct Data dBis = data_generate(8);
             dBis.data_array[0] = data;
 
             for(uint8_t i = 0; i < l; i++)
-                data_setBit(n + i, data_getBit(dBis.data_number - i - 1, d), d);
+                data_setBit((n + (l - 1)) - i, data_getBit((8 - 1) - i, &dBis), d);
 
             data_free(&dBis);
         }
+        else
+            error("ERROR: Incorect data value. Function data_setSequence.");
     }
     else
         error("ERROR: Incorect data number. Function data_setSequence.");
 }
-
 
 void data_show(struct Data* d)
 {

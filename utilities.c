@@ -26,6 +26,12 @@
         uart_tx_char('\r');
         uart_tx_char('\n');
     }
+    int freeRam()
+    {
+      extern int __heap_start, *__brkval;
+      int v;
+      return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+    }
 #else
     char bin_to_ascii(uint8_t bin)
     {
@@ -44,7 +50,7 @@
     }
 #endif
 
-void error(char* str)
+uint8_t error(char* str)
 {
     #ifdef __AVR__
         uart_tx_str(str);

@@ -158,5 +158,5 @@ void hamming_free_config(struct Hamming_config *conf)
     matrix_free(&(conf->CONTROL_MATRIX));
 
     free(&(conf->SYNDROMES_ARRAY));
-    free(&conf);
+    free(conf);
 }

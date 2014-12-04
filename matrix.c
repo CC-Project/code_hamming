@@ -5,7 +5,7 @@ struct Matrix matrix_generate(uint16_t n, uint16_t p)
 	struct Matrix m;
 	m.rows = n;
 	m.cols = p;
-    m.data = data_generate(n*p);
+    m.data = data_generate(n * p);
 	return m;
 }
 

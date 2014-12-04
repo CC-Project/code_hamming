@@ -8,6 +8,12 @@ int test_joconde();
 int main(int argc, char *argv[])
 {
     //General test code
+    struct Matrix m = matrix_generate(2,2);
+    matrix_set(&m, 1, 1, 0);
+    matrix_set(&m, 2, 1, 4);
+    matrix_set(&m, 1, 2, 5);
+    matrix_set(&m, 2,2, 8);
+    matrix_show(&m);
     return EXIT_SUCCESS;
 }
 
