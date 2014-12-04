@@ -1,38 +1,43 @@
-#include "matrix.h"
-struct Matrix matrix_generate(uint16_t n, uint16_t p, struct Base base)
+#include "config.h"
+
+struct Matrix matrix_generate(uint16_t n, uint16_t p)
 {
 	struct Matrix m;
 	m.rows = n;
 	m.cols = p;
-
-    m.data = data_generate(base, n*p);
+    m.data = data_generate(n*p);
 	return m;
 }
 
 void matrix_free(struct Matrix* m)
 {
     data_free(&(m->data));
-    //free(m);
+    free(m);
 }
 
 void matrix_show(struct Matrix* m)
 {
-    uint16_t i = 0;
-    uint16_t j = 0;
-    printf("------------------\nMatrice de taille (%d, %d)\n", m->rows, m->cols);
-    for(i = 0; i < m->data.data_number; i++)
-    {
-        j+=1;
-        uint8_t data = data_get(i, &(m->data));
+    #ifdef __AVR__
 
-        for(int8_t j = m->data.data_base.l - 1; j >= 0; j--)
-            printf("%d", (data & (1 << j)) >> j);
+    #else
+        uint16_t i = 0;
+        uint16_t j = 0;
 
-        printf(" ");
-        //printf("%d ", data_get(i, &(m->data)));
-        if (j == m->cols) {printf("\n"); j = 0;}
-    }
-    printf("\n");
+        printf("------------------\nMatrice de taille (%d, %d)\n", m->rows, m->cols);
+        for(i = 0; i < m->data.data_number; i++)
+        {
+            j+=1;
+            uint8_t data = data_get(i, &(m->data));
+
+            for(int8_t j = BASE_L - 1; j >= 0; j--)
+                printf("%d", (data & (1 << j)) >> j);
+
+            printf(" ");
+            //printf("%d ", data_get(i, &(m->data)));
+            if (j == m->cols) {printf("\n"); j = 0;}
+        }
+        printf("\n");
+    #endif // __AVR__
 }
 
 void matrix_show_word(struct Matrix * m)
@@ -43,14 +48,15 @@ void matrix_show_word(struct Matrix * m)
 
 void matrix_void(struct Matrix * m)
 {
-    uint16_t n = floor((m->data.data_base.l * m->data.data_number-1)/8) + 1; //Number of byte
+    uint16_t n = floor((BASE_L * m->data.data_number-1)/8) + 1; //Number of byte
     uint16_t i = 0;
     for(i=0; i<n; i++) //For each byte
         m->data.data_array[i] = 0;
 }
+
 uint8_t matrix_isempty(struct Matrix* m)
 {
-    uint16_t n = floor(((m->data.data_base.l * m->data.data_number) - 1)/8) + 1; //Number of byte
+    uint16_t n = floor(((BASE_L * m->data.data_number) - 1)/8) + 1; //Number of byte
     uint16_t i = 0;
 
     do
@@ -68,10 +74,7 @@ void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets th
     if(i <= m->rows && j <= m->cols)
         data_set(matrix_get_data_number(i, j, m), val, &(m->data));
     else
-    {
-        fprintf(stderr,"ERROR : matrix_set : Incorect matrix size. (you have ask the data (%d,%d))\n", i, j);
-        exit(EXIT_FAILURE);
-    }
+        error("ERROR : matrix_set : Incorect matrix size.");
 }
 
 uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th line, j-th column of m
@@ -79,19 +82,17 @@ uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th lin
     if(i <= m->rows && j <= m->cols)
         return data_get(matrix_get_data_number(i, j, m), &(m->data));
     else
-    {
-        fprintf(stderr,"ERROR : matrix_get : Incorect matrix size. (you have ask the data (%d,%d))\n", i, j);
-        exit(EXIT_FAILURE);
-    }
+        error("ERROR : matrix_get : Incorect matrix size.");
 }
+
 struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
 {
     if(a->cols == b->rows)
     {
-        struct Matrix m = matrix_generate(a->rows, b->cols, a->data.data_base);
+        struct Matrix m = matrix_generate(a->rows, b->cols);
 
         // Pour la base 2
-        if (a->data.data_base.d == 2)
+        if (BASE_D == 2)
             for(uint16_t i = 1; i <= m.rows; i++)
                 for(uint16_t j = 1; j <= m.cols; j++)
                     for (uint16_t k = 1; k <= a->cols; k++)
@@ -100,17 +101,14 @@ struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
         return m;
     }
     else
-    {
-        fprintf(stderr,"ERROR : matric_mul : The sizes of matrix are not compatible\n");
-        exit(EXIT_FAILURE);
-    }
+        error("ERROR : matric_mul : The sizes of matrix are not compatible");
 }
 
 struct Matrix matrix_add(struct Matrix *a, struct Matrix *b)
 {
-    struct Matrix m = matrix_generate(a->rows, b->cols, a->data.data_base);
+    struct Matrix m = matrix_generate(a->rows, b->cols);
 
-    if (a->data.data_base.d == 2)
+    if (BASE_D == 2)
         for(uint16_t i = 1; i <= m.rows; i++)
             for(uint16_t j = 1; j <= m.cols; j++)
                 matrix_set(&m, i, j, (matrix_get(a, i, j) ^ matrix_get(b, i, j)));
@@ -157,7 +155,7 @@ uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m)
 
 struct Matrix matrix_collapse_down(struct Matrix *a, struct Matrix *b)
 {
-    struct Matrix m = matrix_generate(a->rows + b->rows, a->cols, a->data.data_base);
+    struct Matrix m = matrix_generate(a->rows + b->rows, a->cols);
 
     for(uint16_t i = 0; i < m.data.data_number; i++)
         if(i < a->data.data_number)
@@ -172,7 +170,7 @@ struct Matrix matrix_collapse_right(struct Matrix *a, struct Matrix *b)
 {
     if(a->rows == b->rows)
     {
-        struct Matrix m = matrix_generate(a->rows, a->cols + b->cols, a->data.data_base);
+        struct Matrix m = matrix_generate(a->rows, a->cols + b->cols);
 
         for(uint16_t i = 1; i <= a->rows; i++)
             for(uint16_t j = 1; j <= a->cols; j++)
@@ -185,15 +183,12 @@ struct Matrix matrix_collapse_right(struct Matrix *a, struct Matrix *b)
         return m;
     }
     else
-    {
-        fprintf(stderr,"ERROR : matrix_collapse_right : You can only collapse right two matrix with the same rows number.\n");
-        exit(EXIT_FAILURE);
-    }
+        error("ERROR : matrix_collapse_right : You can only collapse right two matrix with the same rows number.");
 }
 
 struct Matrix matrix_copy(struct Matrix *a)
 {
-    struct Matrix m = matrix_generate(a->rows, a->cols, a->data.data_base);
+    struct Matrix m = matrix_generate(a->rows, a->cols);
 
     for(uint16_t i = 1; i <= a->rows; i++)
         for(uint16_t j = 1; j <= a->cols; j++)
@@ -202,13 +197,13 @@ struct Matrix matrix_copy(struct Matrix *a)
     return m;
 }
 
-void matrix_reverse(struct Matrix *a) // Renvoi la matrice opposé
+void matrix_opposite(struct Matrix *a)
 {
     for(uint16_t i = 1; i <= a->rows; i++)
         for(uint16_t j = 1; j <= a->cols; j++)
         {
-            uint8_t data = ~(matrix_get(a, i, j)) << (8 - a->data.data_base.l);
-            matrix_set(a, i,j, data >> (8 - a->data.data_base.l));
+            uint8_t data = ~(matrix_get(a, i, j)) << (8 - BASE_L);
+            matrix_set(a, i,j, data >> (8 - BASE_L));
         }
 }
 
@@ -222,6 +217,7 @@ void matrix_exchange_cols(uint16_t j1, uint16_t j2, struct Matrix * m)
         matrix_set(m, i, j2, temp);
     }
 }
+
 void matrix_exchange_lines(uint16_t i1, uint16_t i2, struct Matrix * m)
 {
     uint8_t temp;
@@ -235,7 +231,7 @@ void matrix_exchange_lines(uint16_t i1, uint16_t i2, struct Matrix * m)
 
 struct Matrix matrix_transpose(struct Matrix * m)
 {
-    struct Matrix m2 = matrix_generate(m->cols, m->rows, m->data.data_base);
+    struct Matrix m2 = matrix_generate(m->cols, m->rows);
 
     for(uint16_t i = 1; i <= m2.rows; i++)
         for(uint16_t j = 1; j <= m2.cols; j++)
@@ -255,10 +251,7 @@ struct Matrix matrix_pow(struct Matrix * m, uint8_t n)
         return m_pow;
     }
     else
-    {
-        fprintf(stderr,"ERROR : matrix_pow : The array passed as an argument is not square\n");
-        exit(EXIT_FAILURE);
-    }
+        error("ERROR : matrix_pow : The array passed as an argument is not square");
 }
 
 // VALABLE SEULEMENT EN BASE 2
@@ -267,11 +260,7 @@ uint16_t matrix_word_to_int(struct Matrix * m)
     uint16_t val = 0;
     for(uint8_t i = 0; i < m->data.data_number; i++)
         if (data_get(i, &(m->data)) == 1)
-            val = val + int_pow(2, m->data.data_number - i - 1);
+            val = val + (1 << (m->data.data_number - i - 1) );
 
     return val;
 }
-
-/**
-Ici, on va traité des matrices plus générales, des matrices de nombres
-**/

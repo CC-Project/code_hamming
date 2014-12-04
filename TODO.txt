@@ -1,12 +1,3 @@
-Questions:
-	1.	Calloc ou malloc? Calloc -> Mets à 0 dès l'allocation de la mémoire, mais plus lent, contrairement à malloc.
-		->Gain de temps vs sûreté du code?
-	2.	On calcule souvent le nombre total d'octets dans une struct Data: intégrer cette valeur dans la structure?
-		->Perte de mémoire mais plus rapide. Aussi: moins de ram necessaire.
-
-Matrices :
-	1.	matrix_add_line(i) -> Ajoute une ligne après la ligne i. Nouvelle ligne initialisée à 0.
-	2.	matrix_add_col(i) -> Supprime une ligne après la ligne i
-
-Data:
-	1.	data_delete(n) -> Optimisation. On fait à peu près le même calcul 3 fois.
+void matrix_show(struct Matrix* m);         // Prints out a matrix. Not adapted to avr.
+void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data * d); //Not finished
+void data_show(struct Data* d);     						// Prints out a data structure. Not adapted to AVR.
