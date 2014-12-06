@@ -26,6 +26,7 @@
         uart_tx_char('\r');
         uart_tx_char('\n');
     }
+
     int freeRam()
     {
       extern int __heap_start, *__brkval;
@@ -55,12 +56,12 @@ uint8_t error(char* str)
     #ifdef __AVR__
         uart_tx_str(str);
         uart_newline();
+        abort();
     #else
         fprintf(stderr, str);
         fprintf(stderr, "\r\n"); //New line
+        exit(EXIT_FAILURE);
     #endif // __AVR__
-    exit(EXIT_FAILURE);
-    //abort();
 }
 
 uint16_t int_pow(uint16_t a, uint16_t b)

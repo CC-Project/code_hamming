@@ -106,31 +106,39 @@ struct Matrix hamming_generate_gen_matrix(struct Hamming_config * conf)
 
 struct Data hamming_generate_syndromes_array(struct Hamming_config * conf)
 {
-    struct Matrix d = matrix_generate(conf->EW_SIZE, 1); struct Matrix dc;
-    struct Data syndrome_array = data_generate(sizeof(uint8_t) * (1 << HAMMING_M));
-
-    uint8_t synd; uint16_t nb;
-
-    // Pour la base 2
-    for(uint16_t i = 1; i <= conf->EW_SIZE; i++)
+    if(BASE_L == 1)
     {
-        nb = conf->EW_SIZE - i + 1;
-        matrix_set(&d, nb, 1, 1);
-        dc = hamming_syndrome(&d, conf);
+        struct Data syndrome_array = data_generate(8 * conf->EW_SIZE);
+        struct Matrix syndrome_test_matrix = matrix_generate(conf->EW_SIZE, 1);
+        struct Matrix syndrome_result;
+        uint16_t syndrome;
 
-        // Ici, on sait que m <= 8. donc que dc est codé sur 8 bits
-        synd = matrix_word_to_int(&dc); // On récupère le syndrome sous forme d'entier
+        // Pour la base 2
+        for(uint16_t i = 1; i <= conf->EW_SIZE; i++)
+        {
+            // Sets the "conf->EW_SIZE - i" bit
+            matrix_set(&syndrome_test_matrix, conf->EW_SIZE - i + 1, 1, 1);
 
-        if(synd != 0 && syndrome_array.data_array[synd] == 0) // Si le syndrome n'a pas deja ete calcule
-            syndrome_array.data_array[synd] = conf->EW_SIZE - i; // On le met a jour
+            // Computation of the syndrome
+            syndrome_result = hamming_syndrome(&syndrome_test_matrix, conf);
+            syndrome = matrix_word_to_int(&syndrome_result);
 
-        matrix_set(&d, nb, 1, 0);
+            // Adds the syndrome
+            if(syndrome_array.data_array[syndrome] == 0)
+                syndrome_array.data_array[syndrome] = conf->EW_SIZE - i;
+
+            // Resets the bit
+            matrix_set(&syndrome_test_matrix, conf->EW_SIZE - i + 1, 1, 0);
+        }
+
+        // Frees matrix
+        matrix_free(&syndrome_test_matrix);
+        matrix_free(&syndrome_result);
+
+        return syndrome_array;
     }
-    // Frees memory
-    matrix_free(&d);
-    matrix_free(&dc);
-
-    return syndrome_array;
+    else
+        error("Base incorect. Function hamming_generate_syndromes_array");
 }
 
 struct Hamming_config hamming_generate_config() // l = longueur des elements de la base, m = paramètre de hamming
@@ -158,5 +166,5 @@ void hamming_free_config(struct Hamming_config *conf)
     matrix_free(&(conf->CONTROL_MATRIX));
 
     free(&(conf->SYNDROMES_ARRAY));
-    free(conf);
+    //free(conf);
 }

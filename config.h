@@ -11,11 +11,11 @@
 	#endif
 
     // Configurations
-    #define BASE_L 3     // Length of the elements in the base (For instance, in F_8: d = 8 but l = 3)
+    #define BASE_L 1     // Length of the elements in the base (For instance, in F_8: d = 8 but l = 3)
     // Warning : BASE_L <= 8
 
     // Hamming configuration
-    #define HAMMING_M 3  // Hamming parameter
+    #define HAMMING_M 6  // Hamming parameter
     #define HAMMING_EXTENDED 0
 
 	//Defines the base parameters

@@ -8,12 +8,17 @@ int test_joconde();
 int main(int argc, char *argv[])
 {
     //General test code
-    struct Matrix m = matrix_generate(2,2);
-    matrix_set(&m, 1, 1, 0);
-    matrix_set(&m, 2, 1, 4);
-    matrix_set(&m, 1, 2, 5);
-    matrix_set(&m, 2,2, 8);
-    matrix_show(&m);
+    struct Hamming_config conf = hamming_generate_config();
+
+    matrix_show(&(conf.CONTROL_MATRIX));
+    matrix_show(&(conf.GENERATRIX_MATRIX));
+
+    for(uint16_t i = 0; i < conf.EW_SIZE; i++)
+    {
+        printf("%d : %d", i, conf.SYNDROMES_ARRAY.data_array[i]);
+        printf("\n");
+    }
+
     return EXIT_SUCCESS;
 }
 
@@ -21,12 +26,12 @@ int test_data() //Test code for data struct
 {
     struct Data d = data_generate(2);
 
-    data_set(0,1, &d);
-    data_set(1, data_get(0,&d)+1, &d);
+    data_set(0, 1, &d);
+    data_set(1, data_get(0,&d), &d);
     data_show(&d);
     data_delete(0,&d);
     data_show(&d);
-    data_add(3,&d);
+    data_add(0,&d);
     data_show(&d);
     data_free(&d);
 
@@ -36,7 +41,7 @@ int test_data() //Test code for data struct
 int test_matrix()
 {
     struct Matrix m = matrix_generate(2,2);
-    matrix_set(&m,2,2,3);
+    matrix_set(&m,2,2,1);
     matrix_void(&m);
     printf("Matrix is empty: %d\n", matrix_isempty(&m));
     matrix_show(&m);

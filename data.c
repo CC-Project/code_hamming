@@ -78,7 +78,10 @@ void data_set(uint16_t n, uint8_t data, struct Data* d)
             data_setSequence(BASE_L * n, BASE_L, data, d);
     }
     else
+    {
         error("ERROR: Incorect data number. Function data_set.");
+    }
+
 }
 
 void data_add(uint8_t data, struct Data* d)

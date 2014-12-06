@@ -12,7 +12,6 @@ struct Matrix matrix_generate(uint16_t n, uint16_t p)
 void matrix_free(struct Matrix* m)
 {
     data_free(&(m->data));
-    free(m);
 }
 
 void matrix_show(struct Matrix* m)
@@ -254,7 +253,7 @@ struct Matrix matrix_pow(struct Matrix * m, uint8_t n)
         error("ERROR : matrix_pow : The array passed as an argument is not square");
 }
 
-// VALABLE SEULEMENT EN BASE 2
+// VALABLE SEULEMENT EN BASE_L = 1
 uint16_t matrix_word_to_int(struct Matrix * m)
 {
     uint16_t val = 0;
