@@ -51,11 +51,11 @@ uint8_t hamming_check_syndrome(struct Matrix * synd, struct Hamming_config * con
 **/
 struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
 {
-    struct Matrix control = matrix_generate(HAMMING_M, (1 << HAMMING_M)); // Generation de la matrice de controle
+    struct Matrix control = matrix_generate(HAMMING_M, (1 << HAMMING_M)); // Generation of the control matrix
 
     // C'est ici qu'intervient une condition sur m : m <= 12, en effet, data ne peut contenir que 2^16 data, en resolvant m*2^m <= 2^16 on trouve m <= 12
 
-    // Remplissage de la matrice de controle
+    // Fills the control matrix
     for(uint16_t i = 1; i <= HAMMING_M; i++)
         for(uint16_t j = 1; j <= (1 << HAMMING_M); j++)
             if(((j - 1) / (1 << (HAMMING_M - i))) % 2 == 0)
@@ -66,6 +66,7 @@ struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
     // On rend la matrice systématique
     matrix_del_col(1, &control);
 
+	//Sub the identity
     for(uint8_t j = 0; j < HAMMING_M; j++)
         matrix_del_col((1 << j) - j, &control);
 
@@ -143,11 +144,11 @@ struct Hamming_config hamming_generate_config() // l = longueur des elements de 
     // ### Calcul des paramètres
     config.EW_SIZE = (int_pow(BASE_D, HAMMING_M) - 1)/(BASE_D - 1);
     config.W_SIZE = config.EW_SIZE - HAMMING_M;
-    config.C_SIZE = (HAMMING_EXTENDED) ? 4 : 3; // 3 = code de hamming simple
+    config.C_SIZE = (HAMMING_EXTENDED) ? 4 : 3; // 3 = Simple Hamming code
 
     // ### Creation de la matrice de controle
     config.CONTROL_MATRIX = hamming_generate_control_matrix(&config);
-    config.GENERATRIX_MATRIX = hamming_generate_gen_matrix(&config);
+    config.GENERATOR_MATRIX = hamming_generate_gen_matrix(&config);
 
     // ### Generation du tableau de syndromes
     config.SYNDROMES_ARRAY = hamming_generate_syndromes_array(&config);
@@ -157,7 +158,7 @@ struct Hamming_config hamming_generate_config() // l = longueur des elements de 
 
 void hamming_free_config(struct Hamming_config *conf)
 {
-    matrix_free(&(conf->GENERATRIX_MATRIX));
+    matrix_free(&(conf->GENERATOR_MATRIX));
     matrix_free(&(conf->CONTROL_MATRIX));
 
     free(&(conf->SYNDROMES_ARRAY));

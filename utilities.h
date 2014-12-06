@@ -1,5 +1,7 @@
 #ifndef UTILITIES_H
     #define UTILITIES_H
+    #include "config.h"
+    #include <stdio.h>
 
     #ifdef __AVR__
         void uart_init(void);

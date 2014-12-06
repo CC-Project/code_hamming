@@ -1,10 +1,11 @@
 #ifndef MATRIX_H
     #define MATRIX_H
-    #include "config.h"
+    #include "data.h"
+    #include <math.h>
 
     /**
     # Structure des matrices :
-        On travail ici avec des uint16_t soit une taille de matrice maximum de 65535 x 65535 (2^16 -1 x 2^16 - 1)
+        On travaille ici avec des uint16_t soit une taille de matrice maximum de 65535 x 65535 (2^16 -1 x 2^16 - 1)
         Les matrices peuvent stocker des nombres allant jusqu'a 2^BASE_L - 1
     **/
 

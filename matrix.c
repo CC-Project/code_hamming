@@ -1,4 +1,5 @@
-#include "config.h"
+#include "matrix.h"
+
 
 struct Matrix matrix_generate(uint16_t n, uint16_t p)
 {
@@ -82,6 +83,7 @@ uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th lin
         return data_get(matrix_get_data_number(i, j, m), &(m->data));
     else
         error("ERROR : matrix_get : Incorect matrix size.");
+    return -1;
 }
 
 struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
@@ -258,8 +260,9 @@ uint16_t matrix_word_to_int(struct Matrix * m)
 {
     uint16_t val = 0;
     for(uint8_t i = 0; i < m->data.data_number; i++)
+    {
         if (data_get(i, &(m->data)) == 1)
             val = val + (1 << (m->data.data_number - i - 1) );
-
+    }
     return val;
 }

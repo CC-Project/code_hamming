@@ -1,4 +1,4 @@
-#include "config.h"
+#include "data.h"
 
 struct Data data_generate(uint16_t data_number)
 {
@@ -52,13 +52,14 @@ uint8_t data_get(uint16_t n, struct Data* d)
     }
     else
         error("ERROR: Incorect data number. Function data_get");
+    return -1;
 }
 
 void data_set(uint16_t n, uint8_t data, struct Data* d)
 {
     if(n < d->data_number)
     {
-        if(BASE_L == 1 || BASE_L == 2 || BASE_L == 4 || BASE_L == 8) // Si on est dans une puissance de 2
+        if(BASE_L == 1 || BASE_L == 2 || BASE_L == 4 || BASE_L == 8) // If it is a power of 2
         {
             if(0 <= data && data <= BASE_D - 1)
             {
@@ -124,13 +125,6 @@ void data_delete(uint16_t n, struct Data* d)
         error("ERROR: Deleting a wrong block. Function data_delete.");
 }
 
-
-
-/**
-    Peu importe la base, on peu avoir besoin de recupéré 1 seul ou plusieurs bits.
-    On doit donc créer des fonctions pour palier a cela
-    NB : Cela permet par ailleurs de regler le problème des base non puissance de 2**/
-
 uint8_t data_getBit(uint16_t n, struct Data * d)
 {
     if(n <= d->data_number * BASE_L)
@@ -144,6 +138,7 @@ uint8_t data_getBit(uint16_t n, struct Data * d)
     }
     else
         return error("ERROR: Incorect data number. Function data_getBit.");
+    return -1;
 }
 
 uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data * d) // Get a sequence l long begin in n (l <= 8)
@@ -161,6 +156,7 @@ uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data * d) // Get a sequen
     }
     else
         error("ERROR: Incorect data number. Function data_getSequence.");
+    return -1;
 }
 
 void data_setBit(uint16_t n, uint8_t data, struct Data * d)

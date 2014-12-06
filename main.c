@@ -1,9 +1,9 @@
-#include "config.h"
+#include "hamming.h"
 
 int test_data();    //Test code for data struct
 int test_matrix();  //Test code for matrix
 int test_hamming(); //Test code for Hamming
-int test_joconde();
+int test_joconde(); //Test Hamming code on an image
 
 int main(int argc, char *argv[])
 {
@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     struct Hamming_config conf = hamming_generate_config();
 
     matrix_show(&(conf.CONTROL_MATRIX));
-    matrix_show(&(conf.GENERATRIX_MATRIX));
+    matrix_show(&(conf.GENERATOR_MATRIX));
 
     for(uint16_t i = 0; i < conf.EW_SIZE; i++)
     {
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     return EXIT_SUCCESS;
 }
 
-int test_data() //Test code for data struct
+int test_data()
 {
     struct Data d = data_generate(2);
 
@@ -46,7 +46,6 @@ int test_matrix()
     printf("Matrix is empty: %d\n", matrix_isempty(&m));
     matrix_show(&m);
     matrix_free(&m);
-
     return EXIT_SUCCESS;
 }
 

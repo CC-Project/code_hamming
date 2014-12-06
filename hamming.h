@@ -1,6 +1,7 @@
 #ifndef HAMMING_H
     #define HAMMING_H
-    #include "config.h"     //Implémentation des matrices
+    #include "data.h"
+    #include "matrix.h"
 
     struct Hamming_config
     {
@@ -11,7 +12,7 @@
 
         // Corrections matrix
         struct Matrix CONTROL_MATRIX; // La matrice de controle associée de taille (2^m - 1) x m
-        struct Matrix GENERATRIX_MATRIX; // La matrice génératrice
+        struct Matrix GENERATOR_MATRIX; // La matrice génératrice
         struct Data SYNDROMES_ARRAY; // Le tableau de syndromes (m <= 8 donc les syndrome sont codé sur 8 bits au max, d'ou le uint8_t)
     };
 

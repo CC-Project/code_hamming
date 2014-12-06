@@ -1,6 +1,6 @@
 #ifndef DATA_H
     #define DATA_H
-    #include "config.h"
+    #include "utilities.h"
 
     struct Data
     {
