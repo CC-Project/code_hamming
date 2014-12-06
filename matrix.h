@@ -48,6 +48,7 @@
     void matrix_exchange_cols(uint16_t j1, uint16_t j2, struct Matrix * m);
     void matrix_exchange_lines(uint16_t i1, uint16_t i2, struct Matrix * m);
 
+    // Manipulation of matrix types
     void matrix_make_identity(struct Matrix* m);
     void matrix_make_jidentity(struct Matrix* m);
     void matrix_opposite(struct Matrix *a);       // Returns the opposite matrix (Replace 0 by 1)

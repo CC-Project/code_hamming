@@ -19,20 +19,20 @@ void matrix_show(struct Matrix* m)
     #ifdef __AVR__
 
     #else
+        printf("------------------\nMatrice de taille (%d, %d)\n", m->rows, m->cols);
         uint16_t i = 0;
         uint16_t j = 0;
 
-        printf("------------------\nMatrice de taille (%d, %d)\n", m->rows, m->cols);
         for(i = 0; i < m->data.data_number; i++)
         {
-            j+=1;
-            uint8_t data = data_get(i, &(m->data));
+            j += 1;
 
-            for(int8_t j = BASE_L - 1; j >= 0; j--)
-                printf("%d", (data & (1 << j)) >> j);
+            uint8_t data = data_get(i, &(m->data));
+            for(int8_t k = BASE_L - 1; k >= 0; k--)
+                printf("%d", (data & (1 << k)) >> k);
 
             printf(" ");
-            //printf("%d ", data_get(i, &(m->data)));
+
             if (j == m->cols) {printf("\n"); j = 0;}
         }
         printf("\n");
@@ -95,7 +95,7 @@ struct Matrix matrix_mul(struct Matrix *a, struct Matrix *b)
             for(uint16_t i = 1; i <= m.rows; i++)
                 for(uint16_t j = 1; j <= m.cols; j++)
                     for (uint16_t k = 1; k <= a->cols; k++)
-                        matrix_set(&m, i, j, matrix_get(&m, i, j) ^ (matrix_get(a, i, k) & matrix_get(b, k, j)));
+                        matrix_set(&m, i, j, matrix_get(&m, i, j) ^ (matrix_get(a, i, k) & matrix_get(b, k, j))); // En base > 2 Il faut remplacer cela par un xor bit à bit
 
         return m;
     }

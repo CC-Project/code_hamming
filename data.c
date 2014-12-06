@@ -78,16 +78,14 @@ void data_set(uint16_t n, uint8_t data, struct Data* d)
             data_setSequence(BASE_L * n, BASE_L, data, d);
     }
     else
-    {
         error("ERROR: Incorect data number. Function data_set.");
-    }
-
 }
 
 void data_add(uint8_t data, struct Data* d)
 {
     uint16_t a = (BASE_L * (d->data_number +1 ) - 1) / 8 + 1;
     uint16_t b = (BASE_L * d->data_number - 1) / 8 + 1;
+
     if( a > b )
     {
         d->data_array = realloc(d->data_array, a);
@@ -105,9 +103,7 @@ void data_delete(uint16_t n, struct Data* d)
 {
     if (0 <= n && n < d->data_number)
     {
-        uint8_t nb = d->data_number;
-
-        for(uint16_t i = n; i < nb - 1; i++)
+        for(uint16_t i = n; i < d->data_number - 1; i++)
             data_set(i, data_get(i + 1, d), d);
 
         /*
@@ -115,11 +111,13 @@ void data_delete(uint16_t n, struct Data* d)
             Number of byte needed. Taken from data_generate: floor((d->data_base.l * d->data_number - 1)/8) + 1
         */
         uint16_t a = (BASE_L * (d->data_number - 1) - 1)/8 + 1;
-        uint16_t b = BASE_L * d->data_number /8 + 1;
-        if( a < b)
+        uint16_t b = (BASE_L * (d->data_number / 8)) + 1;
+
+        if(a < b)
             d->data_array = realloc(d->data_array, a);
         else
-            data_set(nb - 1, 0, d);
+            data_set(d->data_number - 1, 0, d);
+
         d->data_number -= 1;
     }
     else

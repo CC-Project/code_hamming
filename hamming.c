@@ -46,22 +46,18 @@ uint8_t hamming_check_syndrome(struct Matrix * synd, struct Hamming_config * con
 
 /**
 ###########
+    GENERATION OF ENCODING ELEMENTS
+###########
 **/
 struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
 {
-    uint16_t cols = (1 << HAMMING_M);
-    struct Matrix control = matrix_generate(HAMMING_M, cols); // Generation de la matrice de controle
+    struct Matrix control = matrix_generate(HAMMING_M, (1 << HAMMING_M)); // Generation de la matrice de controle
 
     // C'est ici qu'intervient une condition sur m : m <= 12, en effet, data ne peut contenir que 2^16 data, en resolvant m*2^m <= 2^16 on trouve m <= 12
 
-    /* Principe pour la base 2 :
-        On remplit la matrice de maniere recursive avec les vecteur de la base canonique de 2^m
-        On supprime ensuite les lignes 2^i avec i dans [0,m-1]
-    */
-
     // Remplissage de la matrice de controle
-    for(uint8_t i = 1; i <= HAMMING_M; i++)
-        for(uint16_t j = 1; j <= cols; j++)
+    for(uint16_t i = 1; i <= HAMMING_M; i++)
+        for(uint16_t j = 1; j <= (1 << HAMMING_M); j++)
             if(((j - 1) / (1 << (HAMMING_M - i))) % 2 == 0)
                 matrix_set(&control, i, j, 0);
             else
@@ -81,7 +77,6 @@ struct Matrix hamming_generate_control_matrix(struct Hamming_config * conf)
     // Frees memory
     matrix_free(&identity);
     matrix_free(&control);
-
     return result;
 }
 
