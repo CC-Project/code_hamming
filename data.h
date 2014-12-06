@@ -21,7 +21,7 @@
     uint8_t data_getBit(uint16_t n, struct Data * d);
     uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data * d);
     void data_setBit(uint16_t n, uint8_t data, struct Data * d);
-    void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data * d); //Not finished
+    void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data * d);
 
     void data_show(struct Data* d);     						// Prints out a data structure. Not adapted to AVR.
 

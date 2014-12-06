@@ -1,3 +1,0 @@
-void matrix_show(struct Matrix* m);         // Prints out a matrix. Not adapted to avr.
-void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data * d); //Not finished
-void data_show(struct Data* d);     						// Prints out a data structure. Not adapted to AVR.
