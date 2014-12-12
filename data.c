@@ -1,5 +1,6 @@
 #include "data.h"
 
+// Data generation/free
 struct Data* data_generate(uint16_t data_number)
 {
     //Allocates memory for the struct
@@ -29,6 +30,9 @@ void data_free(struct Data* d)
     free(d);
 }
 
+
+
+// Data operations
 uint8_t data_get(uint16_t n, struct Data* d)
 {
     if(n < d->data_number)
@@ -128,6 +132,9 @@ void data_delete(uint16_t n, struct Data* d)
         error("ERROR: Deleting a wrong block. Function data_delete.");
 }
 
+
+
+
 uint8_t data_getBit(uint16_t n, struct Data* d)
 {
     if(n <= d->data_number * BASE_L)
@@ -144,7 +151,7 @@ uint8_t data_getBit(uint16_t n, struct Data* d)
     return EXIT_FAILURE;
 }
 
-uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data* d) // Get a sequence l long begin in n (l <= 8)
+uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data* d)
 {
     if(n + (l - 1) < d->data_number * BASE_L)
     {
@@ -183,7 +190,7 @@ void data_setBit(uint16_t n, uint8_t data, struct Data* d)
         error("ERROR: Incorect data number. Function data_setBit.");
 }
 
-void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data* d) // Get a sequence l long begin in n (l <= 8)
+void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data* d)
 {
     if(n + (l - 1) < d->data_number * BASE_L)
     {
@@ -204,6 +211,9 @@ void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data* d) // Ge
     else
         error("ERROR: Incorect data number. Function data_setSequence.");
 }
+
+
+
 
 void data_show(struct Data* d)
 {

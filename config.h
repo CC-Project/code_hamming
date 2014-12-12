@@ -1,6 +1,8 @@
 #ifndef CONFIG_H
     #define CONFIG_H
 
+    #define DEBUG 1 //If enable, utilities routines will be compiled
+
 	//The following preprocessor code selects the architecture
 	#ifdef __AVR__
         #warning AVR plateform selected

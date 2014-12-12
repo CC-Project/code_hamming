@@ -51,6 +51,9 @@
     }
 #endif
 
+
+
+
 uint8_t error(char* str)
 {
     #ifdef __AVR__
@@ -61,8 +64,21 @@ uint8_t error(char* str)
         fprintf(stderr, str);
         fprintf(stderr, "\r\n"); //New line
         system("PAUSE>NUL");
-        //exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     #endif // __AVR__
+}
+
+void print_var_bits(uint8_t var)
+{
+    #ifdef __AVR__
+        uart_tx_str("0b")
+        for(int8_t i = 7; i >= 0; i--)
+            uart_tx_char(((var & (1 << i)) >> i) + 0x30 ); //0x30 is the offset needed to print the appropriate number
+    #else
+        printf("0b");
+        for(int8_t i = 7; i >= 0; i--)
+            printf( "%d", (var & (1 << i)) >> i );
+    #endif
 }
 
 uint16_t int_pow(uint16_t a, uint16_t b)
@@ -80,21 +96,12 @@ uint8_t opposite_word(uint8_t word) //Not finished
     return (word == 0) ? 1 : 0;
 }
 
-void print_var_bits(uint8_t var)
-{
-    #ifndef __AVR__
-        printf("0b");
-        for(int8_t i = 7; i >= 0; i--)
-            printf( "%d", (var & (1 << i)) >> i );
-    #endif
-}
-
 uint16_t rand_a_b(uint16_t a, uint16_t b)
 {
     return rand() % (b-a) + a;
 }
 
-uint8_t xor_bit_to_bit(uint8_t a, uint8_t b)
+uint8_t xor_bit_to_bit(uint8_t a, uint8_t b) //Not finished
 {
 
 }
