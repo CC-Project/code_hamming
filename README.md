@@ -7,7 +7,6 @@ TODO
 void matrix_show(struct Matrix* m);	// Prints out a matrix. Not adapted to avr.  
 void data_show(struct Data* d);     // Prints out a data structure. Not adapted to AVR.  
 Pourquoi BASE_L <= 8 ?  
-Hamming.c: Fonction hamming_free_config: pourquoi pas un data_free au lieu du free(&(conf->SYNDROMES_ARRAY)) ?  
 Hamming.c and Hamming.h -> A lot of comments needed.  
 
 Description
