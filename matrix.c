@@ -259,7 +259,7 @@ struct Matrix matrix_pow(struct Matrix * m, uint8_t n)
 uint16_t matrix_word_to_int(struct Matrix * m)
 {
     uint16_t val = 0;
-    for(uint8_t i = 0; i < m->data.data_number; i++)
+    for(uint16_t i = 0; i < m->data.data_number; i++)
     {
         if (data_get(i, &(m->data)) == 1)
             val = val + (1 << (m->data.data_number - i - 1) );

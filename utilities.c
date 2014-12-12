@@ -60,7 +60,8 @@ uint8_t error(char* str)
     #else
         fprintf(stderr, str);
         fprintf(stderr, "\r\n"); //New line
-        exit(EXIT_FAILURE);
+        system("PAUSE>NUL");
+        //exit(EXIT_FAILURE);
     #endif // __AVR__
 }
 
@@ -76,20 +77,24 @@ uint16_t int_pow(uint16_t a, uint16_t b)
 
 uint8_t opposite_word(uint8_t word) //Not finished
 {
-    if(word == 0)
-        return 1;
-    else
-        return 0;
+    return (word == 0) ? 1 : 0;
 }
 
 void print_var_bits(uint8_t var)
 {
-    printf("0b");
-    for(int8_t i = 7; i >= 0; i--)
-        printf( "%d", (var & (1 << i)) >> i );
+    #ifndef __AVR__
+        printf("0b");
+        for(int8_t i = 7; i >= 0; i--)
+            printf( "%d", (var & (1 << i)) >> i );
+    #endif
 }
 
-int rand_a_b(int a, int b)
+uint16_t rand_a_b(uint16_t a, uint16_t b)
 {
     return rand() % (b-a) + a;
+}
+
+uint8_t xor_bit_to_bit(uint8_t a, uint8_t b)
+{
+
 }

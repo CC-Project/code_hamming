@@ -7,23 +7,35 @@ int test_joconde(); //Test Hamming code on an image
 
 int main(int argc, char *argv[])
 {
-    //General test code
     struct Hamming_config conf = hamming_generate_config();
+//    struct Matrix word = matrix_generate(conf.W_SIZE, 1);
+//
+//    matrix_show(&word);
+//    matrix_show(&(conf.CONTROL_MATRIX));
+//
+//    struct Matrix word_coded = hamming_encode(&word, &conf);
+//
+//    matrix_show_word(&word);
+//    matrix_show_word(&word_coded);
+//
+//    return EXIT_SUCCESS;
+    for(uint16_t i = 0; i <= conf.EW_SIZE; i++)
+        printf("%d : %d \n", i, conf.SYNDROMES_ARRAY.data_array[i]);
 
-    matrix_show(&(conf.CONTROL_MATRIX));
-    matrix_show(&(conf.GENERATOR_MATRIX));
+//    struct Matrix word = matrix_generate(3, 1);
+//
+//    matrix_set(&word, 1,1,1);
+//    matrix_set(&word, 2,1,1);
+//    matrix_set(&word, 3,1,1);
+//    matrix_show_word(&word);
+//    printf("Result : %d", matrix_word_to_int(&word));
 
-    for(uint16_t i = 0; i < conf.EW_SIZE; i++)
-    {
-        printf("%d : %d", i, conf.SYNDROMES_ARRAY.data_array[i]);
-        printf("\n");
-    }
-
-    return EXIT_SUCCESS;
+    //test_joconde();
 }
 
 int test_data()
 {
+    /**
     struct Data d = data_generate(2);
 
     data_set(0, 1, &d);
@@ -36,10 +48,12 @@ int test_data()
     data_free(&d);
 
     return EXIT_SUCCESS;
+    **/
 }
 
 int test_matrix()
 {
+    /**
     struct Matrix m = matrix_generate(2,2);
     matrix_set(&m,2,2,1);
     matrix_void(&m);
@@ -47,6 +61,7 @@ int test_matrix()
     matrix_show(&m);
     matrix_free(&m);
     return EXIT_SUCCESS;
+    **/
 }
 
 int test_hamming()
@@ -115,56 +130,72 @@ int test_hamming()
 
 int test_joconde()
 {
-    /**
-    struct Hamming_config conf = hamming_generate_config(3);
-    FILE* file = fopen("joconde.txt", "r"); // Le fichier test
-    FILE* file_coded = fopen("joconde_coded.txt", "w+"); // Le fichier contenant le code
+    uint8_t ERROR_RATE = 40;
 
-    FILE* file_decoded_no_correction = fopen("joconde_decoded_no_correction.txt", "w+"); // Le fichier contenant le code
-    FILE* file_decoded_with_correction = fopen("joconde_decoded_with_correction.txt", "w+"); // Le fichier contenant le code
+    // Programme
+    struct Hamming_config conf = hamming_generate_config();
+
+    FILE* file = fopen("einstein.txt", "r"); // Le fichier test
+
+    FILE* file_coded = fopen("j_coded.txt", "w+"); // Le fichier contenant le code
+
+    FILE* file_decoded_no_correction = fopen("j_decoded_no_cor.txt", "w+"); // Le fichier contenant le code
+    FILE* file_decoded_with_correction = fopen("j_decoded_with_cor.txt", "w+"); // Le fichier contenant le code
 
     // Codage du fichier
-    struct Matrix word = matrix_generate(conf.word_size, 1, base);
+    struct Matrix word = matrix_generate(conf.W_SIZE, 1);
     struct Matrix word_coded;
     struct Matrix word_correct;
 
+    struct Matrix synd;
+    // Initialisation
     uint8_t caractereActuel;
     uint8_t nb = 0;
     uint8_t nb_alea = 0;
+
     srand(time(NULL)); // initialisation de rand
 
     // Boucle de lecture des caractères un à un
     do
     {
-        if(nb == conf.word_size) // Si la matrice de codage est plein
+        //printf("%d\n", nb);
+        if(nb == conf.W_SIZE) // Si la matrice de codage est pleine
         {
             // Gestion du codage
-            word_coded = hamming_encode(&conf, &word); // On encode
-            for(uint8_t i = 1; i <= conf.total_size; i++) // On écrit le code dans le fichier
+            word_coded = hamming_encode(&word, &conf); // On encode
+
+            for(uint8_t i = 1; i <= conf.EW_SIZE; i++) // On écrit le code dans le fichier
             {
                 // Enregistrement dans le coded
                 fputc(bin_to_ascii(matrix_get(&word_coded, i, 1)), file_coded);
 
                 // Ajout d'aspérité au code
-                nb_alea = rand_a_b(0,40);
-                if(nb_alea == 5)
-                    matrix_set(&word_coded, i, 1, inverse_word(matrix_get(&word_coded, i, 1)));
+                nb_alea = rand_a_b(0,ERROR_RATE);
+
+                if(nb_alea == ERROR_RATE / 2)
+                    matrix_set(&word_coded, i, 1, opposite_word(matrix_get(&word_coded, i, 1)));
             }
 
             // Gestion du decodage sans correction
-            word = hamming_decode(&conf, &word_coded);
-            for(uint8_t i = 1; i <= conf.word_size; i++)
+            word = hamming_decode(&word_coded, &conf);
+
+            for(uint8_t i = 1; i <= conf.W_SIZE; i++)
                 fputc(bin_to_ascii(matrix_get(&word, i, 1)), file_decoded_no_correction);
 
-            // Gestion du décodage avec correction
-            word_correct = hamming_correction(&conf, &word_coded);
-            word = hamming_decode(&conf, &word_correct);
+            //synd = hamming_syndrome(&word_coded, &conf);
+            //matrix_show(&synd);
+            //printf("Syndrome : %d\n", conf.SYNDROMES_ARRAY.data_array[matrix_word_to_int(&synd)]);
 
-            for(uint8_t i = 1; i <= conf.word_size; i++)
+            // Gestion du décodage avec correction
+            word_correct = hamming_correction(&word_coded, &conf);
+            word = hamming_decode(&word_correct, &conf);
+
+            for(uint8_t i = 1; i <= conf.W_SIZE; i++)
                 fputc(bin_to_ascii(matrix_get(&word, i, 1)), file_decoded_with_correction);
 
             // On réinitialise
             nb = 0;
+
             matrix_void(&word);
             matrix_void(&word_coded);
             matrix_void(&word_correct);
@@ -184,10 +215,14 @@ int test_joconde()
 
     } while (caractereActuel != '\n'); // On continue tant que fgetc n'a pas retourné EOF (fin de fichier)
 
-    printf("DONE !!");
+    matrix_free(&word);
+    matrix_free(&word_coded);
+    matrix_free(&word_correct);
+    matrix_free(&synd);
+    printf("\n############# \nDONE !! \n#############");
     // Fermeture des fichiers
     fclose(file);
     fclose(file_coded);
-    **/
+
     return EXIT_SUCCESS;
 }

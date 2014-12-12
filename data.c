@@ -22,8 +22,8 @@ struct Data data_generate(uint16_t data_number)
 
 void data_free(struct Data* d)
 {
-    free(&(d->data_array));
-    free(d);
+    //free(&(d->data_array));
+    //free(d);
 }
 
 uint8_t data_get(uint16_t n, struct Data* d)

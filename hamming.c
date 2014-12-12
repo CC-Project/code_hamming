@@ -2,7 +2,7 @@
 
 struct Matrix hamming_encode(struct Matrix * word, struct Hamming_config * conf)
 {
-    struct Matrix result = matrix_mul(&(conf->CONTROL_MATRIX), word);
+    struct Matrix result = matrix_mul(&(conf->GENERATOR_MATRIX), word);
     return result;
 }
 
@@ -104,7 +104,7 @@ struct Data hamming_generate_syndromes_array(struct Hamming_config * conf)
 {
     if(BASE_L == 1)
     {
-        struct Data syndrome_array = data_generate(8 * conf->EW_SIZE);
+        struct Data syndrome_array = data_generate(8 * conf->EW_SIZE); // On fait +1 pour prendre en compte le zéro
         struct Matrix syndrome_test_matrix = matrix_generate(conf->EW_SIZE, 1);
         struct Matrix syndrome_result;
         uint16_t syndrome;
