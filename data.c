@@ -1,29 +1,32 @@
 #include "data.h"
 
-struct Data data_generate(uint16_t data_number)
+struct Data* data_generate(uint16_t data_number)
 {
-    struct Data d;
-    d.data_number = data_number;
+    //Allocates memory for the struct
+    struct Data* d = malloc(sizeof(struct Data));
+    if (d == NULL)
+         error("ERROR : data_generate : Dynamic allocation not possible for the data structure");
 
-    // Dynamic allocation
+    //Allocates memory for the array
     uint16_t n = (BASE_L * data_number - 1)/8 + 1; // Number of byte needed
-    d.data_array = malloc(n * sizeof(uint8_t));
+    d->data_array = malloc(n * sizeof(uint8_t));
+    if (d->data_array == NULL)
+         error("ERROR : data_generate : Dynamic allocation not possible for data_array");
 
-    // Verification of dynamic allocation
-    if (d.data_array == NULL)
-         error("ERROR : data_generate : Dynamic allocation not possible (data_array)");
+    //Sets the data_number field
+    d->data_number = data_number;
 
-    //Sets initial values
+    //Sets initial values to 0
     for(uint16_t i = 0; i < n; i++)
-        d.data_array[i] = 0;
+        d->data_array[i] = 0;
 
     return d;
 }
 
 void data_free(struct Data* d)
 {
-    //free(&(d->data_array));
-    //free(d);
+    free(d->data_array);
+    free(d);
 }
 
 uint8_t data_get(uint16_t n, struct Data* d)
@@ -52,7 +55,7 @@ uint8_t data_get(uint16_t n, struct Data* d)
     }
     else
         error("ERROR: Incorect data number. Function data_get");
-    return -1;
+    return EXIT_FAILURE;
 }
 
 void data_set(uint16_t n, uint8_t data, struct Data* d)
@@ -125,7 +128,7 @@ void data_delete(uint16_t n, struct Data* d)
         error("ERROR: Deleting a wrong block. Function data_delete.");
 }
 
-uint8_t data_getBit(uint16_t n, struct Data * d)
+uint8_t data_getBit(uint16_t n, struct Data* d)
 {
     if(n <= d->data_number * BASE_L)
     {
@@ -138,10 +141,10 @@ uint8_t data_getBit(uint16_t n, struct Data * d)
     }
     else
         return error("ERROR: Incorect data number. Function data_getBit.");
-    return -1;
+    return EXIT_FAILURE;
 }
 
-uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data * d) // Get a sequence l long begin in n (l <= 8)
+uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data* d) // Get a sequence l long begin in n (l <= 8)
 {
     if(n + (l - 1) < d->data_number * BASE_L)
     {
@@ -156,10 +159,10 @@ uint8_t data_getSequence(uint16_t n, uint8_t l, struct Data * d) // Get a sequen
     }
     else
         error("ERROR: Incorect data number. Function data_getSequence.");
-    return -1;
+    return EXIT_FAILURE;
 }
 
-void data_setBit(uint16_t n, uint8_t data, struct Data * d)
+void data_setBit(uint16_t n, uint8_t data, struct Data* d)
 {
     if(n < d->data_number * BASE_L)
     {
@@ -180,20 +183,20 @@ void data_setBit(uint16_t n, uint8_t data, struct Data * d)
         error("ERROR: Incorect data number. Function data_setBit.");
 }
 
-void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data * d) // Get a sequence l long begin in n (l <= 8)
+void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data* d) // Get a sequence l long begin in n (l <= 8)
 {
     if(n + (l - 1) < d->data_number * BASE_L)
     {
         if(0 <= data && data <= BASE_D - 1)
         {
-            // On place la sequence a remplacer dans un data
-            struct Data dBis = data_generate(8);
-            dBis.data_array[0] = data;
+            //Put the sequence to replace in a data
+            struct Data* dBis = data_generate(8);
+            dBis->data_array[0] = data;
 
             for(uint8_t i = 0; i < l; i++)
-                data_setBit((n + (l - 1)) - i, data_getBit((8 - 1) - i, &dBis), d);
+                data_setBit((n + (l - 1)) - i, data_getBit((8 - 1) - i, dBis), d);
 
-            data_free(&dBis);
+            data_free(dBis);
         }
         else
             error("ERROR: Incorect data value. Function data_setSequence.");

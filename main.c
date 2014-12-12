@@ -1,57 +1,34 @@
 #include "hamming.h"
 
-int test_data();    //Test code for data struct
-int test_matrix();  //Test code for matrix
-int test_hamming(); //Test code for Hamming
-int test_joconde(); //Test Hamming code on an image
+void test_data();    //Test code for data struct
+void test_matrix();  //Test code for matrix
+void test_hamming(); //Test code for Hamming
+void test_joconde(); //Test Hamming code on an image
 
 int main(int argc, char *argv[])
 {
-    struct Hamming_config conf = hamming_generate_config();
-//    struct Matrix word = matrix_generate(conf.W_SIZE, 1);
-//
-//    matrix_show(&word);
-//    matrix_show(&(conf.CONTROL_MATRIX));
-//
-//    struct Matrix word_coded = hamming_encode(&word, &conf);
-//
-//    matrix_show_word(&word);
-//    matrix_show_word(&word_coded);
-//
-//    return EXIT_SUCCESS;
-    for(uint16_t i = 0; i <= conf.EW_SIZE; i++)
-        printf("%d : %d \n", i, conf.SYNDROMES_ARRAY.data_array[i]);
-
-//    struct Matrix word = matrix_generate(3, 1);
-//
-//    matrix_set(&word, 1,1,1);
-//    matrix_set(&word, 2,1,1);
-//    matrix_set(&word, 3,1,1);
-//    matrix_show_word(&word);
-//    printf("Result : %d", matrix_word_to_int(&word));
-
-    //test_joconde();
+    test_matrix();
+    test_hamming();
+    return EXIT_SUCCESS;
 }
 
-int test_data()
+void test_data()
 {
     /**
-    struct Data d = data_generate(2);
+    struct Data* d = data_generate(2);
 
-    data_set(0, 1, &d);
-    data_set(1, data_get(0,&d), &d);
-    data_show(&d);
-    data_delete(0,&d);
-    data_show(&d);
-    data_add(0,&d);
-    data_show(&d);
-    data_free(&d);
-
-    return EXIT_SUCCESS;
+    data_set(0, 1, d);
+    data_set(1, data_get(0,d), d);
+    data_show(d);
+    data_delete(0,d);
+    data_show(d);
+    data_add(0,d);
+    data_show(d);
+    data_free(d);
     **/
 }
 
-int test_matrix()
+void test_matrix()
 {
     /**
     struct Matrix m = matrix_generate(2,2);
@@ -60,30 +37,29 @@ int test_matrix()
     printf("Matrix is empty: %d\n", matrix_isempty(&m));
     matrix_show(&m);
     matrix_free(&m);
-    return EXIT_SUCCESS;
     **/
 }
 
-int test_hamming()
+void test_hamming()
 {
     /**
     struct Hamming_config conf = hamming_generate_config(4);
-    printf("--------------------------\n### TEST OF HAMMING CODE (%d, %d, %d) ###\n--------------------------\n\n", conf.total_size, conf.word_size, conf.correction_size);
+    printf("--------------------------\n### TEST OF HAMMING CODE (%d, %d, %d) ###\n--------------------------\n\n", conf.EW_SIZE, conf.W_SIZE, conf.C_SIZE);
 
     // Affichage des matrices de controle et de generation
     printf("Matrice de controle :\n");
-    matrix_show(&(conf.control_matrix));
+    matrix_show(&(conf.CONTROL_MATRIX));
 
     printf("Matrice generatrice :\n");
-    matrix_show(&(conf.generatrix_matrix));
+    matrix_show(&(conf.GENERATOR_MATRIX));
 
     printf("Tableau de syndromes : \n");
     for(uint8_t i = 1; i < int_pow(2, conf.m); i++)
     {
         print_var_bits(i);
         printf(" : ");
-        print_var_bits(conf.syndrome_array[i]);
-        printf(" (%d : %d)", i, conf.syndrome_array[i]);
+        print_var_bits(conf.SYNDROMES_ARRAY[i]);
+        printf(" (%d : %d)", i, conf.SYNDROMES_ARRAY[i]);
         printf("\n");
     }
     printf("\n");
@@ -93,7 +69,7 @@ int test_hamming()
     matrix_set(&dte, 1, 1, 1);
 
     // Affichage
-    printf("Data to encode : %d elements\n", dte.data.data_number);
+    printf("Data to encode : %d elements\n", dte.data->data_number);
     matrix_show_word(&dte);
 
     // Encodage
@@ -125,11 +101,11 @@ int test_hamming()
 
     hamming_free_config(&conf);
     **/
-    return 1;
 }
 
-int test_joconde()
+void test_joconde()
 {
+    /*
     uint8_t ERROR_RATE = 40;
 
     // Programme
@@ -225,4 +201,5 @@ int test_joconde()
     fclose(file_coded);
 
     return EXIT_SUCCESS;
+    */
 }
