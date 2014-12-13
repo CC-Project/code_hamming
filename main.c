@@ -42,8 +42,7 @@ void test_matrix()
 
 void test_hamming()
 {
-    /**
-    struct Hamming_config conf = hamming_generate_config(4);
+    struct Hamming_config conf = hamming_generate_config();
     printf("--------------------------\n### TEST OF HAMMING CODE (%d, %d, %d) ###\n--------------------------\n\n", conf.EW_SIZE, conf.W_SIZE, conf.C_SIZE);
 
     // Affichage des matrices de controle et de generation
@@ -52,19 +51,20 @@ void test_hamming()
 
     printf("Matrice generatrice :\n");
     matrix_show(&(conf.GENERATOR_MATRIX));
-
+    /**
     printf("Tableau de syndromes : \n");
-    for(uint8_t i = 1; i < int_pow(2, conf.m); i++)
+    for(uint8_t i = 0; i <= conf.EW_SIZE; i++)
     {
         print_var_bits(i);
         printf(" : ");
-        print_var_bits(conf.SYNDROMES_ARRAY[i]);
-        printf(" (%d : %d)", i, conf.SYNDROMES_ARRAY[i]);
+        print_var_bits(conf.SYNDROMES_ARRAY.data_array[i]);
+        printf(" (%d : %d)", i, conf.SYNDROMES_ARRAY.data_array[i]);
         printf("\n");
     }
+    **/
     printf("\n");
     // Creation du mot a encoder
-    struct Matrix dte = matrix_generate(conf.word_size, 1);
+    struct Matrix dte = matrix_generate(conf.W_SIZE, 1);
     matrix_set(&dte, 3, 1, 1);
     matrix_set(&dte, 1, 1, 1);
 
@@ -73,19 +73,20 @@ void test_hamming()
     matrix_show_word(&dte);
 
     // Encodage
-    struct Matrix d = hamming_encode(&conf, &dte);
+    struct Matrix d = hamming_encode(&dte, &conf);
 
-    printf("Data encoded : %d elements\n", d.data.data_number);
+    printf("Data encoded : %d elements\n", d.data->data_number);
     matrix_show_word(&d);
 
     // Infiltration d'une erreur dans le mot
     data_set(3, 1, &(d.data));
 
-    printf("Data modified : %d elements\n", d.data.data_number);
+    printf("Data modified : %d elements\n", d.data->data_number);
     matrix_show_word(&d);
 
     // Correction
-    struct Matrix r = hamming_syndrome(&conf, &d);
+    struct Matrix r = hamming_syndrome(&d, &conf);
+
     // Affichage de la correction
     printf("############\nCORRECTION\n############\n\n");
     printf("Syndrome du code modifié : %d \n", matrix_word_to_int(&r));
@@ -93,14 +94,13 @@ void test_hamming()
 
     if(!matrix_isempty(&r))
     {
-        uint8_t b = hamming_check(&conf, &d);
+        uint8_t b = hamming_check_syndrome(&d, &conf);
         printf("######### BIT CORROMPU : Le bit numero %d est corrompu\n", b + 1);
     }
     else
         printf("######### AUCUN BIT CORROMPU\n\n");
 
     hamming_free_config(&conf);
-    **/
 }
 
 void test_joconde()
