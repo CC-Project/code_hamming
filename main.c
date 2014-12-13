@@ -96,7 +96,7 @@ void test_hamming()
 
     if(!matrix_isempty(&r))
     {
-        uint8_t b = hamming_check_syndrome(&d, &conf);
+        uint8_t b = hamming_check_syndrome(&r, &conf);
         printf("######### BIT CORROMPU : Le bit numero %d est corrompu\n", b + 1);
     }
     else

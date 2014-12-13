@@ -154,8 +154,7 @@ struct Matrix hamming_correction(struct Matrix * word, struct Hamming_config * c
 
 uint8_t hamming_check_syndrome(struct Matrix* synd, struct Hamming_config* conf)
 {
-    printf("hamming_check_syndrome: %d\n", matrix_word_to_int(synd));
-    return 0;//return conf->SYNDROMES_ARRAY->data_array[matrix_word_to_int(synd)];
+    return conf->SYNDROMES_ARRAY->data_array[matrix_word_to_int(synd)];
 }
 
 struct Matrix hamming_syndrome(struct Matrix* word, struct Hamming_config* conf)
