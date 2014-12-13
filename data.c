@@ -221,7 +221,7 @@ void data_show(struct Data* d)
     #ifdef __AVR__
 
     #else
-        printf("-----------------\nShow %d data :\n", d->data_number);
+        printf("\nShow %d data :\n", d->data_number);
         for(uint16_t i = 0; i < d->data_number; i++)
         {
             data = data_get(i, d);
@@ -230,6 +230,6 @@ void data_show(struct Data* d)
             print_var_bits(data);
             printf("\n");
         }
-        printf("-----------------\n\n", d->data_number);
+        printf("\n\n");
     #endif // __AVR__
 }

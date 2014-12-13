@@ -11,7 +11,7 @@
     };
 
     // Generation and deletion
-    struct Matrix matrix_generate(uint16_t n, uint16_t p);
+    struct Matrix* matrix_generate(uint16_t n, uint16_t p);
     void matrix_free(struct Matrix* m);
 
 
@@ -29,16 +29,16 @@
     void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val); //Sets the i-th line, j-th column of m to val
     uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j);           //Gets the i-th line, j-th column of m
     void matrix_void(struct Matrix* m);             // Voids a matrix i.e sets all data to 0.
-    struct Matrix matrix_copy(struct Matrix *a);    // Copy a matrix
+    struct Matrix* matrix_copy(struct Matrix *a);    // Copy a matrix
 
 
     // Operations on matrix
-    struct Matrix matrix_mul(struct Matrix* a, struct Matrix* b);               // Mul two matrix
-    struct Matrix matrix_add(struct Matrix* a, struct Matrix* b);               // Adds two matrix
-    struct Matrix matrix_pow(struct Matrix * m, uint8_t n);                     // Returns M^n
-    struct Matrix matrix_transpose(struct Matrix * m);                          // Transposes a matrix
-    struct Matrix matrix_collapse_down(struct Matrix *a, struct Matrix *b);     // Collapse two matrix
-    struct Matrix matrix_collapse_right(struct Matrix *a, struct Matrix *b);
+    struct Matrix* matrix_mul(struct Matrix* a, struct Matrix* b);               // Mul two matrix
+    struct Matrix* matrix_add(struct Matrix* a, struct Matrix* b);               // Adds two matrix
+    struct Matrix* matrix_pow(struct Matrix * m, uint8_t n);                     // Returns M^n
+    struct Matrix* matrix_transpose(struct Matrix * m);                          // Transposes a matrix
+    struct Matrix* matrix_collapse_down(struct Matrix *a, struct Matrix *b);     // Collapse two matrix
+    struct Matrix* matrix_collapse_right(struct Matrix *a, struct Matrix *b);
 
 
     // Manipulation of rows and cols

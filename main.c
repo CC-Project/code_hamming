@@ -7,7 +7,6 @@ void test_joconde(); //Test Hamming code on an image
 
 int main(int argc, char *argv[])
 {
-    //test_matrix();
     test_hamming();
     return EXIT_SUCCESS;
 }
@@ -31,78 +30,84 @@ void test_data()
 void test_matrix()
 {
     /**
-    struct Matrix m = matrix_generate(2,2);
-    matrix_set(&m,2,2,1);
-    matrix_void(&m);
-    printf("Matrix is empty: %d\n", matrix_isempty(&m));
-    matrix_show(&m);
-    matrix_free(&m);
+    struct Matrix* m = matrix_generate(2,2);
+    matrix_set(m,2,2,1);
+    matrix_show(m);
+    matrix_void(m);
+    printf("Matrix is empty: %d\n", matrix_isempty(m));
+    matrix_show(m);
+    matrix_free(m);
     **/
 }
 
 void test_hamming()
 {
-    struct Hamming_config conf = hamming_generate_config();
-    printf("--------------------------\n### TEST OF HAMMING CODE (%d, %d, %d) ###\n--------------------------\n\n", conf.EW_SIZE, conf.W_SIZE, conf.C_SIZE);
 
-    // Affichage des matrices de controle et de generation
-    printf("Matrice de controle :\n");
-    matrix_show(&(conf.CONTROL_MATRIX));
+    struct Hamming_config* conf = hamming_generate_config();
+    printf("\nTest of the (%d, %d, %d) Hamming code\n--------------------------------\n\n", conf->EW_SIZE, conf->W_SIZE, conf->C_SIZE);
 
-    printf("Matrice generatrice :\n");
-    matrix_show(&(conf.GENERATOR_MATRIX));
+    // Display the generator and control matrix
+    printf("Control matrix: \n");
+    matrix_show(conf->CONTROL_MATRIX);
+
+    printf("Generator matrix: \n");
+    matrix_show(conf->GENERATOR_MATRIX);
 
     //**
-    printf("Tableau de syndromes : \n");
-    for(uint8_t i = 0; i <= conf.EW_SIZE; i++)
+    printf("Syndromes array: \n");
+    for(uint8_t i = 0; i <= conf->EW_SIZE; i++)
     {
         print_var_bits(i);
         printf(" : ");
-        print_var_bits(conf.SYNDROMES_ARRAY->data_array[i]);
-        printf(" (%d : %d)", i, conf.SYNDROMES_ARRAY->data_array[i]);
+        print_var_bits(conf->SYNDROMES_ARRAY->data_array[i]);
+        printf(" (%d : %d)", i, conf->SYNDROMES_ARRAY->data_array[i]);
         printf("\n");
     }
     printf("\n");
-    /**/
 
-    // Creation du mot a encoder
-    struct Matrix dte = matrix_generate(conf.W_SIZE, 1);
-    matrix_set(&dte, 3, 1, 1);
-    matrix_set(&dte, 1, 1, 1);
+    // Generation of the word to encode
+    struct Matrix* dte = matrix_generate(conf->W_SIZE, 1);
+    matrix_set(dte, 3, 1, 1);
+    matrix_set(dte, 1, 1, 1);
 
-    // Affichage
-    printf("Data to encode : %d elements\n", dte.data->data_number);
-    matrix_show_word(&dte);
+    // Display
+    printf("Data to encode : %d elements\n", dte->data->data_number);
+    matrix_show_word(dte);
 
-    // Encodage
-    struct Matrix d = hamming_encode(&dte, &conf);
+    // Encoding
+    struct Matrix* d = hamming_encode(dte, conf);
 
-    printf("Data encoded : %d elements\n", d.data->data_number);
-    matrix_show_word(&d);
 
-    // Infiltration d'une erreur dans le mot
-    data_set(3, 1, d.data);
+    printf("Data encoded : %d elements\n", d->data->data_number);
+    matrix_show_word(d);
 
-    printf("Data modified : %d elements\n", d.data->data_number);
-    matrix_show_word(&d);
+    // Add an error
+    data_set(3, 1, d->data);
+
+    printf("Data modified : %d elements\n", d->data->data_number);
+    matrix_show_word(d);
 
     // Correction
-    struct Matrix r = hamming_syndrome(&d, &conf);
+    struct Matrix* r = hamming_syndrome(d, conf);
 
     // Affichage de la correction
-    printf("############\nCORRECTION\n############\n\n");
-    printf("Syndrome du code modifie : %d \n", matrix_word_to_int(&r));
-    data_show(r.data);
+    printf("\n\nCorrection\n-----------\n\n");
+    printf("Syndrome of the modified code : %d \n", matrix_word_to_int(r));
+    data_show(r->data);
 
-    if(!matrix_isempty(&r))
+    if(!matrix_isempty(r))
     {
-        uint8_t b = hamming_check_syndrome(&r, &conf);
-        printf("######### BIT CORROMPU : Le bit numero %d est corrompu\n", b + 1);
+        uint8_t b = hamming_check_syndrome(r, conf);
+        printf("The bit %d is corrupted\n", b + 1);
     }
     else
-        printf("######### AUCUN BIT CORROMPU\n\n");
+        printf("No bit corrupted\n");
 
-    hamming_free_config(&conf);
+    matrix_free(dte);
+    matrix_free(d);
+    matrix_free(r);
+    hamming_free_config(conf);
+    /**/
 }
 
 void test_joconde()

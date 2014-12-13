@@ -103,5 +103,5 @@ uint16_t rand_a_b(uint16_t a, uint16_t b)
 
 uint8_t xor_bit_to_bit(uint8_t a, uint8_t b) //Not finished
 {
-
+    return 0;
 }

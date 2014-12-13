@@ -6,6 +6,7 @@ TODO
 ----
 void matrix_show(struct Matrix* m);	// Prints out a matrix. Not adapted to avr.  
 void data_show(struct Data* d);     // Prints out a data structure. Not adapted to AVR.  
+struct Matrix* hamming_generate_generator_matrix(struct Hamming_config * conf); //// On supprime les m dernières colonnes qui correspondent a l'identité?  
 Pourquoi BASE_L <= 8 ?  
 Hamming.c and Hamming.h -> A lot of comments needed.  
 Correct the names of the func  
