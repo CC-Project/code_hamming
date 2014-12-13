@@ -7,7 +7,7 @@ void test_joconde(); //Test Hamming code on an image
 
 int main(int argc, char *argv[])
 {
-    test_matrix();
+    //test_matrix();
     test_hamming();
     return EXIT_SUCCESS;
 }
@@ -51,18 +51,20 @@ void test_hamming()
 
     printf("Matrice generatrice :\n");
     matrix_show(&(conf.GENERATOR_MATRIX));
-    /**
+
+    //**
     printf("Tableau de syndromes : \n");
     for(uint8_t i = 0; i <= conf.EW_SIZE; i++)
     {
         print_var_bits(i);
         printf(" : ");
-        print_var_bits(conf.SYNDROMES_ARRAY.data_array[i]);
-        printf(" (%d : %d)", i, conf.SYNDROMES_ARRAY.data_array[i]);
+        print_var_bits(conf.SYNDROMES_ARRAY->data_array[i]);
+        printf(" (%d : %d)", i, conf.SYNDROMES_ARRAY->data_array[i]);
         printf("\n");
     }
-    **/
     printf("\n");
+    /**/
+
     // Creation du mot a encoder
     struct Matrix dte = matrix_generate(conf.W_SIZE, 1);
     matrix_set(&dte, 3, 1, 1);
@@ -79,7 +81,7 @@ void test_hamming()
     matrix_show_word(&d);
 
     // Infiltration d'une erreur dans le mot
-    data_set(3, 1, &(d.data));
+    data_set(3, 1, d.data);
 
     printf("Data modified : %d elements\n", d.data->data_number);
     matrix_show_word(&d);
@@ -89,8 +91,8 @@ void test_hamming()
 
     // Affichage de la correction
     printf("############\nCORRECTION\n############\n\n");
-    printf("Syndrome du code modifié : %d \n", matrix_word_to_int(&r));
-    data_show(&(r.data));
+    printf("Syndrome du code modifie : %d \n", matrix_word_to_int(&r));
+    data_show(r.data);
 
     if(!matrix_isempty(&r))
     {

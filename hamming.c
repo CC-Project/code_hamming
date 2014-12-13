@@ -154,11 +154,12 @@ struct Matrix hamming_correction(struct Matrix * word, struct Hamming_config * c
 
 uint8_t hamming_check_syndrome(struct Matrix* synd, struct Hamming_config* conf)
 {
-    return conf->SYNDROMES_ARRAY->data_array[matrix_word_to_int(synd)];
+    printf("hamming_check_syndrome: %d\n", matrix_word_to_int(synd));
+    return 0;//return conf->SYNDROMES_ARRAY->data_array[matrix_word_to_int(synd)];
 }
 
-struct Matrix hamming_syndrome(struct Matrix * word, struct Hamming_config * conf)
+struct Matrix hamming_syndrome(struct Matrix* word, struct Hamming_config* conf)
 {
     struct Matrix result = matrix_mul(&(conf->CONTROL_MATRIX), word);
-    return result; // On retourne le nombre en binaire correspondant au syndrome (=> que la matrice data reçu soit d'une taille < 255 lignes, m < 8)
+    return result; // On retourne le nombre en binaire correspondant au syndrome (Suppose que la matrice data reçue soit d'une taille < 255 lignes, m < 8)
 }
