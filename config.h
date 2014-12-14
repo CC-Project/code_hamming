@@ -1,6 +1,5 @@
 #ifndef CONFIG_H
     #define CONFIG_H
-
     #define DEBUG 1 //If enable, utilities routines will be compiled
 
 	//The following preprocessor code selects the architecture
@@ -22,7 +21,7 @@
     // Warning : BASE_L <= 8
 
     // Hamming configuration
-    #define HAMMING_M 4  // Hamming parameter <= 8
+    #define HAMMING_M 3  // Hamming parameter <= 8
     #define HAMMING_EXTENDED 0
 
 #endif // CONFIG_H

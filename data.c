@@ -197,7 +197,7 @@ void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data* d)
         if(0 <= data && data <= BASE_D - 1)
         {
             //Put the sequence to replace in a data
-            struct Data* dBis = data_generate(8);
+            struct Data * dBis = data_generate(1);
             dBis->data_array[0] = data;
 
             for(uint8_t i = 0; i < l; i++)

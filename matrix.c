@@ -16,8 +16,6 @@ void matrix_free(struct Matrix* m)
     free(m);
 }
 
-
-
 // Utilities
 void matrix_show(struct Matrix* m)
 {

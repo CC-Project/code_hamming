@@ -1,6 +1,8 @@
 #ifndef UTILITIES_H
     #define UTILITIES_H
     #include "config.h"
+    #include "data.h"
+    #include "matrix.h"
     #include <stdio.h>
 
     #ifdef __AVR__
@@ -19,6 +21,6 @@
     uint16_t int_pow(uint16_t a, uint16_t b);   //Computes a^b
     uint8_t opposite_word(uint8_t word);        //Returns the opposite word (10011 -> 01100). Not finished
     uint16_t rand_a_b(uint16_t a, uint16_t b);  //Returns a random number between a and b (inclusive)
-    uint8_t xor_bit_to_bit(uint8_t a, uint8_t b);   //Not finished
+    //uint8_t xor_bit_to_bit(uint8_t a, uint8_t b);   //Not finished
 
 #endif // UTILITIES_H
