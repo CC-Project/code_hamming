@@ -46,5 +46,6 @@ Temporary Items
 *.cbp
 *.depend
 *.layout
+*.txt
 bin/
 obj/
