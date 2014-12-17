@@ -19,7 +19,8 @@
     uint8_t error(char* str); // Exit the program with the error code EXIT_FAILED
     void print_var_bits(uint8_t var);
     uint16_t int_pow(uint16_t a, uint16_t b);   //Computes a^b
-    uint8_t opposite_word(uint8_t word);        //Returns the opposite word (10011 -> 01100). Not finished
+    uint8_t opposite_word(uint8_t word);        //Returns the opposite word (10011 -> 01100)
+    uint8_t opposite_bit(uint8_t bit);
     uint16_t rand_a_b(uint16_t a, uint16_t b);  //Returns a random number between a and b (inclusive)
     //uint8_t xor_bit_to_bit(uint8_t a, uint8_t b);   //Not finished
 

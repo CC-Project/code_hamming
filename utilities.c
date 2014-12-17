@@ -104,7 +104,10 @@ uint8_t opposite_word(uint8_t word)
 
     return result;
 }
-
+uint8_t opposite_bit(uint8_t bit)
+{
+    return (bit == 0) ? 1 : 0;
+}
 uint16_t rand_a_b(uint16_t a, uint16_t b)
 {
     return rand() % (b - a) + a;
