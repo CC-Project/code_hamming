@@ -12,7 +12,6 @@ struct Hamming_config* hamming_generate_config()
 
     config->CONTROL_MATRIX = hamming_generate_control_matrix(config);
     config->GENERATOR_MATRIX = hamming_generate_generator_matrix(config);
-
     config->SYNDROMES_ARRAY = hamming_generate_syndromes_array(config);
     return config;
 }
@@ -24,7 +23,6 @@ void hamming_free_config(struct Hamming_config *conf)
     data_free(conf->SYNDROMES_ARRAY);
     free(conf);
 }
-
 
 // Coding and decoding matrix
 struct Matrix* hamming_generate_generator_matrix(struct Hamming_config * conf)
@@ -116,8 +114,6 @@ struct Data* hamming_generate_syndromes_array(struct Hamming_config * conf)
         error("Wrong base. Function hamming_generate_syndromes_array");
 }
 
-
-
 // Manipulation of data
 struct Matrix* hamming_encode(struct Matrix * word, struct Hamming_config * conf)
 {
@@ -144,7 +140,8 @@ struct Matrix* hamming_correction(struct Matrix * word, struct Hamming_config * 
         struct Matrix* word_correct = matrix_copy(word);
         uint8_t synd_check = hamming_check_syndrome(synd, conf) + 1;
 
-        matrix_set(word_correct, synd_check, 1, opposite_word(matrix_get(word, synd_check, 1)));
+        matrix_set(word_correct, synd_check, 1, opposite_bit(matrix_get(word, synd_check, 1)));
+
         matrix_free(synd);
         return word_correct;
     }

@@ -21,7 +21,7 @@
     // Warning : BASE_L <= 8
 
     // Hamming configuration
-    #define HAMMING_M 4  // Hamming parameter <= 8
+    #define HAMMING_M 3  // Hamming parameter <= 8
     #define HAMMING_EXTENDED 0
 
 #endif // CONFIG_H

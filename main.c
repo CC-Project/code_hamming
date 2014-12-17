@@ -9,11 +9,7 @@ void test_encode(); //Test Hamming code on an file
 
 int main(int argc, char *argv[])
 {
-    char i = 5;
-    char* a = "salut";
-    strcat(a, i);
-    printf("%s", a);
-    //test_hamming();
+    test_encode();
     return EXIT_SUCCESS;
 }
 
@@ -117,59 +113,62 @@ void test_hamming()
 void test_encode()
 {
     // Configuration
-    char* FILE_NAME = "einstein";
+    char FILE_NAME[64] = "einstein";
 
     // Génération de la configuration de hamming
     struct Hamming_config* conf = hamming_generate_config();
 
     // Déclaration des variables
-    char* FILE_COMPLEMENT;
-    char* FILE_CODED_NAME;
-    char* FILE_DECODED_F_NAME;
-    char* FILE_DECODED_T_NAME;
+    char FILE_COMPLEMENT[64];
+    char FILE_CODED_NAME[64];
+    char FILE_DECODED_F_NAME[64];
+    char FILE_DECODED_T_NAME[64];
+    char FILE_PATH[64];
+    char PROB_CHAR[32];
 
     FILE* file;
     FILE* file_coded;
     FILE* file_decoded_no_correction;
     FILE* file_decoded_with_correction;
 
-    struct Matrix* word;
-    struct Matrix* word_coded;
-    struct Matrix* word_correct;
-    struct Matrix* synd;
-
     uint8_t caractereActuel;
     uint8_t nb;
     uint8_t nb_alea;
+
+    uint8_t i;
 
     uint16_t PROBABILITY_OF_ERROR; // En pourmille
 
     // Divers
     srand(time(NULL)); // initialisation de rand
 
-    for(uint16_t k = 1; k < 1000; k = k + 10)
+    for(uint16_t k = 0; k <= 1001; k = k + 20)
     {
+        struct Matrix* word;
+        struct Matrix* word_coded;
+        struct Matrix* word_correct;
+
         PROBABILITY_OF_ERROR = k;
 
-        FILE_COMPLEMENT = strcat(FILE_NAME, "_");
-        FILE_COMPLEMENT = strcat(FILE_NAME, PROBABILITY_OF_ERROR);
+        // Gestion des chaines de caractères
+        sprintf(PROB_CHAR, "%d", k); // Conversion en chaine de caractere
 
-        // Programme
-        FILE_CODED_NAME = strcat(FILE_NAME, "_CODED.txt");
-        FILE_DECODED_F_NAME = strcat(FILE_COMPLEMENT, "_DECODED_NO_C.txt");
-        FILE_DECODED_T_NAME = strcat(FILE_COMPLEMENT, "_DECODED_WITH_C.txt");
-        FILE_NAME = strcat(FILE_NAME, ".txt");
+        sprintf(FILE_COMPLEMENT, "%s%s", FILE_NAME, "_");
+        sprintf(FILE_COMPLEMENT, "%s%s", FILE_COMPLEMENT, PROB_CHAR);
+        sprintf(FILE_PATH, "%s%s", FILE_NAME, ".txt");
 
-        file = fopen(FILE_NAME, "r"); // Le fichier à exploiter
+        sprintf(FILE_CODED_NAME, "%s%s", FILE_NAME, "_CODED.txt");
+        sprintf(FILE_DECODED_F_NAME, "%s%s", FILE_COMPLEMENT, "_DECODED_NO_C.txt");
+        sprintf(FILE_DECODED_T_NAME, "%s%s", FILE_COMPLEMENT, "_DECODED_WITH_C.txt");
 
+        // Ouverture des fichiers
+        file = fopen(FILE_PATH, "r"); // Le fichier à exploiter
         file_coded = fopen(FILE_CODED_NAME, "w+"); // Le fichier contenant le code codé
         file_decoded_no_correction = fopen(FILE_DECODED_F_NAME, "w+"); // Le fichier contenant le code sans corrections
         file_decoded_with_correction = fopen(FILE_DECODED_T_NAME, "w+"); // Le fichier contenant le code corrigé
 
-        // Codage du fichier
-        word = matrix_generate(conf->W_SIZE, 1);
-
         // Initialisation des variables
+        word;
         nb = 0; nb_alea = 0;
 
         // Lecture des caractères un à un
@@ -179,27 +178,27 @@ void test_encode()
             {
                 // Gestion du codage
                 word_coded = hamming_encode(word, conf); // On encode
-                for(uint8_t i = 1; i <= conf->EW_SIZE; i++) // On écrit le code dans le fichier
+                for(i = 1; i <= conf->EW_SIZE; i++) // On écrit le code dans le fichier
                 {
                     if(k == 1) // Enregistrement dans le file_coded si c'est le premier passage
                         fputc(bin_to_ascii(matrix_get(word_coded, i, 1)), file_coded);
 
                     // Ajout d'aspérité au code
                     nb_alea = rand_a_b(0, 1000);
-                    if(nb_alea <= PROBABILITY_OF_ERROR)
+                    if(nb_alea < PROBABILITY_OF_ERROR)
                         matrix_set(word_coded, i, 1, opposite_bit(matrix_get(word_coded, i, 1)));
                 }
 
                 // Gestion du decodage sans correction
                 word = hamming_decode(word_coded, conf);
-                for(uint8_t i = 1; i <= conf->W_SIZE; i++)
+                for(i = 1; i <= conf->W_SIZE; i++)
                     fputc(bin_to_ascii(matrix_get(word, i, 1)), file_decoded_no_correction);
 
                 // Gestion du décodage avec correction
                 word_correct = hamming_correction(word_coded, conf);
                 word = hamming_decode(word_correct, conf);
 
-                for(uint8_t i = 1; i <= conf->W_SIZE; i++)
+                for(i = 1; i <= conf->W_SIZE; i++)
                     fputc(bin_to_ascii(matrix_get(word, i, 1)), file_decoded_with_correction);
 
                 // On réinitialise
@@ -226,18 +225,20 @@ void test_encode()
         // Fermeture des fichiers
         fclose(file);
         fclose(file_coded);
+        fclose(file_decoded_no_correction);
+        fclose(file_decoded_with_correction);
 
-        printf("\n############# \nDONE !! \n#############");
+        matrix_free(word);
+        matrix_free(word_coded);
+        matrix_free(word_correct);
 
-
-        system("PAUSE>NUL");
+        printf("DONE !! \n");
     }
 
     // Libération des matrices
-    matrix_free(word);
-    matrix_free(word_coded);
-    matrix_free(word_correct);
-    matrix_free(synd);
+    hamming_free_config(conf);
 
-    return EXIT_SUCCESS;
+    // Affichage final
+    printf("TOTALY DONE !! \n");
+    system("PAUSE>NUL");
 }

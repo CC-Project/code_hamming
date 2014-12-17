@@ -141,6 +141,7 @@ struct Matrix* matrix_mul(struct Matrix *a, struct Matrix *b)
         error("ERROR : matric_mul : The sizes of matrix are not compatible");
 
     struct Matrix* m = matrix_generate(a->rows, b->cols);
+
     if (BASE_D == 2)
         for(uint16_t i = 1; i <= m->rows; i++)
             for(uint16_t j = 1; j <= m->cols; j++)
