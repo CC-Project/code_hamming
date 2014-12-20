@@ -168,7 +168,7 @@ void test_encode()
         file_decoded_with_correction = fopen(FILE_DECODED_T_NAME, "w+"); // Le fichier contenant le code corrigé
 
         // Initialisation des variables
-        word;
+        word = matrix_generate(conf->W_SIZE, 1);
         nb = 0; nb_alea = 0;
 
         // Lecture des caractères un à un
