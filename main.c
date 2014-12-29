@@ -9,14 +9,15 @@ void test_encode(); //Test Hamming code on an file
 
 int main(int argc, char *argv[])
 {
-    test_encode();
+    for(uint64_t i = 0; i<1000; i++)
+        test_hamming();
     return EXIT_SUCCESS;
 }
 
 void test_data()
 {
     /**
-    struct Data* d = data_generate(2);
+    struct Data* d = data_generate(10);
 
     data_set(0, 1, d);
     data_set(1, data_get(0,d), d);
@@ -33,85 +34,84 @@ void test_matrix()
 {
     /**
     struct Matrix* m = matrix_generate(2,2);
-    matrix_set(m,2,2,1);
-    matrix_show(m);
-    matrix_void(m);
-    printf("Matrix is empty: %d\n", matrix_isempty(m));
-    matrix_show(m);
+    matrix_make_identity(m);
     matrix_free(m);
-    **/
+    /*/
 }
 
 void test_hamming()
 {
+    /**/
     struct Hamming_config* conf = hamming_generate_config();
-    printf("\nTest of the (%d, %d, %d) Hamming code\n--------------------------------\n\n", conf->EW_SIZE, conf->W_SIZE, conf->C_SIZE);
-
-    // Display the generator and control matrix
-    printf("Control matrix: \n");
-    matrix_show(conf->CONTROL_MATRIX);
-
-    printf("Generator matrix: \n");
-    matrix_show(conf->GENERATOR_MATRIX);
-
-    //**
-    printf("Syndromes array: \n");
-    for(uint8_t i = 0; i <= conf->EW_SIZE; i++)
-    {
-        print_var_bits(i);
-        printf(" : ");
-        print_var_bits(conf->SYNDROMES_ARRAY->data_array[i]);
-        printf(" (%d : %d)", i, conf->SYNDROMES_ARRAY->data_array[i]);
-        printf("\n");
-    }
-    printf("\n");
+//    printf("\nTest of the (%d, %d, %d) Hamming code\n--------------------------------\n\n", conf->EW_SIZE, conf->W_SIZE, conf->C_SIZE);
+//
+//    // Display the generator and control matrix
+//    printf("Control matrix: \n");
+//    matrix_show(conf->CONTROL_MATRIX);
+//
+//    printf("Generator matrix: \n");
+//    matrix_show(conf->GENERATOR_MATRIX);
+//
+//
+//    printf("Syndromes array: \n");
+//    for(uint8_t i = 0; i <= conf->EW_SIZE; i++)
+//    {
+//        print_var_bits(i);
+//        printf(" : ");
+//        print_var_bits(conf->SYNDROMES_ARRAY->data_array[i]);
+//        printf(" (%d : %d)", i, conf->SYNDROMES_ARRAY->data_array[i]);
+//        printf("\n");
+//    }
+//    printf("\n");
 
     // Generation of the word to encode
     struct Matrix* dte = matrix_generate(conf->W_SIZE, 1);
     matrix_set(dte, 3, 1, 1);
     matrix_set(dte, 1, 1, 1);
 
-    // Display
-    printf("Data to encode : %d elements\n", dte->data->data_number);
-    matrix_show_word(dte);
-
-    // Encoding
+//    // Display
+//    printf("Data to encode : %d elements\n", dte->data->data_number);
+//    matrix_show_word(dte);
+//
+//    // Encoding
     struct Matrix* d = hamming_encode(dte, conf);
-
-    printf("Data encoded : %d elements\n", d->data->data_number);
-    matrix_show_word(d);
+//
+//    printf("Data encoded : %d elements\n", d->data->data_number);
+//    matrix_show_word(d);
 
     // Add an error
     data_set(3, 1, d->data);
 
-    printf("Data modified : %d elements\n", d->data->data_number);
-    matrix_show_word(d);
+//    printf("Data modified : %d elements\n", d->data->data_number);
+//    matrix_show_word(d);
 
     // Correction
     struct Matrix* r = hamming_syndrome(d, conf);
 
-    // Affichage de la correction
-    printf("\n\nCorrection\n-----------\n\n");
-    printf("Syndrome of the modified code : %d \n", matrix_word_to_int(r));
-    data_show(r->data);
+//    // Affichage de la correction
+//    printf("\n\nCorrection\n-----------\n\n");
+//    printf("Syndrome of the modified code : %d \n", matrix_word_to_int(r));
+//    data_show(r->data);
 
     if(!matrix_isempty(r))
     {
         uint8_t b = hamming_check_syndrome(r, conf);
-        printf("The bit %d is corrupted\n", b + 1);
+//        printf("The bit %d is corrupted\n", b + 1);
     }
     else
-        printf("No bit corrupted\n");
+//        printf("No bit corrupted\n");
 
     matrix_free(dte);
     matrix_free(d);
     matrix_free(r);
 
     hamming_free_config(conf);
+    /**/
 }
 
 void test_encode()
 {
+    /**
     // Configuration
     char FILE_NAME[64] = "einstein";
 
@@ -241,4 +241,5 @@ void test_encode()
     // Affichage final
     printf("TOTALY DONE !! \n");
     system("PAUSE>NUL");
+    **/
 }

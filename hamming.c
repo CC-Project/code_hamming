@@ -10,22 +10,23 @@ struct Hamming_config* hamming_generate_config()
     config->W_SIZE = config->EW_SIZE - HAMMING_M;
     config->C_SIZE = (HAMMING_EXTENDED) ? 4 : 3; // 3 = Simple Hamming code
 
-    config->CONTROL_MATRIX = hamming_generate_control_matrix(config);
-    config->GENERATOR_MATRIX = hamming_generate_generator_matrix(config);
-    config->SYNDROMES_ARRAY = hamming_generate_syndromes_array(config);
+    hamming_generate_control_matrix(config);
+    hamming_generate_generator_matrix(config);
+    hamming_generate_syndromes_array(config);
+
     return config;
 }
 
 void hamming_free_config(struct Hamming_config *conf)
 {
-    matrix_free(conf->GENERATOR_MATRIX);
     matrix_free(conf->CONTROL_MATRIX);
+    matrix_free(conf->GENERATOR_MATRIX);
     data_free(conf->SYNDROMES_ARRAY);
     free(conf);
 }
 
 // Coding and decoding matrix
-struct Matrix* hamming_generate_generator_matrix(struct Hamming_config * conf)
+void hamming_generate_generator_matrix(struct Hamming_config * conf)
 {
     //Get the control matrix
     struct Matrix* control = matrix_copy(conf->CONTROL_MATRIX);
@@ -36,18 +37,16 @@ struct Matrix* hamming_generate_generator_matrix(struct Hamming_config * conf)
     struct Matrix* identity = matrix_generate(control->cols, control->cols);
     matrix_make_identity(identity);
 
-    struct Matrix* result = matrix_collapse_down(identity, control); //Merge it with the identity
+    conf->GENERATOR_MATRIX = matrix_collapse_down(identity, control); //Merge it with the identity
 
     // Frees memory
     matrix_free(identity);
     matrix_free(control);
-
-    return result;
 }
 
-struct Matrix* hamming_generate_control_matrix(struct Hamming_config * conf)
+void hamming_generate_control_matrix(struct Hamming_config * conf)
 {
-    struct Matrix* control = matrix_generate(HAMMING_M, (1 << HAMMING_M)); // Generation of the control matrix
+    struct Matrix* control  = matrix_generate(HAMMING_M, (1 << HAMMING_M)); // Generation of the control matrix
 
     // C'est ici qu'intervient une condition sur m : m <= 12, en effet, data ne peut contenir que 2^16 data, en resolvant m*2^m <= 2^16 on trouve m <= 12
 
@@ -69,19 +68,18 @@ struct Matrix* hamming_generate_control_matrix(struct Hamming_config * conf)
     struct Matrix* identity = matrix_generate(HAMMING_M, HAMMING_M);
     matrix_make_identity(identity);
 
-    struct Matrix* result = matrix_collapse_right(control, identity);
+    conf->CONTROL_MATRIX  = matrix_collapse_right(control, identity);
 
     // Frees memory
     matrix_free(identity);
     matrix_free(control);
-    return result;
 }
 
-struct Data* hamming_generate_syndromes_array(struct Hamming_config * conf)
+void hamming_generate_syndromes_array(struct Hamming_config * conf)
 {
     if(BASE_L == 1)
     {
-        struct Data* syndrome_array = data_generate(8 * (conf->EW_SIZE + 1)); // On fait +1 pour prendre en compte le zéro
+       config->SYNDROMES_ARRAY = data_generate(8 * (conf->EW_SIZE + 1)); // On fait +1 pour prendre en compte le zéro
         struct Matrix* syndrome_test_matrix = matrix_generate(conf->EW_SIZE, 1);
         struct Matrix* syndrome_result = NULL;
         uint16_t syndrome;
@@ -97,8 +95,8 @@ struct Data* hamming_generate_syndromes_array(struct Hamming_config * conf)
             syndrome = matrix_word_to_int(syndrome_result);
 
             // Adds the syndrome
-            if(syndrome_array->data_array[syndrome] == 0)
-                syndrome_array->data_array[syndrome] = conf->EW_SIZE - i;
+            if(config->SYNDROMES_ARRAY->data_array[syndrome] == 0)
+                config->SYNDROMES_ARRAY->data_array[syndrome] = conf->EW_SIZE - i;
 
             // Resets the bit
             matrix_set(syndrome_test_matrix, conf->EW_SIZE - i + 1, 1, 0);
@@ -107,8 +105,6 @@ struct Data* hamming_generate_syndromes_array(struct Hamming_config * conf)
         // Frees matrix
         matrix_free(syndrome_test_matrix);
         matrix_free(syndrome_result);
-
-        return syndrome_array;
     }
     else
         error("Wrong base. Function hamming_generate_syndromes_array");

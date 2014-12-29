@@ -21,9 +21,9 @@
     void hamming_free_config(struct Hamming_config *conf);
 
     // Coding and decoding matrix
-    struct Matrix* hamming_generate_generator_matrix(struct Hamming_config * conf);
-    struct Matrix* hamming_generate_control_matrix(struct Hamming_config * conf);
-    struct Data* hamming_generate_syndromes_array(struct Hamming_config * conf); // Generate the array of syndromes
+    void hamming_generate_generator_matrix(struct Hamming_config * conf);
+    void hamming_generate_control_matrix(struct Hamming_config * conf);
+    void hamming_generate_syndromes_array(struct Hamming_config * conf); // Generate the array of syndromes
 
     // Manipulation of data
     struct Matrix* hamming_encode(struct Matrix * word, struct Hamming_config * conf);
