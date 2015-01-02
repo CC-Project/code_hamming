@@ -51,6 +51,21 @@
     }
 #endif
 
+#ifdef DEBUG
+    void print_var_bits(uint8_t var)
+    {
+        #ifdef __AVR__
+            uart_tx_str("0b")
+            for(int8_t i = 7; i >= 0; i--)
+                uart_tx_char(((var & (1 << i)) >> i) + 0x30 ); //0x30 is the offset needed to print the appropriate number
+        #else
+            printf("0b");
+            for(int8_t i = 7; i >= 0; i--)
+                printf( "%d", (var & (1 << i)) >> i );
+        #endif
+    }
+#endif
+
 uint8_t error(char* str)
 {
     #ifdef __AVR__
@@ -65,19 +80,6 @@ uint8_t error(char* str)
     #endif // __AVR__
 }
 
-void print_var_bits(uint8_t var)
-{
-    #ifdef __AVR__
-        uart_tx_str("0b")
-        for(int8_t i = 7; i >= 0; i--)
-            uart_tx_char(((var & (1 << i)) >> i) + 0x30 ); //0x30 is the offset needed to print the appropriate number
-    #else
-        printf("0b");
-        for(int8_t i = 7; i >= 0; i--)
-            printf( "%d", (var & (1 << i)) >> i );
-    #endif
-}
-
 uint16_t int_pow(uint16_t a, uint16_t b)
 {
     uint16_t r = 1;
@@ -88,47 +90,7 @@ uint16_t int_pow(uint16_t a, uint16_t b)
     return r;
 }
 
-uint8_t opposite_word(uint8_t word)
-{
-    struct Data * word_data = data_generate(1);
-    struct Data * result_data = data_generate(1);
-
-    for(uint8_t i = 1; i <= BASE_L; i++)
-        data_set(8 - i, (data_getBit(8 - i, word_data) == 0) ? 1 : 0, result_data);
-
-    uint8_t result = result_data->data_array[0];
-
-    // Frees
-    data_free(word_data);
-    data_free(result_data);
-
-    return result;
-}
 uint8_t opposite_bit(uint8_t bit)
 {
     return (bit == 0) ? 1 : 0;
 }
-uint16_t rand_a_b(uint16_t a, uint16_t b)
-{
-    return rand() % (b - a) + a;
-}
-/**
-uint8_t xor_bit_to_bit(uint8_t a, uint8_t b)
-{
-    struct Data * a_data = data_generate(1);
-    struct Data * b_data = data_generate(1);
-    struct Data * result_data = data_generate(1);
-
-    for(uint8_t i = 0; i < 8; i++)
-        data_setBit(i, data_getBit(i, a_data) ^ data_getBit(i, a_data), result_data);
-
-    uint8_t result = result_data->data_array[0];
-
-    // Frees
-    data_free(a_data);
-    data_free(b_data);
-    data_free(result_data);
-
-    return result;
-}
-**/

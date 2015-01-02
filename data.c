@@ -89,24 +89,6 @@ void data_set(uint16_t n, uint8_t data, struct Data* d)
         error("ERROR: Incorect data number. Function data_set.");
 }
 
-void data_add(uint8_t data, struct Data* d)
-{
-    uint16_t a = (BASE_L * (d->data_number +1 ) - 1) / 8 + 1;
-    uint16_t b = (BASE_L * d->data_number - 1) / 8 + 1;
-
-    if( a > b )
-    {
-        d->data_array = realloc(d->data_array, a);
-        d->data_number += 1;
-        data_set(d->data_number-1, data, d);
-    }
-    else
-    {
-        d->data_number += 1;
-        data_set(d->data_number-1, data, d);
-    }
-}
-
 void data_delete(uint16_t n, struct Data* d)
 {
     if (0 <= n && n < d->data_number)
@@ -214,22 +196,23 @@ void data_setSequence(uint16_t n, uint8_t l, uint8_t data, struct Data* d)
 
 
 
+#ifdef DEBUG
+    void data_show(struct Data* d)
+    {
+        uint8_t data;
+        #ifdef __AVR__
 
-void data_show(struct Data* d)
-{
-    uint8_t data;
-    #ifdef __AVR__
-
-    #else
-        printf("\nShow %d data :\n", d->data_number);
-        for(uint16_t i = 0; i < d->data_number; i++)
-        {
-            data = data_get(i, d);
-            printf("%d ", data);
-            printf(" | ");
-            print_var_bits(data);
-            printf("\n");
-        }
-        printf("\n\n");
-    #endif // __AVR__
-}
+        #else
+            printf("\nShow %d data :\n", d->data_number);
+            for(uint16_t i = 0; i < d->data_number; i++)
+            {
+                data = data_get(i, d);
+                printf("%d ", data);
+                printf(" | ");
+                print_var_bits(data);
+                printf("\n");
+            }
+            printf("\n\n");
+        #endif // __AVR__
+    }
+#endif
