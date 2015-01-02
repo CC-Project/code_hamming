@@ -37,7 +37,7 @@ void hamming_generate_generator_matrix(struct Hamming_config * conf)
     struct Matrix* identity = matrix_generate(control->cols, control->cols);
     matrix_make_identity(identity);
 
-    conf->GENERATOR_MATRIX = matrix_collapse_down(identity, control); //Merge it with the identity
+    conf->GENERATOR_MATRIX = matrix_concat_down(identity, control); //Merge it with the identity
 
     // Frees memory
     matrix_free(identity);
@@ -68,7 +68,7 @@ void hamming_generate_control_matrix(struct Hamming_config * conf)
     struct Matrix* identity = matrix_generate(HAMMING_M, HAMMING_M);
     matrix_make_identity(identity);
 
-    conf->CONTROL_MATRIX  = matrix_collapse_right(control, identity);
+    conf->CONTROL_MATRIX  = matrix_concat_right(control, identity);
 
     // Frees memory
     matrix_free(identity);

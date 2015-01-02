@@ -144,7 +144,7 @@ struct Matrix* matrix_mul(struct Matrix *a, struct Matrix *b)
     return m;
 }
 
-struct Matrix* matrix_collapse_down(struct Matrix* a, struct Matrix* b)
+struct Matrix* matrix_concat_down(struct Matrix* a, struct Matrix* b)
 {
     struct Matrix* m = matrix_generate(a->rows + b->rows, a->cols);
 
@@ -157,7 +157,7 @@ struct Matrix* matrix_collapse_down(struct Matrix* a, struct Matrix* b)
     return m;
 }
 
-struct Matrix* matrix_collapse_right(struct Matrix *a, struct Matrix *b)
+struct Matrix* matrix_concat_right(struct Matrix *a, struct Matrix *b)
 {
     if(a->rows != b->rows)
         error("ERROR : matrix_collapse_right : You can only collapse right two matrix with the same rows number.");
