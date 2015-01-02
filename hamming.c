@@ -79,7 +79,7 @@ void hamming_generate_syndromes_array(struct Hamming_config * conf)
 {
     if(BASE_L == 1)
     {
-       config->SYNDROMES_ARRAY = data_generate(8 * (conf->EW_SIZE + 1)); // On fait +1 pour prendre en compte le zéro
+       config->SYNDROMES_ARRAY = data_generate(8 * (conf->EW_SIZE + 1)); // On fait +1 pour prendre en compte le zÃ©ro
         struct Matrix* syndrome_test_matrix = matrix_generate(conf->EW_SIZE, 1);
         struct Matrix* syndrome_result = NULL;
         uint16_t syndrome;
@@ -100,11 +100,11 @@ void hamming_generate_syndromes_array(struct Hamming_config * conf)
 
             // Resets the bit
             matrix_set(syndrome_test_matrix, conf->EW_SIZE - i + 1, 1, 0);
+            matrix_free(syndrome_result);
         }
 
         // Frees matrix
         matrix_free(syndrome_test_matrix);
-        matrix_free(syndrome_result);
     }
     else
         error("Wrong base. Function hamming_generate_syndromes_array");
@@ -156,5 +156,5 @@ uint8_t hamming_check_syndrome(struct Matrix* synd, struct Hamming_config* conf)
 struct Matrix* hamming_syndrome(struct Matrix* word, struct Hamming_config* conf)
 {
     struct Matrix* result = matrix_mul(conf->CONTROL_MATRIX, word);
-    return result; // On retourne le nombre en binaire correspondant au syndrome (Suppose que la matrice data reçue soit d'une taille < 255 lignes, m < 8)
+    return result; // On retourne le nombre en binaire correspondant au syndrome (Suppose que la matrice data reÃ§ue soit d'une taille < 255 lignes, m < 8)
 }
