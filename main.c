@@ -130,15 +130,16 @@ void test_encode()
 
     uint16_t PROBABILITY_OF_ERROR; // En pourmille
 
+    // Matrices
+    struct Matrix* word;
+    struct Matrix* word_coded;
+    struct Matrix* word_correct;
+
     // Divers
     srand(time(NULL)); // initialisation de rand
 
     for(uint16_t k = 0; k <= 1001; k = k + 20)
     {
-        struct Matrix* word;
-        struct Matrix* word_coded;
-        struct Matrix* word_correct;
-
         PROBABILITY_OF_ERROR = k;
 
         // Gestion des chaines de caractères
@@ -169,6 +170,7 @@ void test_encode()
             {
                 // Gestion du codage
                 word_coded = hamming_encode(word, conf); // On encode
+
                 for(i = 1; i <= conf->EW_SIZE; i++) // On écrit le code dans le fichier
                 {
                     if(k == 1) // Enregistrement dans le file_coded si c'est le premier passage
@@ -181,22 +183,28 @@ void test_encode()
                 }
 
                 // Gestion du decodage sans correction
+                matrix_free(word); // On supprime l'ancienne valeur de word
                 word = hamming_decode(word_coded, conf);
+
                 for(i = 1; i <= conf->W_SIZE; i++)
                     fputc(bin_to_ascii(matrix_get(word, i, 1)), file_decoded_no_correction);
 
                 // Gestion du décodage avec correction
                 word_correct = hamming_correction(word_coded, conf);
+
+                matrix_free(word); // On supprime l'ancienne valeur de word
                 word = hamming_decode(word_correct, conf);
 
                 for(i = 1; i <= conf->W_SIZE; i++)
                     fputc(bin_to_ascii(matrix_get(word, i, 1)), file_decoded_with_correction);
 
                 // On réinitialise
-                nb = 0;
                 matrix_free(word);
                 matrix_free(word_coded);
                 matrix_free(word_correct);
+
+                nb = 0;
+                word = matrix_generate(conf->W_SIZE, 1);
             }
             else
             {

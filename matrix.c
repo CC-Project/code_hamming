@@ -132,13 +132,11 @@ struct Matrix* matrix_copy(struct Matrix *a)
     return m;
 }
 
-
-
 // Operations on matrix
 struct Matrix* matrix_mul(struct Matrix *a, struct Matrix *b)
 {
     if(a->cols != b->rows)
-        error("ERROR : matric_mul : The sizes of matrix are not compatible");
+        error("ERROR : matrix_mul : The sizes of matrix are not compatible");
 
     struct Matrix* m = matrix_generate(a->rows, b->cols);
 
@@ -147,6 +145,7 @@ struct Matrix* matrix_mul(struct Matrix *a, struct Matrix *b)
             for(uint16_t j = 1; j <= m->cols; j++)
                 for (uint16_t k = 1; k <= a->cols; k++)
                     matrix_set(m, i, j, matrix_get(m, i, j) ^ (matrix_get(a, i, k) & matrix_get(b, k, j))); // En base > 2 Il faut remplacer cela par un xor bit à bit
+
     return m;
 }
 

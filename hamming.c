@@ -129,22 +129,18 @@ struct Matrix* hamming_decode(struct Matrix * word, struct Hamming_config * conf
 struct Matrix* hamming_correction(struct Matrix * word, struct Hamming_config * conf)
 {
     struct Matrix* synd = hamming_syndrome(word, conf);
+    struct Matrix* word_correct = matrix_copy(word);
 
     if(!matrix_isempty(synd))
     {
-        struct Matrix* word_correct = matrix_copy(word);
         uint8_t synd_check = hamming_check_syndrome(synd, conf) + 1;
-
         matrix_set(word_correct, synd_check, 1, opposite_bit(matrix_get(word, synd_check, 1)));
 
-        matrix_free(synd);
         return word_correct;
     }
-    else
-    {
-        matrix_free(synd);
-        return word;
-    }
+
+    matrix_free(synd);
+    return word_correct;
 }
 
 uint8_t hamming_check_syndrome(struct Matrix* synd, struct Hamming_config* conf)
