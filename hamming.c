@@ -113,8 +113,7 @@ void hamming_generate_syndromes_array(struct Hamming_config * conf)
 // Manipulation of data
 struct Matrix* hamming_encode(struct Matrix * word, struct Hamming_config * conf)
 {
-    struct Matrix* result = matrix_mul(conf->GENERATOR_MATRIX, word);
-    return result;
+    return matrix_mul(conf->GENERATOR_MATRIX, word);
 }
 
 struct Matrix* hamming_decode(struct Matrix * word, struct Hamming_config * conf)
@@ -155,6 +154,6 @@ uint8_t hamming_check_syndrome(struct Matrix* synd, struct Hamming_config* conf)
 
 struct Matrix* hamming_syndrome(struct Matrix* word, struct Hamming_config* conf)
 {
-    struct Matrix* result = matrix_mul(conf->CONTROL_MATRIX, word);
-    return result; // On retourne le nombre en binaire correspondant au syndrome (Suppose que la matrice data reçue soit d'une taille < 255 lignes, m < 8)
+    return matrix_mul(conf->CONTROL_MATRIX, word);
+    // On retourne le nombre en binaire correspondant au syndrome (Suppose que la matrice data recue soit d'une taille < 255 lignes, m < 8)
 }
