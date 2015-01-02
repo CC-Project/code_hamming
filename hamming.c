@@ -79,11 +79,7 @@ void hamming_generate_syndromes_array(struct Hamming_config * conf)
 {
     if(BASE_L == 1)
     {
-<<<<<<< HEAD
         conf->SYNDROMES_ARRAY = data_generate(8 * (conf->EW_SIZE + 1)); // On fait +1 pour prendre en compte le zéro
-=======
-       config->SYNDROMES_ARRAY = data_generate(8 * (conf->EW_SIZE + 1)); // On fait +1 pour prendre en compte le zÃ©ro
->>>>>>> origin/master
         struct Matrix* syndrome_test_matrix = matrix_generate(conf->EW_SIZE, 1);
         struct Matrix* syndrome_result = NULL;
         uint16_t syndrome;
