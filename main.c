@@ -9,8 +9,7 @@ void test_encode(); //Test Hamming code on an file
 
 int main(int argc, char *argv[])
 {
-    for(uint64_t i = 0; i<1000; i++)
-        test_hamming();
+    test_encode();
     return EXIT_SUCCESS;
 }
 
@@ -111,7 +110,6 @@ void test_hamming()
 
 void test_encode()
 {
-    /**
     // Configuration
     char FILE_NAME[64] = "einstein";
 
@@ -241,5 +239,4 @@ void test_encode()
     // Affichage final
     printf("TOTALY DONE !! \n");
     system("PAUSE>NUL");
-    **/
 }
