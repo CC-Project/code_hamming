@@ -10,16 +10,12 @@ struct Data* data_generate(uint16_t data_number)
 
     //Allocates memory for the array
     uint16_t n = (BASE_L * data_number - 1)/8 + 1; // Number of byte needed
-    d->data_array = malloc(n * sizeof(uint8_t));
+    d->data_array = calloc(n,sizeof(uint8_t)); //Automatically sets the bits to zero
     if (d->data_array == NULL)
-         error("ERROR : data_generate : Dynamic allocation not possible for data_array");
+         error("ERROR : data_generate : Dynamic allocation not possible for the array");
 
     //Sets the data_number field
     d->data_number = data_number;
-
-    //Sets initial values to 0
-    for(uint16_t i = 0; i < n; i++)
-        d->data_array[i] = 0;
 
     return d;
 }
@@ -42,7 +38,7 @@ uint8_t data_get(uint16_t n, struct Data* d)
             Else, we must get the bits one by one and recreate the sequence
         */
 
-        if(BASE_L == 1 || BASE_L == 2 || BASE_L == 4 || BASE_L == 8) // Si on est dans une puissance de 2
+        if(BASE_L == 1 || BASE_L == 2 || BASE_L == 4 || BASE_L == 8) // If a power of 2.
         {
             uint16_t i = BASE_L * n;     // First bit containing the data. First bit is 0, to 7.
             uint8_t it = i % 8;     // First bit in the byte containing the data

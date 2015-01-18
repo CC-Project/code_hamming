@@ -1,6 +1,6 @@
 #ifndef CONFIG_H
     #define CONFIG_H
-    #define DEBUG 1 //If enable, utilities routines will be compiled
+    #define DEBUG 1 //If enable, debugging routines will be compiled
 
 	//The following preprocessor code selects the architecture
 	#ifdef __AVR__
@@ -10,15 +10,14 @@
 		#include <avr/io.h>
 		#define EXIT_FAILURE -1
     #else
-        #warning Target is not an AVR
+        #warning Windows plateform selected
         #include <inttypes.h>
         #include <stdlib.h>
 	#endif
 
-    // Configurations
-    #define BASE_L 1                // Length of the elements in the base (For instance, in F_8: d = 8 but l = 3)
-    #define BASE_D (1 << BASE_L)    //Number of elements in the working set. 2^l = d
-    // Warning : BASE_L <= 8
+    // Configurations. Warning: BASE_L <= 8
+    #define BASE_L 1                // Length of the elements in the base chosen (For instance, in F_8: BASE_D = 8 but BASE_L = 3 because 8 = 2^3.)
+    #define BASE_D (1 << BASE_L)    //Number of elements in the set. 2^l = d
 
     // Hamming configuration
     #define HAMMING_M 3  // Hamming parameter <= 8
