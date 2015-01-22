@@ -10,18 +10,20 @@ void test_encode(); //Test Hamming code on an file
 
 int main(int argc, char *argv[])
 {
-    test_hamming();
+    test_data();
     return EXIT_SUCCESS;
 }
 
 void test_data()
 {
-    struct Data* d = data_generate(5);
+    struct Data* d = data_generate(3);
 
     data_set(0, 1, d);
     data_set(1, data_get(0,d), d);
     data_show(d);
     data_delete(0,d);
+    data_show(d);
+    data_set(1,12,d);
     data_show(d);
     data_free(d);
 }
