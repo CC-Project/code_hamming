@@ -17,18 +17,18 @@
     };
 
     // Set up
-    struct Hamming_config * hamming_generate_config();
-    void hamming_free_config(struct Hamming_config *conf);
+    struct Hamming_config* hamming_generate_config();
+    void hamming_free_config(struct Hamming_config* conf);
 
     // Coding and decoding matrix
-    void hamming_generate_generator_matrix(struct Hamming_config * conf);
-    void hamming_generate_control_matrix(struct Hamming_config * conf);
-    void hamming_generate_syndromes_array(struct Hamming_config * conf); // Generate the array of syndromes
+    void hamming_generate_generator_matrix(struct Hamming_config* conf);
+    void hamming_generate_control_matrix(struct Hamming_config* conf);
+    void hamming_generate_syndromes_array(struct Hamming_config* conf); // Generate the array of syndromes
 
     // Manipulation of data
-    struct Matrix* hamming_encode(struct Matrix * word, struct Hamming_config * conf);
-    struct Matrix* hamming_decode(struct Matrix * word, struct Hamming_config * conf);
-    struct Matrix* hamming_correction(struct Matrix * word, struct Hamming_config * conf);
-    struct Matrix* hamming_syndrome(struct Matrix * word, struct Hamming_config *conf); // Calcul le syndrome associé a un code
-    uint8_t hamming_check_syndrome(struct Matrix * word, struct Hamming_config * conf); // Retourne en binaire le numero du bit defectueux
+    struct Matrix* hamming_encode(struct Matrix* word, struct Hamming_config* conf);
+    struct Matrix* hamming_decode(struct Matrix* word, struct Hamming_config* conf);
+    struct Matrix* hamming_correction(struct Matrix* word, struct Hamming_config* conf);
+    struct Matrix* hamming_syndrome(struct Matrix* word, struct Hamming_config*conf); // Calcul le syndrome associé a un code
+    uint8_t hamming_check_syndrome(struct Matrix* word, struct Hamming_config* conf); // Retourne en binaire le numero du bit defectueux
 #endif // HAMMING_H

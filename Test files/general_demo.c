@@ -10,16 +10,13 @@ void test_encode(); //Test Hamming code on an file
 
 int main(int argc, char *argv[])
 {
-    test_data();
-    test_matrix();
     test_hamming();
-//    test_encode();
     return EXIT_SUCCESS;
 }
 
 void test_data()
 {
-    struct Data* d = data_generate(10);
+    struct Data* d = data_generate(5);
 
     data_set(0, 1, d);
     data_set(1, data_get(0,d), d);
@@ -83,10 +80,8 @@ void test_hamming()
     // Correction
     struct Matrix* r = hamming_syndrome(d, conf);
 
-    // Affichage de la correction
     printf("\n\nCorrection\n-----------\n\n");
     printf("Syndrome of the modified code : %d \n", matrix_word_to_int(r));
-    data_show(r->data);
 
     if(!matrix_isempty(r))
     {
