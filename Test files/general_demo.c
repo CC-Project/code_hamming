@@ -47,7 +47,7 @@ void test_matrix()
 void test_hamming()
 {
     struct Hamming_config* conf = hamming_generate_config();
-    printf("\nTest of the (%d, %d, %d) Hamming code\n--------------------------------\n\n", conf->EW_SIZE, conf->W_SIZE, conf->C_SIZE);
+    printf("\nTest of the (%d, %d, 3) Hamming code\n--------------------------------\n\n", N, K);
 
     // Display the generator and control matrix
     printf("Control matrix: \n");
@@ -58,7 +58,7 @@ void test_hamming()
 
 
     printf("Syndromes array: \n");
-    for(uint8_t i = 0; i <= conf->EW_SIZE; i++)
+    for(uint8_t i = 0; i <= N; i++)
     {
         print_var_bits(i);
         printf(" : ");
@@ -69,7 +69,7 @@ void test_hamming()
     printf("\n");
 
     // Generation of the word to encode
-    struct Matrix* dte = matrix_generate(conf->W_SIZE, 1);
+    struct Matrix* dte = matrix_generate(K, 1);
     matrix_set(dte, 3, 1, 1);
     matrix_set(dte, 1, 1, 1);
 
@@ -173,18 +173,18 @@ void test_encode()
         file_decoded_with_correction = fopen(FILE_DECODED_T_NAME, "w+"); // Le fichier contenant le code corrigé
 
         // Initialisation des variables
-        word = matrix_generate(conf->W_SIZE, 1);
+        word = matrix_generate(K, 1);
         nb = 0; nb_alea = 0;
 
         // Lecture des caractères un à un
         do
         {
-            if(nb == conf->W_SIZE) // Si la matrice de codage est pleine
+            if(nb == K) // Si la matrice de codage est pleine
             {
                 // Gestion du codage
                 word_coded = hamming_encode(word, conf); // On encode
 
-                for(i = 1; i <= conf->EW_SIZE; i++) // On écrit le code dans le fichier
+                for(i = 1; i <= N; i++) // On écrit le code dans le fichier
                 {
                     if(k == 1) // Enregistrement dans le file_coded si c'est le premier passage
                         fputc(bin_to_ascii(matrix_get(word_coded, i, 1)), file_coded);
@@ -199,7 +199,7 @@ void test_encode()
                 matrix_free(word); // On supprime l'ancienne valeur de word
                 word = hamming_decode(word_coded, conf);
 
-                for(i = 1; i <= conf->W_SIZE; i++)
+                for(i = 1; i <= K; i++)
                     fputc(bin_to_ascii(matrix_get(word, i, 1)), file_decoded_no_correction);
 
                 // Gestion du décodage avec correction
@@ -208,7 +208,7 @@ void test_encode()
                 matrix_free(word); // On supprime l'ancienne valeur de word
                 word = hamming_decode(word_correct, conf);
 
-                for(i = 1; i <= conf->W_SIZE; i++)
+                for(i = 1; i <= K; i++)
                     fputc(bin_to_ascii(matrix_get(word, i, 1)), file_decoded_with_correction);
 
                 // On réinitialise
@@ -217,7 +217,7 @@ void test_encode()
                 matrix_free(word_correct);
 
                 nb = 0;
-                word = matrix_generate(conf->W_SIZE, 1);
+                word = matrix_generate(K, 1);
             }
             else
             {

@@ -5,11 +5,6 @@
 
     struct Hamming_config
     {
-        // Hamming code parameters
-        uint8_t EW_SIZE; // Total size of the encoded words
-        uint8_t W_SIZE; // Size of word
-        uint8_t C_SIZE; // Size of the correction
-
         // Corrections matrix
         struct Matrix* CONTROL_MATRIX; // Size: (2^m - 1) * m
         struct Matrix* GENERATOR_MATRIX;

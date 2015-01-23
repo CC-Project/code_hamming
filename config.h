@@ -16,7 +16,8 @@
 	#endif
 
     // Hamming configuration
-    #define HAMMING_M 3  // Hamming parameter <= 8
-    #define HAMMING_EXTENDED 0
+    #define M 3  // Hamming parameter <= 8
+    #define N (1 << M) - 1 //Length of the encoded words
+    #define K N-M //Length of the data word (without encoding)
 
 #endif // CONFIG_H
