@@ -64,9 +64,9 @@ void matrix_free(struct Matrix* m)
     }
 #endif // DEBUG
 
-uint8_t matrix_isempty(struct Matrix* m)
+uint8_t matrix_is_null(struct Matrix* m)
 {
-    uint16_t n = floor(((BASE_L * m->data->data_number) - 1)/8) + 1; //Number of byte
+    uint16_t n = m->data->data_number / 8; //Number of byte, i.e of cells in the array.
     uint16_t i = 0;
 
     do

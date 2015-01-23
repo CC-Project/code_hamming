@@ -10,28 +10,32 @@ void test_encode(); //Test Hamming code on an file
 
 int main(int argc, char *argv[])
 {
-    test_data();
+    test_matrix();
     return EXIT_SUCCESS;
 }
 
 void test_data()
 {
-    struct Data* d = data_generate(3);
+    struct Data* d = data_generate(10);
 
     data_set(0, 1, d);
-    data_set(1, data_get(0,d), d);
+    data_set(2, 1, d);
+    data_set(4, 1, d);
+    data_set(9,1,d);
     data_show(d);
-    data_delete(0,d);
+    data_delete(4,d);
     data_show(d);
-    data_set(1,12,d);
+    data_set(3,1,d);
     data_show(d);
     data_free(d);
 }
 
 void test_matrix()
 {
-    struct Matrix* m = matrix_generate(2,2);
+    struct Matrix* m = matrix_generate(5,5);
+    printf("Matrix null: %d\n", matrix_is_null(m));
     matrix_make_identity(m);
+    matrix_show(m);
     matrix_free(m);
 }
 
@@ -85,7 +89,7 @@ void test_hamming()
     printf("\n\nCorrection\n-----------\n\n");
     printf("Syndrome of the modified code : %d \n", matrix_word_to_int(r));
 
-    if(!matrix_isempty(r))
+    if(!matrix_is_null(r))
     {
         uint8_t b = hamming_check_syndrome(r, conf);
         printf("The bit %d is corrupted\n", b + 1);

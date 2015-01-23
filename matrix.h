@@ -11,7 +11,7 @@
     };
 
     // Generation and deletion
-    struct Matrix* matrix_generate(uint16_t n, uint16_t p);
+    struct Matrix* matrix_generate(uint16_t n, uint16_t p); //Returns a pointer to a null matrix
     void matrix_free(struct Matrix* m);
 
 
@@ -21,7 +21,7 @@
         void matrix_show(struct Matrix* m);         // Prints out a matrix. Not adapted to AVR.
         void matrix_show_word(struct Matrix* m);    // Prints a word (colum) in an human-readable line
     #endif
-    uint8_t matrix_isempty(struct Matrix* m);   // Returns 1 if the matrix is empty (0 everywhere)
+    uint8_t matrix_is_null(struct Matrix* m);   // Returns 1 if the matrix is empty (0 everywhere)
     uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m);  // Return the number of the (i,j) data in data attribute
     void matrix_make_identity(struct Matrix* m);    // Returns I_k
 
