@@ -2,15 +2,15 @@ Library for the Hamming Code
 ============================
 Implementation of the Hamming Codes for PC and AVR architectures.  
 The set of the symbols used is {0,1}.  
+Previous general prog in release config was: 53KB.  
 
 TODO
 ----
 void matrix_show(struct Matrix* m);	// Prints out a matrix. Not adapted to avr.  
 void data_show(struct Data* d);     // Prints out a data structure. Not adapted to AVR.  
-Optimize the code in data_get.  
-Adapt to work with BASE_L > 1.  
 Hamming extended code.  
-Check if utilities.h doesnt include shit.  
+Matrix_mul -> Optimise by counting the number of 1, and returning the parity of the computed number.  
+We can free the 3 int variables in hamming_config.  
 
 Notes on the config file
 ------------------------

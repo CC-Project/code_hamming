@@ -62,25 +62,23 @@ void data_delete(uint16_t n, struct Data* d)
 {
     if (0 <= n && n < d->data_number)
     {
+        //Move the data, starting from the data we want to delete.
         for(uint16_t i = n; i < d->data_number - 1; i++)
             data_set(i, data_get(i + 1, d), d);
 
-        /*
-            Determines wether or not it is necessary to allocate a new block of memory.
-            Number of byte needed. Taken from data_generate: floor((d->data_base.l * d->data_number - 1)/8) + 1
-        */
-        uint16_t a = (BASE_L * (d->data_number - 1) - 1)/8 + 1;
-        uint16_t b = (BASE_L * (d->data_number / 8)) + 1;
+        //Determines whether or not it is necessary to allocate a new block of memory.
+        uint16_t old_byte_number_needed = (d->data_number - 1)/8 + 1;;
+        uint16_t new_byte_number_needed = d->data_number/8 + 1;
 
-        if(a < b)
-            d->data_array = realloc(d->data_array, a);
+        if(new_byte_number_needed < old_byte_number_needed)
+            d->data_array = realloc(d->data_array, new_byte_number_needed);
         else
             data_set(d->data_number - 1, 0, d);
 
         d->data_number -= 1;
     }
     else
-        error("ERROR: Deleting a wrong block. Function data_delete.");
+        error("ERROR: Wrong block. Function data_delete.");
 }
 
 
@@ -91,7 +89,7 @@ void data_delete(uint16_t n, struct Data* d)
         #ifdef __AVR__
 
         #else
-            printf("\nShow %d data :\n(", d->data_number);
+            printf("\nShow %d data :\n( ", d->data_number);
             for(uint16_t i = 0; i < d->data_number; i++)
             {
                 data = data_get(i, d);

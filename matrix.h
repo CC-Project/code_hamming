@@ -33,12 +33,12 @@
 
 
     // Operations on matrix
-    struct Matrix* matrix_mul(struct Matrix* a, struct Matrix* b);               // Mul two matrix
+    struct Matrix* matrix_mul(struct Matrix* a, struct Matrix* b);           // Mul two matrix
     struct Matrix* matrix_concat_down(struct Matrix *a, struct Matrix *b);   // Concatenate two matrix, by adding b below a
     struct Matrix* matrix_concat_right(struct Matrix *a, struct Matrix *b);  //Concatenate two matrix, by adding b at the right side of a
 
 
     // Misc
     void matrix_del_col(uint16_t j, struct Matrix* m);  // Remove the j-th col of m.
-    uint16_t matrix_word_to_int(struct Matrix * m); // If the matrix is a word, this function return the number associated to this word. Only available for BASE_L = 1
+    uint16_t matrix_word_to_int(struct Matrix * m); // If the matrix is a word, this function return the number associated to this word.
 #endif // MATRIX_H

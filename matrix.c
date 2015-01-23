@@ -45,8 +45,7 @@ void matrix_free(struct Matrix* m)
                 j += 1;
 
                 uint8_t data = data_get(i, m->data);
-                for(int8_t k = BASE_L - 1; k >= 0; k--)
-                    printf("%d", (data & (1 << k)) >> k);
+                printf("%d", data);
 
                 printf(" ");
 
@@ -135,11 +134,10 @@ struct Matrix* matrix_mul(struct Matrix *a, struct Matrix *b)
 
     struct Matrix* m = matrix_generate(a->rows, b->cols);
 
-    if (BASE_D == 2)
-        for(uint16_t i = 1; i <= m->rows; i++)
-            for(uint16_t j = 1; j <= m->cols; j++)
-                for (uint16_t k = 1; k <= a->cols; k++)
-                    matrix_set(m, i, j, matrix_get(m, i, j) ^ (matrix_get(a, i, k) & matrix_get(b, k, j))); // En base > 2 Il faut remplacer cela par un xor bit à bit
+    for(uint16_t i = 1; i <= m->rows; i++)
+        for(uint16_t j = 1; j <= m->cols; j++)
+            for (uint16_t k = 1; k <= a->cols; k++)
+                matrix_set(m, i, j, matrix_get(m, i, j) ^ (matrix_get(a, i, k) & matrix_get(b, k, j)));
 
     return m;
 }
@@ -183,12 +181,12 @@ void matrix_del_col(uint16_t j, struct Matrix* m)
 {
     for(uint16_t i = 1; i <= m->rows; i++)
         data_delete(matrix_get_data_number(i, j, m) - (i - 1), m->data);
-        // On fait un - (i - 1) pour compenser le décalage du a la supression des données
+        // (i - 1) -> Complete the shift due to the removal of the previous datas.
 
     m->cols -= 1;
 }
 
-uint16_t matrix_word_to_int(struct Matrix * m) // Only available for BASE_L = 1
+uint16_t matrix_word_to_int(struct Matrix * m)
 {
     uint16_t val = 0;
     for(uint16_t i = 0; i < m->data->data_number; i++)

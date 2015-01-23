@@ -6,7 +6,7 @@ struct Hamming_config* hamming_generate_config()
     struct Hamming_config* config = malloc(sizeof(struct Hamming_config));
 
     // Computes the parameters
-    config->EW_SIZE = (int_pow(BASE_D, HAMMING_M) - 1)/(BASE_D - 1);
+    config->EW_SIZE = (1 << HAMMING_M) - 1;
     config->W_SIZE = config->EW_SIZE - HAMMING_M;
     config->C_SIZE = (HAMMING_EXTENDED) ? 4 : 3; // 3 = Simple Hamming code
 
@@ -77,37 +77,32 @@ void hamming_generate_control_matrix(struct Hamming_config * conf)
 
 void hamming_generate_syndromes_array(struct Hamming_config * conf)
 {
-    if(BASE_L == 1)
+    conf->SYNDROMES_ARRAY = data_generate(8 * (conf->EW_SIZE + 1)); // On fait +1 pour prendre en compte le zéro
+    struct Matrix* syndrome_test_matrix = matrix_generate(conf->EW_SIZE, 1);
+    struct Matrix* syndrome_result = NULL;
+    uint16_t syndrome;
+
+    // Pour la base 2
+    for(uint16_t i = 1; i <= conf->EW_SIZE; i++)
     {
-        conf->SYNDROMES_ARRAY = data_generate(8 * (conf->EW_SIZE + 1)); // On fait +1 pour prendre en compte le zéro
-        struct Matrix* syndrome_test_matrix = matrix_generate(conf->EW_SIZE, 1);
-        struct Matrix* syndrome_result = NULL;
-        uint16_t syndrome;
+        // Sets the "conf->EW_SIZE - i" bit
+        matrix_set(syndrome_test_matrix, conf->EW_SIZE - i + 1, 1, 1);
 
-        // Pour la base 2
-        for(uint16_t i = 1; i <= conf->EW_SIZE; i++)
-        {
-            // Sets the "conf->EW_SIZE - i" bit
-            matrix_set(syndrome_test_matrix, conf->EW_SIZE - i + 1, 1, 1);
+        // Computation of the syndrome
+        syndrome_result = hamming_syndrome(syndrome_test_matrix, conf);
+        syndrome = matrix_word_to_int(syndrome_result);
 
-            // Computation of the syndrome
-            syndrome_result = hamming_syndrome(syndrome_test_matrix, conf);
-            syndrome = matrix_word_to_int(syndrome_result);
+        // Adds the syndrome
+        if(conf->SYNDROMES_ARRAY->data_array[syndrome] == 0)
+            conf->SYNDROMES_ARRAY->data_array[syndrome] = conf->EW_SIZE - i;
 
-            // Adds the syndrome
-            if(conf->SYNDROMES_ARRAY->data_array[syndrome] == 0)
-                conf->SYNDROMES_ARRAY->data_array[syndrome] = conf->EW_SIZE - i;
-
-            // Resets the bit
-            matrix_set(syndrome_test_matrix, conf->EW_SIZE - i + 1, 1, 0);
-            matrix_free(syndrome_result);
-        }
-
-        // Frees matrix
-        matrix_free(syndrome_test_matrix);
+        // Resets the bit
+        matrix_set(syndrome_test_matrix, conf->EW_SIZE - i + 1, 1, 0);
+        matrix_free(syndrome_result);
     }
-    else
-        error("Wrong base. Function hamming_generate_syndromes_array");
+
+    // Frees matrix
+    matrix_free(syndrome_test_matrix);
 }
 
 // Manipulation of data

@@ -10,7 +10,7 @@ void test_encode(); //Test Hamming code on an file
 
 int main(int argc, char *argv[])
 {
-    test_matrix();
+    test_hamming();
     return EXIT_SUCCESS;
 }
 
@@ -35,8 +35,13 @@ void test_matrix()
     struct Matrix* m = matrix_generate(5,5);
     printf("Matrix null: %d\n", matrix_is_null(m));
     matrix_make_identity(m);
-    matrix_show(m);
+    struct Matrix* m2 = matrix_copy(m);
+    matrix_set(m2,1,2,1);
+    struct Matrix* m3 = matrix_mul(m2,m);
+    matrix_show(m3);
     matrix_free(m);
+    matrix_free(m2);
+    matrix_free(m3);
 }
 
 void test_hamming()

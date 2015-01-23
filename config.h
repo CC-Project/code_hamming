@@ -15,10 +15,6 @@
         #include <stdlib.h>
 	#endif
 
-    // Configurations. Warning: BASE_L <= 8
-    #define BASE_L 1                // Length of the elements in the base chosen (For instance, in F_8: BASE_D = 8 but BASE_L = 3 because 8 = 2^3.)
-    #define BASE_D (1 << BASE_L)    //Number of elements in the set. 2^l = d
-
     // Hamming configuration
     #define HAMMING_M 3  // Hamming parameter <= 8
     #define HAMMING_EXTENDED 0
