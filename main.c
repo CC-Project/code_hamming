@@ -1,4 +1,5 @@
-#include "hamming.h"
+#include "config.h"
+#include "inc/hamming.h"
 
 int main(int argc, char *argv[])
 {

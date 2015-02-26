@@ -1,6 +1,5 @@
 #ifndef UTILITIES_H
     #define UTILITIES_H
-    #include "config.h"
 
     #ifdef __AVR__
         void uart_init(void);
@@ -10,6 +9,7 @@
         int freeRam(); //Returns the memory available
     #else
         #include <stdio.h>
+        #include "../config.h"
         char bin_to_ascii(uint8_t bin);
         uint8_t ascii_to_bin(char bin);
     #endif

@@ -1,4 +1,4 @@
-#include "../hamming.h"
+#include "../inc/hamming.h"
 #include "string.h"
 #include "time.h"
 
@@ -8,11 +8,11 @@ void test_hamming(); //Test code for Hamming
 uint16_t rand_a_b(uint16_t a, uint16_t b);  //Returns a random number between a and b (inclusive). Needed for test_encode()
 void test_encode(); //Test Hamming code on an file
 
-int main(int argc, char *argv[])
-{
-    test_hamming();
-    return EXIT_SUCCESS;
-}
+//int main(int argc, char *argv[])
+//{
+//    test_hamming();
+//    return EXIT_SUCCESS;
+//}
 
 void test_data()
 {
