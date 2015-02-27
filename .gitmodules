@@ -1,0 +1,3 @@
+[submodule "lib_data"]
+	path = lib_data
+	url = https://github.com/CC-Project/lib_data
