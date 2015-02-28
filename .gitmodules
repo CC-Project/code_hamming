@@ -1,3 +1,6 @@
 [submodule "lib_data"]
-	path = lib_data
+	path = lib/lib_data
 	url = https://github.com/CC-Project/lib_data
+[submodule "lib_utilities"]
+	path = lib/lib_utilities
+	url = https://github.com/CC-Project/lib_utilities

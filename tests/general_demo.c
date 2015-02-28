@@ -1,6 +1,17 @@
-#include "../inc/hamming.h"
+// Main Modules
 #include "string.h"
 #include "time.h"
+
+// Import configuration
+#include "../config.h"
+
+//Import all modules
+#include "../lib/lib_data/import.h"
+#include "../lib/lib_utilities/import.h"
+
+// Import libs
+#include "../src/hamming/hamming.h"
+#include "../src/matrix/matrix.h"
 
 void test_data();    //Test code for data struct
 void test_matrix();  //Test code for matrix
