@@ -1,13 +1,11 @@
 // Import configuration
 #include "config.h"
 
-//Import all modules
-#include "lib/lib_data/import.h"
-#include "lib/lib_utilities/import.h"
-
-// Import libs
-#include "src/hamming/hamming.h"
-#include "src/matrix/matrix.h"
+//Import all modules and libs
+#include "src/include/data.h"
+#include "src/include/utilities.h"
+#include "src/include/hamming.h"
+#include "src/include/matrix.h"
 
 int main(int argc, char *argv[])
 {

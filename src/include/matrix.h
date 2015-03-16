@@ -9,8 +9,8 @@
 
     // Include
     #include"../../config.h"
-    #include "../../lib/lib_data/import.h"
-    #include "../../lib/lib_utilities/import.h"
+    #include "data.h"
+    #include "utilities.h"
     #include <math.h>
 
     struct Matrix

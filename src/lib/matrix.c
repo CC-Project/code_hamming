@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "../include/matrix.h"
 
 // Generation and deletion
 struct Matrix* matrix_generate(uint16_t n, uint16_t p)
