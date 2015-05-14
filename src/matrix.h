@@ -8,9 +8,9 @@
     #endif // __AVR__
 
     // Include
-    #include"../../config.h"
-    #include "data.h"
-    #include "utilities.h"
+    #include"../config.h"
+    #include "../../lib_utilities/utilities.h"
+    #include "../../lib_data/data.h"
     #include <math.h>
 
     struct Matrix

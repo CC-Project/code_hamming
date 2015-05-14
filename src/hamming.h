@@ -8,10 +8,10 @@
     #endif // __AVR__
 
     // Include
-    #include "utilities.h"
-    #include "data.h"
+    #include "../../lib_utilities/utilities.h"
+    #include "../../lib_data/data.h"
+    #include "../config.h"
     #include "matrix.h"
-    #include"../../config.h"
 
     struct Hamming_config
     {

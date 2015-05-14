@@ -1,4 +1,4 @@
-#include "../include/hamming.h"
+#include "hamming.h"
 
 // Set up
 struct Hamming_config* hamming_generate_config()

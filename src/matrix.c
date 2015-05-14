@@ -1,4 +1,4 @@
-#include "../include/matrix.h"
+#include "matrix.h"
 
 // Generation and deletion
 struct Matrix* matrix_generate(uint16_t n, uint16_t p)
@@ -87,10 +87,6 @@ void matrix_make_identity(struct Matrix* m)
     for(i = 1; i <= m->cols; i++)
         matrix_set(m, i, i, 1);
 }
-
-
-
-
 
 // Matrix's data manipulations
 void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets the i-th line, j-th column of m to val
