@@ -2,6 +2,8 @@
     #define CONFIG_H
     #pragma once
 
+    #include "hamming_config.h"
+
 	// The following preprocessor code selects the architecture
 	#ifdef __AVR__
         #ifndef AVR_WARNING
@@ -22,10 +24,4 @@
 	#endif
 	// Project configuration
     //#define DEBUG 1 // If enable, debugging routines will be compiled
-
-    // Hamming configuration
-    #define M 3  // Hamming parameter <= 8
-    #define N (1 << M) - 1 //Length of the encoded words
-    #define K N-M //Length of the data word (without encoding)
-
 #endif // CONFIG_H
