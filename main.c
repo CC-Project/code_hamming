@@ -8,8 +8,10 @@
 // Import configuration
 #include "config.h"
 
-int main_hamming()
+int main()
 {
-    // Your program goes here
+    uint32_t i = 25663;
+    printf(int_to_string(i));
+
     return EXIT_SUCCESS;
 }

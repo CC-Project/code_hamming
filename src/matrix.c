@@ -18,17 +18,6 @@ void matrix_free(struct Matrix* m)
 
 // Utilities
 #ifdef DEBUG
-    struct Matrix* matrix_transpose(struct Matrix * m)
-    {
-        struct Matrix* m2 = matrix_generate(m->cols, m->rows);
-
-        for(uint16_t i = 1; i <= m2->rows; i++)
-            for(uint16_t j = 1; j <= m2->cols; j++)
-                matrix_set(m2, i, j, matrix_get(m, j, i));
-
-        return m2;
-    }
-
     void matrix_show(struct Matrix* m)
     {
         #ifdef __AVR__
@@ -61,6 +50,17 @@ void matrix_free(struct Matrix* m)
     }
 #endif // DEBUG
 
+struct Matrix* matrix_transpose(struct Matrix * m)
+{
+    struct Matrix* m2 = matrix_generate(m->cols, m->rows);
+
+    for(uint16_t i = 1; i <= m2->rows; i++)
+        for(uint16_t j = 1; j <= m2->cols; j++)
+            matrix_set(m2, i, j, matrix_get(m, j, i));
+
+    return m2;
+}
+
 uint8_t matrix_is_null(struct Matrix* m)
 {
     uint16_t n = m->data->data_number / 8; //Number of byte, i.e of cells in the array.
@@ -78,7 +78,7 @@ uint8_t matrix_is_null(struct Matrix* m)
 
 uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m)
 {
-    return (i-1) * m->cols + j-1;
+    return (i - 1) * m->cols + (j - 1);
 }
 
 void matrix_make_identity(struct Matrix* m)
@@ -94,7 +94,17 @@ void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets th
     if(i <= m->rows && j <= m->cols)
         data_set(matrix_get_data_number(i, j, m), val, m->data);
     else
-        error("ERROR : matrix_set : Incorect matrix size.");
+    {
+        #ifdef DEBUG
+            error("ERROR : matrix_set : Incorect matrix size.");
+        #endif // DEBUG
+        #ifdef __AVR__
+            while(1){}
+        #else
+            system("PAUSE>NUL");
+            exit(EXIT_FAILURE);
+        #endif
+    }
 }
 
 uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th line, j-th column of m
@@ -102,7 +112,18 @@ uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th lin
     if(i <= m->rows && j <= m->cols)
         return data_get(matrix_get_data_number(i, j, m), m->data);
     else
-        error("ERROR : matrix_get : Incorect matrix size.");
+    {
+        #ifdef DEBUG
+            error("ERROR : matrix_get : Incorect matrix size.");
+        #endif // DEBUG
+        #ifdef __AVR__
+            while(1){}
+        #else
+            system("PAUSE>NUL");
+            exit(EXIT_FAILURE);
+        #endif
+    }
+
     return -1;
 }
 
@@ -124,7 +145,17 @@ struct Matrix* matrix_copy(struct Matrix *a)
 struct Matrix* matrix_mul(struct Matrix *a, struct Matrix *b)
 {
     if(a->cols != b->rows)
-        error("ERROR : matrix_mul : The sizes of matrix are not compatible");
+    {
+        #ifdef DEBUG
+            error("ERROR : matrix_mul : The sizes of matrix are not compatible");
+        #endif // DEBUG
+        #ifdef __AVR__
+            while(1){}
+        #else
+            system("PAUSE>NUL");
+            exit(EXIT_FAILURE);
+        #endif
+    }
 
     struct Matrix* m = matrix_generate(a->rows, b->cols);
 
@@ -152,7 +183,17 @@ struct Matrix* matrix_concat_down(struct Matrix* a, struct Matrix* b)
 struct Matrix* matrix_concat_right(struct Matrix *a, struct Matrix *b)
 {
     if(a->rows != b->rows)
-        error("ERROR : matrix_collapse_right : You can only collapse right two matrix with the same rows number.");
+    {
+        #ifdef DEBUG
+            error("ERROR : matrix_collapse_right : You can only collapse right two matrix with the same rows number.");
+        #endif // DEBUG
+        #ifdef __AVR__
+            while(1){}
+        #else
+            system("PAUSE>NUL");
+            exit(EXIT_FAILURE);
+        #endif
+    }
 
     struct Matrix* m = matrix_generate(a->rows, a->cols + b->cols);
 
@@ -166,8 +207,6 @@ struct Matrix* matrix_concat_right(struct Matrix *a, struct Matrix *b)
 
     return m;
 }
-
-
 
 
 // Misc

@@ -6,10 +6,10 @@
 #include "../config.h"
 
 //Import all modules and libs
-#include "../src/include/data.h"
-#include "../src/include/utilities.h"
-#include "../src/include/hamming.h"
-#include "../src/include/matrix.h"
+#include "../../lib_data/data.h"
+#include "../../lib_utilities/utilities.h"
+#include "../src/hamming.h"
+#include "../src/matrix.h"
 
 void test_data();    //Test code for data struct
 void test_matrix();  //Test code for matrix
@@ -17,11 +17,11 @@ void test_hamming(); //Test code for Hamming
 uint16_t rand_a_b(uint16_t a, uint16_t b);  //Returns a random number between a and b (inclusive). Needed for test_encode()
 void test_encode(); //Test Hamming code on an file
 
-//int main(int argc, char *argv[])
-//{
-//    test_hamming();
-//    return EXIT_SUCCESS;
-//}
+int main(int argc, char *argv[])
+{
+    test_hamming();
+    return EXIT_SUCCESS;
+}
 
 void test_data()
 {
