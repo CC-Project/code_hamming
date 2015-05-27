@@ -118,6 +118,7 @@ void test_hamming()
     hamming_free_config(conf);
 }
 
+/**
 uint16_t rand_a_b(uint16_t a, uint16_t b)
 {
     return rand() % (b - a) + a;
@@ -263,3 +264,4 @@ void test_encode()
     printf("TOTALY DONE !! \n");
     system("PAUSE>NUL");
 }
+**/

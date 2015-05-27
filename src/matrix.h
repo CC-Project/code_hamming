@@ -2,16 +2,16 @@
     #define MATRIX_H
     #pragma once
 
-    #ifndef __AVR__
-        #include <inttypes.h>
-        #include <stdlib.h>
-    #endif // __AVR__
+    #include <inttypes.h>
+    #include <stdlib.h>
 
     // Include
-    #include"../config.h"
+    #include "../config.h"
     #include "../../lib_utilities/utilities.h"
     #include "../../lib_data/data.h"
-    #include <math.h>
+    //#include <math.h>
+
+    #define DATA_NUMBER(i,j,m) (uint16_t)((i - 1) * m->cols + (j - 1))
 
     struct Matrix
     {
@@ -33,9 +33,8 @@
 
     struct Matrix* matrix_transpose(struct Matrix * m); // Transposes a matrix
     uint8_t matrix_is_null(struct Matrix* m);   // Returns 1 if the matrix is empty (0 everywhere)
-    uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m);  // Return the number of the (i,j) data in data attribute
+    //uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m);  // Return the number of the (i,j) data in data attribute
     void matrix_make_identity(struct Matrix* m);    // Returns I_k
-
 
     // Matrix's data manipulations
     void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val); //Sets the i-th line, j-th column of m to val
@@ -47,7 +46,6 @@
     struct Matrix* matrix_mul(struct Matrix* a, struct Matrix* b);           // Mul two matrix
     struct Matrix* matrix_concat_down(struct Matrix *a, struct Matrix *b);   // Concatenate two matrix, by adding b below a
     struct Matrix* matrix_concat_right(struct Matrix *a, struct Matrix *b);  //Concatenate two matrix, by adding b at the right side of a
-
 
     // Misc
     void matrix_del_col(uint16_t j, struct Matrix* m);  // Remove the j-th col of m.

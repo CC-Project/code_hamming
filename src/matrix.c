@@ -16,40 +16,6 @@ void matrix_free(struct Matrix* m)
     free(m);
 }
 
-// Utilities
-#ifdef DEBUG
-    void matrix_show(struct Matrix* m)
-    {
-        #ifdef __AVR__
-
-        #else
-            printf("Size is (%d, %d)\n", m->rows, m->cols);
-            uint16_t i = 0;
-            uint16_t j = 0;
-
-            for(i = 0; i < m->data->data_number; i++)
-            {
-                j += 1;
-
-                uint8_t data = data_get(i, m->data);
-                printf("%d", data);
-
-                printf(" ");
-
-                if (j == m->cols) {printf("\n"); j = 0;}
-            }
-            printf("\n");
-        #endif
-    }
-
-    void matrix_show_word(struct Matrix * m)
-    {
-        struct Matrix* tm = matrix_transpose(m);
-        matrix_show(tm);
-        matrix_free(tm);
-    }
-#endif // DEBUG
-
 struct Matrix* matrix_transpose(struct Matrix * m)
 {
     struct Matrix* m2 = matrix_generate(m->cols, m->rows);
@@ -76,11 +42,6 @@ uint8_t matrix_is_null(struct Matrix* m)
     return 1;
 }
 
-uint16_t matrix_get_data_number(uint16_t i, uint16_t j, struct Matrix* m)
-{
-    return (i - 1) * m->cols + (j - 1);
-}
-
 void matrix_make_identity(struct Matrix* m)
 {
     uint16_t i = 0;
@@ -92,7 +53,7 @@ void matrix_make_identity(struct Matrix* m)
 void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets the i-th line, j-th column of m to val
 {
     if(i <= m->rows && j <= m->cols)
-        data_set(matrix_get_data_number(i, j, m), val, m->data);
+        data_set(DATA_NUMBER(i, j, m), val, m->data);
     else
     {
         #ifdef DEBUG
@@ -110,7 +71,7 @@ void matrix_set(struct Matrix* m, uint16_t i, uint16_t j, uint8_t val) //Sets th
 uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th line, j-th column of m
 {
     if(i <= m->rows && j <= m->cols)
-        return data_get(matrix_get_data_number(i, j, m), m->data);
+        return data_get(DATA_NUMBER(i, j, m), m->data);
     else
     {
         #ifdef DEBUG
@@ -137,9 +98,6 @@ struct Matrix* matrix_copy(struct Matrix *a)
 
     return m;
 }
-
-
-
 
 // Operations on matrix
 struct Matrix* matrix_mul(struct Matrix *a, struct Matrix *b)
@@ -213,8 +171,7 @@ struct Matrix* matrix_concat_right(struct Matrix *a, struct Matrix *b)
 void matrix_del_col(uint16_t j, struct Matrix* m)
 {
     for(uint16_t i = 1; i <= m->rows; i++)
-        data_delete(matrix_get_data_number(i, j, m) - (i - 1), m->data);
-        // (i - 1) -> Complete the shift due to the removal of the previous datas.
+        data_delete(DATA_NUMBER(i, j, m) - (i - 1), m->data); // (i - 1) -> Complete the shift due to the removal of the previous datas.
 
     m->cols -= 1;
 }
@@ -223,9 +180,59 @@ uint16_t matrix_word_to_int(struct Matrix * m)
 {
     uint16_t val = 0;
     for(uint16_t i = 0; i < m->data->data_number; i++)
-    {
         if (data_get(i, m->data) == 1)
-            val = val + (1 << (m->data->data_number - i - 1) );
-    }
+            val += (1 << (m->data->data_number - i - 1));
+
+
     return val;
 }
+
+struct Matrix* matrix_int_to_word(uint16_t val)
+{
+    uint8_t i = 0;
+
+    while((1 << i) < val)
+        i++;
+
+    struct Matrix* result = matrix_generate(i + 1, 1);
+
+    for(uint8_t p = 0; p < i + 1; p++)
+        if(val & (1 << p))
+            matrix_set(result, p + 1, 1, 1);
+
+    return result;
+}
+
+// Utilities
+#ifdef DEBUG
+    void matrix_show(struct Matrix* m)
+    {
+        #ifdef __AVR__
+            for
+        #else
+            printf("Size is (%d, %d)\n", m->rows, m->cols);
+            uint16_t i = 0;
+            uint16_t j = 0;
+
+            for(i = 0; i < m->data->data_number; i++)
+            {
+                j += 1;
+
+                uint8_t data = data_get(i, m->data);
+                printf("%d", data);
+
+                printf(" ");
+
+                if (j == m->cols) {printf("\n"); j = 0;}
+            }
+            printf("\n");
+        #endif
+    }
+
+    void matrix_show_word(struct Matrix * m)
+    {
+        struct Matrix* tm = matrix_transpose(m);
+        matrix_show(tm);
+        matrix_free(tm);
+    }
+#endif // DEBUG
