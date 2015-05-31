@@ -1,6 +1,5 @@
 // Import configuration
 #include "config.h"
-#include "code_config.h"
 //Import all modules and libs
 #include "../lib_data/data.h"
 #include "../lib_utilities/utilities.h"
@@ -10,18 +9,6 @@
 int main()
 {
     /*
-    struct Matrix* a = matrix_generate(6, 1);
-    struct Matrix* b = matrix_generate(3, 6);
-
-    matrix_set(a, 1, 1, 1); matrix_set(a, 3, 1, 1); matrix_set(a, 6, 1, 1);
-    matrix_set(b, 1, 1, 1); matrix_set(b, 1, 6, 1); matrix_set(b, 2, 1, 1); matrix_set(b, 2, 3, 1); matrix_set(b, 2, 6, 1); matrix_set(b, 3, 1, 1); matrix_set(b, 3, 6, 1);
-    matrix_show(a); matrix_show(b);
-
-    struct Matrix* r = matrix_mul(b, a);
-    matrix_show(r);
-    data_show(r->data);
-*/
-
     struct Matrix_config* conf = cmatrix_generate_config();
     #if USED_CODE == CODE_HAMMING
         printf("\nTest of the (%d, %d, 3) Hamming code\n--------------------------------\n\n", N, K);
@@ -75,6 +62,10 @@ int main()
     else
         printf("No bit corrupted\n");
 
+    printf("Corrected matrix :\n", matrix_word_to_int(r));
+
+    matrix_show_word(cmatrix_decode(d, conf));
+
     matrix_free(dte);
     matrix_free(d);
     matrix_free(r);
@@ -82,4 +73,5 @@ int main()
     cmatrix_free_config(conf);
 
     return 0;
+    */
 }

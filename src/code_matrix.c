@@ -98,36 +98,6 @@ void cmatrix_generate_generator_matrix(struct Matrix_config * conf)
 
 void cmatrix_generate_syndromes_array(struct Matrix_config * conf)
 {
-    /*
-    #if USED_CODE == CODE_HAMMING // Hamming code
-        conf->SYNDROMES_ARRAY = data_generate(8 * (N + 1)); // = 2^m
-        struct Matrix* syndrome_test_matrix = matrix_generate(N, 1);
-        struct Matrix* syndrome_result = NULL;
-        uint16_t syndrome;
-
-        for(uint16_t i = 1; i <= N; i++)
-        {
-            // Sets the "N - i" bit
-            matrix_set(syndrome_test_matrix, N - i + 1, 1, 1);
-
-            // Computation of the syndrome
-            syndrome_result = cmatrix_syndrome(syndrome_test_matrix, conf);
-            matrix_show_word(syndrome_result);
-            syndrome = matrix_word_to_int(syndrome_result);
-            printf("%d\n", syndrome);
-            // Adds the syndrome
-            if(conf->SYNDROMES_ARRAY->data_array[syndrome] == 0)
-                conf->SYNDROMES_ARRAY->data_array[syndrome] = N - i;
-
-            // Resets the bit
-            matrix_set(syndrome_test_matrix, N - i + 1, 1, 0);
-            matrix_free(syndrome_result);
-        }
-
-        // Frees matrix
-
-    */
-
     // Code général
     conf->SYNDROMES_ARRAY = calloc((1 << conf->CONTROL_MATRIX->rows), sizeof(SIZE_SYNDROME_ALLOCATION)); // = 2^m
     struct Matrix* syndrome_test_matrix = matrix_generate(N, 1);
@@ -192,7 +162,7 @@ struct Matrix* cmatrix_correction(struct Matrix * word, struct Matrix_config * c
     if(!matrix_is_null(synd))
     {
         uint8_t synd_check = cmatrix_check_syndrome(synd, conf) + 1;
-        matrix_set(word_correct, synd_check, 1, opposite_bit(matrix_get(word, synd_check, 1)));
+        matrix_set(word_correct, synd_check, 1, OPPOSITE_BIT(matrix_get(word, synd_check, 1)));
 
         return word_correct;
     }
