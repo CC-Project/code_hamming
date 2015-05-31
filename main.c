@@ -7,16 +7,27 @@
 
 #include "src/code_matrix.h"
 #include "src/matrix.h"
-
 int main()
 {
+    /*
+    struct Matrix* a = matrix_generate(6, 1);
+    struct Matrix* b = matrix_generate(3, 6);
+
+    matrix_set(a, 1, 1, 1); matrix_set(a, 3, 1, 1); matrix_set(a, 6, 1, 1);
+    matrix_set(b, 1, 1, 1); matrix_set(b, 1, 6, 1); matrix_set(b, 2, 1, 1); matrix_set(b, 2, 3, 1); matrix_set(b, 2, 6, 1); matrix_set(b, 3, 1, 1); matrix_set(b, 3, 6, 1);
+    matrix_show(a); matrix_show(b);
+
+    struct Matrix* r = matrix_mul(b, a);
+    matrix_show(r);
+    data_show(r->data);
+*/
+
     struct Matrix_config* conf = cmatrix_generate_config();
     #if USED_CODE == CODE_HAMMING
         printf("\nTest of the (%d, %d, 3) Hamming code\n--------------------------------\n\n", N, K);
     #elif USED_CODE == CODE_REPETITION
-        printf("\nTest of the (%d, %d) repetition code\n--------------------------------\n\n", NB_REPETITION, K);
+        printf("\nTest of the (%d, %d) repetition code\n--------------------------------\n\n", N, K);
     #endif
-
     // Display the generator and control matrix
     printf("Control matrix: \n");
     matrix_show(conf->CONTROL_MATRIX);
@@ -25,14 +36,9 @@ int main()
     matrix_show(conf->GENERATOR_MATRIX);
 
     printf("Syndromes array: \n");
-    for(uint8_t i = 0; i <= N; i++)
-    {
-        print_var_bits((1 << (N - i)), N);
-        printf(" : ");
-        print_var_bits(conf->SYNDROMES_ARRAY->data_array[i], (1 << K));
-        printf(" (%d : %d)", i, conf->SYNDROMES_ARRAY->data_array[i]);
-        printf("\n");
-    }
+    for(uint8_t i = 0; i < (1 << conf->CONTROL_MATRIX->rows); i++)
+        printf("|%d : %d|\n", i, conf->SYNDROMES_ARRAY[i]);
+
     printf("\n");
 
     // Generation of the word to encode
@@ -49,7 +55,6 @@ int main()
     printf("Data encoded : %d elements\n", d->data->data_number);
     matrix_show_word(d);
 
-/**
     // Add an error
     data_set(4, 0, d->data);
 
@@ -75,6 +80,6 @@ int main()
     matrix_free(r);
 
     cmatrix_free_config(conf);
-**/
+
     return 0;
 }

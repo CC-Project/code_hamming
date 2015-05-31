@@ -91,10 +91,14 @@ uint8_t matrix_get(struct Matrix* m, uint16_t i, uint16_t j) //Gets the i-th lin
 struct Matrix* matrix_copy(struct Matrix *a)
 {
     struct Matrix* m = matrix_generate(a->rows, a->cols);
-
+/*
     for(uint16_t i = 1; i <= a->rows; i++)
         for(uint16_t j = 1; j <= a->cols; j++)
             matrix_set(m, i, j, matrix_get(a, i,j));
+*/
+
+    for(uint16_t k = 0; k < (a->data->data_number / 8) + 1; k++)
+        m->data->data_array[k] = a->data->data_array[k];
 
     return m;
 }
@@ -115,14 +119,14 @@ struct Matrix* matrix_mul(struct Matrix *a, struct Matrix *b)
         #endif
     }
 
-    struct Matrix* m = matrix_generate(a->rows, b->cols);
+    struct Matrix* result = matrix_generate(a->rows, b->cols);
 
-    for(uint16_t i = 1; i <= m->rows; i++)
-        for(uint16_t j = 1; j <= m->cols; j++)
+    for(uint16_t i = 1; i <= result->rows; i++)
+        for(uint16_t j = 1; j <= result->cols; j++)
             for (uint16_t k = 1; k <= a->cols; k++)
-                matrix_set(m, i, j, matrix_get(m, i, j) ^ (matrix_get(a, i, k) & matrix_get(b, k, j)));
+                matrix_set(result, i, j, matrix_get(result, i, j) ^ (matrix_get(a, i, k) & matrix_get(b, k, j)));
 
-    return m;
+    return result;
 }
 
 struct Matrix* matrix_concat_down(struct Matrix* a, struct Matrix* b)
@@ -186,7 +190,7 @@ uint16_t matrix_word_to_int(struct Matrix * m)
 
     return val;
 }
-
+/*
 struct Matrix* matrix_int_to_word(uint16_t val)
 {
     uint8_t i = 0;
@@ -198,11 +202,11 @@ struct Matrix* matrix_int_to_word(uint16_t val)
 
     for(uint8_t p = 0; p < i + 1; p++)
         if(val & (1 << p))
-            matrix_set(result, p + 1, 1, 1);
+            matrix_set(result, (i + 1) - p, 1, 1);
 
     return result;
 }
-
+*/
 // Utilities
 #ifdef DEBUG
     void matrix_show(struct Matrix* m)
