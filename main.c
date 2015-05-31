@@ -8,8 +8,27 @@
 #include "src/matrix.h"
 int main()
 {
-    /*
     struct Matrix_config* conf = cmatrix_generate_config();
+
+    // Display the generator and control matrix
+    printf("Control matrix: \n");
+    matrix_show(conf->CONTROL_MATRIX);
+
+    printf("Generator matrix: \n");
+    matrix_show(conf->GENERATOR_MATRIX);
+
+    printf("\n\n\n");
+    printf("uint8_t synd_array[%d][1] PROGMEM = {", 1 << conf->CONTROL_MATRIX->rows);
+
+    for(uint16_t k = 0; k < 1 << conf->CONTROL_MATRIX->rows; k++)
+        if(k == (1 << conf->CONTROL_MATRIX->rows) - 1)
+            printf("{%d}", conf->SYNDROMES_ARRAY[k]);
+        else
+            printf("{%d}, ", conf->SYNDROMES_ARRAY[k]);
+
+    printf("};\n\n\n");
+
+    /*
     #if USED_CODE == CODE_HAMMING
         printf("\nTest of the (%d, %d, 3) Hamming code\n--------------------------------\n\n", N, K);
     #elif USED_CODE == CODE_REPETITION
@@ -71,7 +90,6 @@ int main()
     matrix_free(r);
 
     cmatrix_free_config(conf);
-
-    return 0;
     */
+    return 0;
 }

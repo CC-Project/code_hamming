@@ -98,35 +98,52 @@ void cmatrix_generate_generator_matrix(struct Matrix_config * conf)
 
 void cmatrix_generate_syndromes_array(struct Matrix_config * conf)
 {
-    // Code général
-    conf->SYNDROMES_ARRAY = calloc((1 << conf->CONTROL_MATRIX->rows), sizeof(SIZE_SYNDROME_ALLOCATION)); // = 2^m
-    struct Matrix* syndrome_test_matrix = matrix_generate(N, 1);
-    struct Matrix* syndrome_result;
-    uint16_t syndrome;
+    #ifndef __AVR__
+        // Code général
+        conf->SYNDROMES_ARRAY = calloc((1 << conf->CONTROL_MATRIX->rows), sizeof(SIZE_SYNDROME_ALLOCATION)); // = 2^m
+        struct Matrix* syndrome_test_matrix = matrix_generate(N, 1);
+        struct Matrix* syndrome_result;
+        uint16_t syndrome;
 
-    // Correction de seulement une erreur (valable pour tout les codes)
-    for(SIZE_SYNDROME_ALLOCATION i = 0; i < N; i++)
-    {
-        // Sets the "N - i" bit
-        matrix_set(syndrome_test_matrix, N - i, 1, 1);
+        // Correction de seulement une erreur (valable pour tout les codes)
+        for(SIZE_SYNDROME_ALLOCATION i = 0; i < N; i++)
+        {
+            // Sets the "N - i" bit
+            matrix_set(syndrome_test_matrix, N - i, 1, 1);
 
-        // Computation of the syndrome
-        syndrome_result = cmatrix_syndrome(syndrome_test_matrix, conf);
-        syndrome = matrix_word_to_int(syndrome_result);
+            // Computation of the syndrome
+            syndrome_result = cmatrix_syndrome(syndrome_test_matrix, conf);
+            syndrome = matrix_word_to_int(syndrome_result);
 
-        matrix_show_word(syndrome_test_matrix);
-        matrix_show_word(syndrome_result);
+            // Adds the syndrome
+            if(conf->SYNDROMES_ARRAY[syndrome] == 0)
+                conf->SYNDROMES_ARRAY[syndrome] = N - i - 1;
 
-        // Adds the syndrome
-        if(conf->SYNDROMES_ARRAY[syndrome] == 0)
-            conf->SYNDROMES_ARRAY[syndrome] = N - i - 1;
+            // Resets the bit
+            matrix_set(syndrome_test_matrix, N - i, 1, 0);
+            matrix_free(syndrome_result);
+        }
 
-        // Resets the bit
-        matrix_set(syndrome_test_matrix, N - i, 1, 0);
-        matrix_free(syndrome_result);
-    }
-
-    matrix_free(syndrome_test_matrix);
+        matrix_free(syndrome_test_matrix);
+    #else
+        #if CODE_USED == CODE_HAMMING
+            #if M == 2
+                uint8_t synd_array[4][1] PROGMEM = {{0}, {2}, {1}, {0}};
+            #elif M == 3
+                uint8_t synd_array[8][1] PROGMEM = {{0}, {6}, {5}, {0}, {4}, {1}, {2}, {3}};
+            #elif M == 4
+                uint8_t synd_array[16][1] PROGMEM = {{0}, {14}, {13}, {0}, {12}, {1}, {2}, {3}, {11}, {4}, {5}, {6}, {7}, {8}, {9}, {10}};
+            #elif M == 5
+                uint8_t synd_array[32][1] PROGMEM = {{0}, {30}, {29}, {0}, {28}, {1}, {2}, {3}, {27}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {26}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}, {22}, {23}, {24}, {25}};
+            #elif M == 6
+                uint8_t synd_array[64][1] PROGMEM = {{0}, {62}, {61}, {0}, {60}, {1}, {2}, {3}, {59}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {58}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}, {22}, {23}, {24}, {25}, {57}, {26}, {27}, {28}, {29}, {30}, {31}, {32}, {33}, {34}, {35}, {36}, {37}, {38}, {39}, {40}, {41}, {42}, {43}, {44}, {45}, {46}, {47}, {48}, {49}, {50}, {51}, {52}, {53}, {54}, {55}, {56}};
+            #elif M == 7
+                uint8_t synd_array[128][1] PROGMEM = {{0}, {126}, {125}, {0}, {124}, {1}, {2}, {3}, {123}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {122}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}, {22}, {23}, {24}, {25}, {121}, {26}, {27}, {28}, {29}, {30}, {31}, {32}, {33}, {34}, {35}, {36}, {37}, {38}, {39}, {40}, {41}, {42}, {43}, {44}, {45}, {46}, {47}, {48}, {49}, {50}, {51}, {52}, {53}, {54}, {55}, {56}, {120}, {57}, {58}, {59}, {60}, {61}, {62}, {63}, {64}, {65}, {66}, {67}, {68}, {69}, {70}, {71}, {72}, {73}, {74}, {75}, {76}, {77}, {78}, {79}, {80}, {81}, {82}, {83}, {84}, {85}, {86}, {87}, {88}, {89}, {90}, {91}, {92}, {93}, {94}, {95}, {96}, {97}, {98}, {99}, {100}, {101}, {102}, {103}, {104}, {105}, {106}, {107}, {108}, {109}, {110}, {111}, {112}, {113}, {114}, {115}, {116}, {117}, {118}, {119}};
+            #elif M == 8
+                uint8_t synd_array[256][1] PROGMEM = {{0}, {254}, {253}, {0}, {252}, {1}, {2}, {3}, {251}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {250}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}, {22}, {23}, {24}, {25}, {249}, {26}, {27}, {28}, {29}, {30}, {31}, {32}, {33}, {34}, {35}, {36}, {37}, {38}, {39}, {40}, {41}, {42}, {43}, {44}, {45}, {46}, {47}, {48}, {49}, {50}, {51}, {52}, {53}, {54}, {55}, {56}, {248}, {57}, {58}, {59}, {60}, {61}, {62}, {63}, {64}, {65}, {66}, {67}, {68}, {69}, {70}, {71}, {72}, {73}, {74}, {75}, {76}, {77}, {78}, {79}, {80}, {81}, {82}, {83}, {84}, {85}, {86}, {87}, {88}, {89}, {90}, {91}, {92}, {93}, {94}, {95}, {96}, {97}, {98}, {99}, {100}, {101}, {102}, {103}, {104}, {105}, {106}, {107}, {108}, {109}, {110}, {111}, {112}, {113}, {114}, {115}, {116}, {117}, {118}, {119}, {247}, {120}, {121}, {122}, {123}, {124}, {125}, {126}, {127}, {128}, {129}, {130}, {131}, {132}, {133}, {134}, {135}, {136}, {137}, {138}, {139}, {140}, {141}, {142}, {143}, {144}, {145}, {146}, {147}, {148}, {149}, {150}, {151}, {152}, {153}, {154}, {155}, {156}, {157}, {158}, {159}, {160}, {161}, {162}, {163}, {164}, {165}, {166}, {167}, {168}, {169}, {170}, {171}, {172}, {173}, {174}, {175}, {176}, {177}, {178}, {179}, {180}, {181}, {182}, {183}, {184}, {185}, {186}, {187}, {188}, {189}, {190}, {191}, {192}, {193}, {194}, {195}, {196}, {197}, {198}, {199}, {200}, {201}, {202}, {203}, {204}, {205}, {206}, {207}, {208}, {209}, {210}, {211}, {212}, {213}, {214}, {215}, {216}, {217}, {218}, {219}, {220}, {221}, {222}, {223}, {224}, {225}, {226}, {227}, {228}, {229}, {230}, {231}, {232}, {233}, {234}, {235}, {236}, {237}, {238}, {239}, {240}, {241}, {242}, {243}, {244}, {245}, {246}};
+            #endif // M
+        #endif // CODE_USED
+    #endif
 }
 
 // Manipulation of data
