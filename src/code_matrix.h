@@ -1,13 +1,13 @@
-#ifndef HAMMING_H
-    #define HAMMING_H
+#ifndef CODE_MATRIX_H
+    #define CODE_MATRIX_H
     #pragma once
 
-    #ifndef __AVR__
-        #include <inttypes.h>
-        #include <stdlib.h>
+    #ifdef __AVR__
+        #include <avr/pgmspace.h>
     #endif // __AVR__
 
-    // Include
+    #include <inttypes.h>
+    #include <stdlib.h>
     #include "../../lib_utilities/utilities.h"
     #include "../../lib_data/data.h"
     #include "../config.h"

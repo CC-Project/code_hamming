@@ -4,7 +4,7 @@
 
 // --------- CONFIGURATION ------------ //
 
-#define USED_CODE CODE_HAMMING // 1 = Hamming, 2 = Repetition
+#define USED_CODE CODE_GOLAY // 1 = Hamming, 2 = Repetition
 
 #if USED_CODE == CODE_HAMMING
     #ifndef HAMMING_CONFIG
@@ -23,6 +23,14 @@
         #define M 2 // Size of packets
         #define N (M * 3) // Length of the encoded words
         #define K (M) // Length of the data word (without encoding)
+    #endif
+#elif USED_CODE == CODE_GOLAY
+    #ifndef GOLAY_CONFIG
+        #define GOLAY_CONFIG
+
+        // Repetition code configuration
+        #define N 23 // Length of the encoded words
+        #define K 12 // Length of the data word (without encoding)
     #endif
 #endif // USED_CODE
 
