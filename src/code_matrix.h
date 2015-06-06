@@ -18,7 +18,7 @@
         // Corrections matrix
         struct Matrix* CONTROL_MATRIX; // Size: (2^m - 1) * m
         struct Matrix* GENERATOR_MATRIX;
-        SIZE_SYNDROME_ALLOCATION* SYNDROMES_ARRAY; // Syndrom array (m <= 8 donc les syndrome sont codé sur 8 bits au max, d'ou le uint8_t)
+        uint8_t* SYNDROMES_ARRAY; // Syndrom array (m <= 8 donc les syndrome sont codé sur 8 bits au max, d'ou le uint8_t)
     };
 
     // Set up
@@ -37,5 +37,5 @@
 
     struct Matrix* cmatrix_correction(struct Matrix* word, struct Matrix_config* conf);
     struct Matrix* cmatrix_syndrome(struct Matrix* word, struct Matrix_config*conf); // Calcul le syndrome associé a un code
-    SIZE_SYNDROME_ALLOCATION cmatrix_check_syndrome(struct Matrix* word, struct Matrix_config* conf); // Retourne en binaire le numero du bit defectueux
+    uint8_t cmatrix_check_syndrome(struct Matrix* word, struct Matrix_config* conf); // Retourne en binaire le numero du bit defectueux
 #endif // HAMMING_H

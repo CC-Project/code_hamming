@@ -11,7 +11,7 @@
         #define HAMMING_CONFIG
 
         // Hamming configuration
-        #define M 8  // Hamming parameter <= 8
+        #define M 3  // Hamming parameter <= 8
         #define N (1 << M) - 1 // Length of the encoded words
         #define K (N - M) // Length of the data word (without encoding)
     #endif
@@ -26,8 +26,12 @@
     #endif
 #endif // USED_CODE
 
-#if USED_CODE == CODE_GOLAY
-    #define SIZE_SYNDROME_ALLOCATION uint16_t
-#else
-    #define SIZE_SYNDROME_ALLOCATION uint8_t
+#if USED_CODE == CODE_HAMMING
+    #if M > 8
+        #error The hamming parameter must be inferior to 8
+    #endif // M
+#elif USED_CODE == CODE_REPETITION
+    #if M > 4
+        #error The repetition parameter must be inferior to 4
+    #endif // M
 #endif // USED_CODE
