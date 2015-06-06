@@ -36,6 +36,6 @@
     struct Matrix* cmatrix_extract(struct Matrix * word, struct Matrix_config * conf);
 
     struct Matrix* cmatrix_correction(struct Matrix* word, struct Matrix_config* conf);
-    struct Matrix* cmatrix_syndrome(struct Matrix* word, struct Matrix_config*conf); // Calcul le syndrome associé a un code
-    uint8_t cmatrix_check_syndrome(struct Matrix* word, struct Matrix_config* conf); // Retourne en binaire le numero du bit defectueux
+    uint8_t* cmatrix_get_erroneous_bits(struct Matrix* word); // Retourne en binaire les numeros des bits defectueux
+    #define cmatrix_syndrome(word, conf) matrix_mul(conf->CONTROL_MATRIX, word);
 #endif // HAMMING_H

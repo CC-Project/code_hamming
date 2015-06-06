@@ -14,6 +14,8 @@
         #define M 3  // Hamming parameter <= 8
         #define N (1 << M) - 1 // Length of the encoded words
         #define K (N - M) // Length of the data word (without encoding)
+
+        #define SIZE_SYNDROME_ARRAY 1
     #endif
 #elif USED_CODE == CODE_REPETITION
     #ifndef REPETITION_CONFIG
@@ -23,6 +25,8 @@
         #define M 2 // Size of packets
         #define N (M * 3) // Length of the encoded words
         #define K (M) // Length of the data word (without encoding)
+
+        #define SIZE_SYNDROME_ARRAY 2
     #endif
 #elif USED_CODE == CODE_GOLAY
     #ifndef GOLAY_CONFIG
@@ -31,11 +35,13 @@
         // Repetition code configuration
         #define N 23 // Length of the encoded words
         #define K 12 // Length of the data word (without encoding)
+
+        #define SIZE_SYNDROME_ARRAY 3
     #endif
 #endif // USED_CODE
 
 #if USED_CODE == CODE_HAMMING
-    #if M > 8
+    #if M > 7
         #error The hamming parameter must be inferior to 8
     #endif // M
 #elif USED_CODE == CODE_REPETITION

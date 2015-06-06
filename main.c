@@ -18,7 +18,54 @@ int main()
     printf("Generator matrix: \n");
     matrix_show(conf->GENERATOR_MATRIX);
 
+    // Generation of the word to encode
+    struct Matrix* dte = matrix_generate(K, 1);
+    matrix_set(dte, 3, 1, 1);
+    matrix_set(dte, 1, 1, 1);
 
+    // Display
+    printf("Data to encode : %d elements\n", dte->data->data_number);
+    matrix_show_word(dte);
+
+    // Encoding
+    struct Matrix* d = cmatrix_encode(dte, conf);
+    printf("Data encoded : %d elements\n", d->data->data_number);
+    matrix_show_word(d);
+
+    // Add an error
+    matrix_set(d, 2, 1, 1);
+    matrix_set(d, 5, 1, 1);
+    printf("Data modified : %d elements\n", d->data->data_number);
+    matrix_show_word(d);
+
+    // Correction
+    struct Matrix* r = cmatrix_syndrome(d, conf);
+
+    printf("\n\nCorrection\n-----------\n\n");
+    printf("Syndrome of the modified code : %d \n", matrix_word_to_int(r));
+
+    printf("Corrected matrix :\n", matrix_word_to_int(r));
+
+    matrix_show_word(cmatrix_correction(d, conf));
+/*
+    if(!matrix_is_null(r))
+    {
+        uint8_t b = cmatrix_check_syndrome(r, conf);
+        printf("The bit %d is corrupted\n", b + 1);
+    }
+    else
+        printf("No bit corrupted\n");
+
+    printf("Corrected matrix :\n", matrix_word_to_int(r));
+
+    matrix_show_word(cmatrix_decode(d, conf));
+
+    matrix_free(dte);
+    matrix_free(d);
+    matrix_free(r);
+
+    cmatrix_free_config(conf);*/
+/*
     uint8_t synd_array[2048][3] = {0};
     struct Matrix* syndrome_test_matrix = matrix_generate(conf->CONTROL_MATRIX->cols, 1);
     struct Matrix* syndrome_result;
@@ -42,7 +89,7 @@ int main()
                 /*
                 printf("------------------\n\n(%d, %d, %d) : %d\n", i, j, k, syndrome);
                 matrix_show_word(syndrome_test_matrix);
-                */
+
                 // Adds the syndrome
                 synd_array[syndrome][0] = conf->CONTROL_MATRIX->cols - i;
                 synd_array[syndrome][1] = (j == i) ? 0 : conf->CONTROL_MATRIX->cols - j;
@@ -60,9 +107,9 @@ int main()
                 compteur++;
             }
 
-    //printf("\n\nTotal : %d", compteur);
+    printf("\n\nTotal : %d; taille : %d", compteur, sizeof(synd_array));
     matrix_free(syndrome_test_matrix);
-
+/*
     printf("\n\n\n");
     printf("uint8_t SYNDROME_ARRAY[%d][3] PROGMEM = {", 1 << conf->CONTROL_MATRIX->rows);
 
@@ -73,8 +120,8 @@ int main()
             printf("{%d, %d, %d}, ", synd_array[k][0], synd_array[k][1], synd_array[k][2]);
 
     printf("};\n\n\n");
-
-    /*
+*/
+/*
     #if USED_CODE == CODE_HAMMING
         printf("\nTest of the (%d, %d, 3) Hamming code\n--------------------------------\n\n", N, K);
     #elif USED_CODE == CODE_REPETITION
@@ -136,6 +183,6 @@ int main()
     matrix_free(r);
 
     cmatrix_free_config(conf);
-    */
-    return 0;
+
+    return 0;*/
 }
