@@ -4,14 +4,14 @@
 
 // --------- CONFIGURATION ------------ //
 
-#define USED_CODE CODE_GOLAY // 1 = Hamming, 2 = Repetition
+#define USED_CODE CODE_HAMMING // 1 = Hamming, 2 = Repetition
 
 #if USED_CODE == CODE_HAMMING
     #ifndef HAMMING_CONFIG
         #define HAMMING_CONFIG
 
         // Hamming configuration
-        #define M 3  // Hamming parameter <= 8
+        #define M 7  // Hamming parameter <= 8
         #define N (1 << M) - 1 // Length of the encoded words
         #define K (N - M) // Length of the data word (without encoding)
 
@@ -41,7 +41,7 @@
 #endif // USED_CODE
 
 #if USED_CODE == CODE_HAMMING
-    #if M > 7
+    #if M > 8
         #error The hamming parameter must be inferior to 8
     #endif // M
 #elif USED_CODE == CODE_REPETITION

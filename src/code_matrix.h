@@ -15,10 +15,8 @@
 
     struct Matrix_config
     {
-        // Corrections matrix
-        struct Matrix* CONTROL_MATRIX; // Size: (2^m - 1) * m
+        struct Matrix* CONTROL_MATRIX;
         struct Matrix* GENERATOR_MATRIX;
-        uint8_t* SYNDROMES_ARRAY; // Syndrom array (m <= 8 donc les syndrome sont codé sur 8 bits au max, d'ou le uint8_t)
     };
 
     // Set up

@@ -212,11 +212,23 @@ struct Matrix* matrix_int_to_word(uint16_t val)
     void matrix_show(struct Matrix* m)
     {
         #ifdef __AVR__
-            for
+            uint16_t i = 0, j = 0;
+
+            for(i = 0; i < m->data->data_number; i++)
+            {
+                j += 1;
+
+                uint8_t data = data_get(i, m->data);
+                uart_tx_char(data + 0x30);
+
+                uart_tx_str(" ");
+
+                if (j == m->cols) {uart_newline(); j = 0;}
+            }
+            uart_newline();
         #else
             printf("Size is (%d, %d)\n", m->rows, m->cols);
-            uint16_t i = 0;
-            uint16_t j = 0;
+            uint16_t i = 0, j = 0;
 
             for(i = 0; i < m->data->data_number; i++)
             {
